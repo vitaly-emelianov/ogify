@@ -39,37 +39,12 @@
         <sourceDirectory>src</sourceDirectory>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>exec-npm-install</id>
-                        <phase>generate-sources</phase>
-                        <configuration>
-                            <executable>npm</executable>
-                            <workingDirectory>face</workingDirectory>
-                            <arguments>
-                                <argument>install</argument>
-                            </arguments>
-                        </configuration>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.5</version>
                 <configuration>
                     <webappDirectory>web</webappDirectory>
                     <webResources>
-                        <resource>
-                            <directory>face/app</directory>
-                            <targetPath>webapp</targetPath>
-                        </resource>
                     </webResources>
                     <outputDirectory>deployments</outputDirectory>
                     <warName>ROOT</warName>
