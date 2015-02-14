@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.taptag.R;
-import com.taptag.model.Data;
+import com.taptag.model.DrawerItem;
 
 /**
  * The Adapter class for the ListView displayed in the left navigation drawer.
@@ -19,7 +19,7 @@ public class LeftNavAdapter extends BaseAdapter
 {
 
 	/** The items. */
-	private ArrayList<Data> items;
+	private ArrayList<DrawerItem> items;
 
 	/** The context. */
 	private Context context;
@@ -32,7 +32,7 @@ public class LeftNavAdapter extends BaseAdapter
 	 * @param items
 	 *            the array of items to be displayed on ListView
 	 */
-	public LeftNavAdapter(Context context, ArrayList<Data> items)
+	public LeftNavAdapter(Context context, ArrayList<DrawerItem> items)
 	{
 		this.context = context;
 		this.items = items;
@@ -51,7 +51,7 @@ public class LeftNavAdapter extends BaseAdapter
 	 * @see android.widget.Adapter#getItem(int)
 	 */
 	@Override
-	public Data getItem(int arg0)
+	public DrawerItem getItem(int arg0)
 	{
 		return items.get(arg0);
 	}

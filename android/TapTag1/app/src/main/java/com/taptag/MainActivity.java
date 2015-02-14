@@ -17,8 +17,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.taptag.custom.CustomActivity;
-import com.taptag.model.Data;
-import com.taptag.ui.Categories;
+import com.taptag.model.DrawerItem;
 import com.taptag.ui.LeftNavAdapter;
 import com.taptag.ui.Profile;
 import com.taptag.ui.Employer;
@@ -112,11 +111,11 @@ public class MainActivity extends CustomActivity {
      *
      * @return the dummy items
      */
-    private ArrayList<Data> getDummyLeftNavItems() {
-        ArrayList<Data> al = new ArrayList<Data>();
-        al.add(new Data("Employee", null, R.drawable.ic_nav1));
-        al.add(new Data("Employer", null, R.drawable.ic_nav2));
-        al.add(new Data("Profile", null, R.drawable.ic_nav4));
+    private ArrayList<DrawerItem> getDummyLeftNavItems() {
+        ArrayList<DrawerItem> al = new ArrayList<DrawerItem>();
+        al.add(new DrawerItem("Employee", null, R.drawable.ic_nav1));
+        al.add(new DrawerItem("Employer", null, R.drawable.ic_nav2));
+        al.add(new DrawerItem("Profile", null, R.drawable.ic_nav4));
         return al;
     }
 
