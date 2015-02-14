@@ -4,5 +4,5 @@
     <item
         android:id="@+id/action_add"
         android:showAsAction="always"
-        android:title="@string/employer_menu_new_order" />
-</menu><!-- From: file:/C:/Users/illus_000/Documents/GitHub/eatfit/android/TapTag1/app/src/main/res/menu/menu_employer.xml -->
+        android:title="@string/action_add_new_order" />
+</menu>

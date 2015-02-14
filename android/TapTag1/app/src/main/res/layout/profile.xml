@@ -135,9 +135,13 @@
         android:textColor="@color/main_color_cyan_dark"
         android:textSize="16sp" />
 
-    <ScrollView
-        android:id="@+id/scrollView2"
+    <ListView
+        android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal" />
+        android:cacheColorHint="@color/transparent"
+        android:divider="@color/white"
+        android:dividerHeight="0dp"
+        tools:listitem="@layout/offers_list_item" >
+    </ListView>
 </LinearLayout>

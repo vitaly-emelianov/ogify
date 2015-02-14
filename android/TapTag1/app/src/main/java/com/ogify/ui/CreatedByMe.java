@@ -8,15 +8,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ogify.NewOrderActivity;
+import com.ogify.OrderInfoActivity;
 import com.ogify.R;
 import com.ogify.custom.CustomFragment;
 
-public class Employer extends CustomFragment {
+public class CreatedByMe extends CustomFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -29,11 +31,18 @@ public class Employer extends CustomFragment {
     private void setupViewComponents(View v) {
         ListView grid = (ListView) v.findViewById(R.id.list);
         grid.setAdapter(new StoreAdapter());
+        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), OrderInfoActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_employer, menu);
+        inflater.inflate(R.menu.menu_add_new_order, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

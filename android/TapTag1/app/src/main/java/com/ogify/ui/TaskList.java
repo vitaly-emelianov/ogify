@@ -8,20 +8,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ogify.NewOrderActivity;
+import com.ogify.OrderInfoActivity;
 import com.ogify.R;
 import com.ogify.custom.CustomFragment;
 
-public class AssignedToMe extends CustomFragment {
+public class TaskList extends CustomFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.offers_list, null);
-        setHasOptionsMenu(true);
         setupViewComponents(v);
         return v;
     }
@@ -29,25 +30,13 @@ public class AssignedToMe extends CustomFragment {
     private void setupViewComponents(View v) {
         ListView grid = (ListView) v.findViewById(R.id.list);
         grid.setAdapter(new StoreAdapter());
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_assigned_to_me, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // handle item selection
-        switch (item.getItemId()) {
-            case R.id.action_add:
-                Intent intent = new Intent(getActivity(), NewOrderActivity.class);
+        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), OrderInfoActivity.class);
                 startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+            }
+        });
     }
 
     private class StoreAdapter extends BaseAdapter {

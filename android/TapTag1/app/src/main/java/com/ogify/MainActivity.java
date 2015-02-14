@@ -19,11 +19,10 @@ import android.widget.ListView;
 
 import com.ogify.custom.CustomActivity;
 import com.ogify.model.DrawerItem;
-import com.ogify.ui.AssignedToMe;
-import com.ogify.ui.Employee;
+import com.ogify.ui.Tasks;
 import com.ogify.ui.LeftNavAdapter;
-import com.ogify.ui.Profile;
-import com.ogify.ui.Employer;
+import com.ogify.ui.MyProfile;
+import com.ogify.ui.CreatedByMe;
 
 /**
  * The Class MainActivity is the base activity class of the application. This
@@ -104,7 +103,6 @@ public class MainActivity extends CustomActivity {
                 launchFragment(pos);
             }
         });
-        drawerLayout.openDrawer(drawerLeft);
     }
 
     /**
@@ -116,9 +114,9 @@ public class MainActivity extends CustomActivity {
      */
     private ArrayList<DrawerItem> getDummyLeftNavItems() {
         ArrayList<DrawerItem> al = new ArrayList<DrawerItem>();
-        al.add(new DrawerItem("Profile", null, R.drawable.ic_nav4));
-        al.add(new DrawerItem("Employee", null, R.drawable.ic_nav1));
-        al.add(new DrawerItem("Employer", null, R.drawable.ic_nav2));
+        al.add(new DrawerItem("My Profile", null, R.drawable.ic_nav4));
+        al.add(new DrawerItem("Tasks", null, R.drawable.ic_nav1));
+        al.add(new DrawerItem("Created By Me", null, R.drawable.ic_nav2));
         return al;
     }
 
@@ -134,13 +132,13 @@ public class MainActivity extends CustomActivity {
         String title = null;
         if (pos == 0) {
             title = "My Profile";
-            f = new Profile();
+            f = new MyProfile();
         } else if (pos == 1) {
             title = "Tasks";
-            f = new Employee();
+            f = new Tasks();
         } else if (pos == 2) {
             title = "Created By Me";
-            f = new Employer();
+            f = new CreatedByMe();
         }
 
         if (f != null) {

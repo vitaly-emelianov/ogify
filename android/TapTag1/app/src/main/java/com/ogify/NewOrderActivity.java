@@ -19,7 +19,7 @@ public class NewOrderActivity extends CustomActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_new_order, menu);
+        getMenuInflater().inflate(R.menu.menu_submit_new_order, menu);
         return true;
     }
 

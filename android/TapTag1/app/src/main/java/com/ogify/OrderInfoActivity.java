@@ -1,13 +1,13 @@
 package com.ogify;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.ogify.R;
+import com.ogify.custom.CustomActivity;
 
-public class OrderInfoActivity extends ActionBarActivity {
+
+public class OrderInfoActivity extends CustomActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,20 +19,18 @@ public class OrderInfoActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_order_info, menu);
+        getMenuInflater().inflate(R.menu.menu_assign_to_me, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

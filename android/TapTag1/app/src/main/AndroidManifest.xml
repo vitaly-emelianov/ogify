@@ -29,6 +29,7 @@
             android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,8 +43,12 @@
             android:label="@string/title_activity_new_order" >
         </activity>
         <activity
-            android:name="com.ogify.OrderInfoActivity"
+            android:name=".OrderInfoActivity"
             android:label="@string/title_activity_order_info" >
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login" >
         </activity>
     </application>
 

@@ -7,9 +7,8 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
-    <string name="employee_menu_assign_new">Assign new</string>
-
-    <string name="employer_menu_new_order">Add new</string>
+    <string name="action_assign_new">Assign new</string>
+    <string name="action_add_new_order">Add new</string>
 
     <string name="title_activity_new_order">New Order</string>
     <string name="new_order_title_text">TITLE</string>
@@ -20,9 +19,11 @@
     <string name="new_order_radio_friend">Friend</string>
     <string name="new_order_radio_friends">Friends</string>
     <string name="new_order_radio_all">All</string>
+    <string name="action_submit">Submit</string>
 
-    <string name="new_order_submit">Submit</string>
-    <string name="title_activity_order_info">OrderInfo</string>
+    <string name="title_activity_order_info">Order Info</string>
+    <string name="action_assign_to_me">Assign To Me</string>
+    <string name="title_activity_login">LoginActivity</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
