@@ -4,15 +4,15 @@
     android:id="@+id/va"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
         android:gravity="center_vertical">
 
         <ImageView
@@ -24,127 +24,120 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp" >
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+
             <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/main_color_cyan_dark"
-        android:textSize="22sp"
-        android:text="Mel Gibson" />
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mel Gibson"
+                android:textColor="@color/main_color_cyan_dark"
+                android:textSize="22sp" />
+
             <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/gray_dk"
-        android:textSize="14sp"
-        android:text="Actor Director" />
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Actor Director"
+                android:textColor="@color/gray_dk"
+                android:textSize="14sp" />
+
             <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/gray_dk"
-        android:textSize="12sp"
-        android:text="Los Angeles, USA" />
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Los Angeles, USA"
+                android:textColor="@color/gray_dk"
+                android:textSize="12sp" />
         </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
-            android:layout_width="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/p1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-             >
+            android:layout_weight="1"
+            android:background="@drawable/color_pattern1"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/p1"
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/textView4"
+                style="@style/lbl_pattern1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/color_pattern1"
-                android:gravity="center"
-                android:orientation="vertical" >
+                android:text="21K" />
 
-                <TextView
-                    android:id="@+id/textView1"
-                    style="@style/lbl_pattern1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="21K" />
-
-                <TextView
-                    android:id="@+id/textView1"
-                    style="@style/lbl_pattern2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Followers" />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/p2"
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/textView5"
+                style="@style/lbl_pattern2"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/color_pattern2"
-                android:gravity="center"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/textView1"
-                    style="@style/lbl_pattern1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="34" />
-
-                <TextView
-                    android:id="@+id/textView1"
-                    style="@style/lbl_pattern2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Following" />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/p3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/color_pattern3"
-                android:gravity="center"
-                android:orientation="vertical" >
-
-
-                <TextView
-                    android:id="@+id/textView1"
-                    style="@style/lbl_pattern2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/ic_gear"
-                    android:drawablePadding="3dp"
-                    android:text="Settings" />
-            </LinearLayout>
+                android:text="Followers" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/p2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/color_pattern2"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView6"
+                style="@style/lbl_pattern1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="34" />
+
+            <TextView
+                android:id="@+id/textView7"
+                style="@style/lbl_pattern2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Following" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/p3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/color_pattern3"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView8"
+                style="@style/lbl_pattern2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="3dp"
+                android:drawableTop="@drawable/ic_gear"
+                android:text="Settings" />
+        </LinearLayout>
+    </LinearLayout>
+
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView9"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
+        android:text="Assigned To Me:"
         android:textColor="@color/main_color_cyan_dark"
-        android:textSize="16sp"
-        android:text="20 Photos" />
+        android:textSize="16sp" />
 
-     <GridView
-            android:id="@+id/grid"
-            android:layout_width="@dimen/profile_grid_w"
-            android:layout_height="match_parent"
-            android:cacheColorHint="@color/transparent"
-            android:columnWidth="@dimen/profile_col_w"
-            android:gravity="center_horizontal"
-            android:horizontalSpacing="10dp"
-            android:numColumns="2"
-            android:stretchMode="none"
-            android:verticalSpacing="10dp"
-            tools:listitem="@layout/profile_item" 
-            >
-        </GridView>
-
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>
