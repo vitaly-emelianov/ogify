@@ -97,40 +97,40 @@ public final class R {
         public static final int white_rect=0x7f020037;
     }
     public static final class id {
-        public static final int back=0x7f08000d;
+        public static final int back=0x7f080017;
         public static final int content_frame=0x7f080001;
-        public static final int dot1=0x7f08001c;
-        public static final int dot2=0x7f08001d;
-        public static final int dot3=0x7f08001e;
-        public static final int dotbar=0x7f080008;
+        public static final int dot1=0x7f08000a;
+        public static final int dot2=0x7f08000b;
+        public static final int dot3=0x7f08000c;
+        public static final int dotbar=0x7f080009;
         public static final int drawer_layout=0x7f080000;
-        public static final int editText1=0x7f080010;
-        public static final int f=0x7f08000a;
+        public static final int editText1=0x7f08001a;
+        public static final int f=0x7f080015;
         public static final int grid=0x7f080006;
-        public static final int imageView1=0x7f080009;
-        public static final int imageView2=0x7f080015;
+        public static final int imageView1=0x7f08000e;
+        public static final int imageView2=0x7f08001f;
         public static final int img=0x7f080004;
-        public static final int l=0x7f080020;
+        public static final int l=0x7f08000f;
         public static final int lbl=0x7f080005;
-        public static final int lbl1=0x7f080018;
-        public static final int lbl2=0x7f080019;
+        public static final int lbl1=0x7f080011;
+        public static final int lbl2=0x7f080012;
         public static final int left_drawer=0x7f080002;
-        public static final int list=0x7f08001f;
-        public static final int next=0x7f08000e;
-        public static final int p1=0x7f080011;
-        public static final int p2=0x7f080013;
-        public static final int p3=0x7f080014;
-        public static final int pager=0x7f08001b;
-        public static final int rel=0x7f08001a;
-        public static final int scr=0x7f080007;
-        public static final int seekBar1=0x7f08000f;
-        public static final int sfdf=0x7f080021;
-        public static final int switch1=0x7f08000b;
-        public static final int textView1=0x7f080012;
-        public static final int textView2=0x7f080017;
+        public static final int list=0x7f08000d;
+        public static final int next=0x7f080018;
+        public static final int p1=0x7f08001b;
+        public static final int p2=0x7f08001d;
+        public static final int p3=0x7f08001e;
+        public static final int pager=0x7f080008;
+        public static final int rel=0x7f080007;
+        public static final int scr=0x7f080014;
+        public static final int seekBar1=0x7f080019;
+        public static final int sfdf=0x7f080010;
+        public static final int switch1=0x7f080016;
+        public static final int textView1=0x7f08001c;
+        public static final int textView2=0x7f080021;
         public static final int v=0x7f080003;
-        public static final int va=0x7f080016;
-        public static final int view1=0x7f08000c;
+        public static final int va=0x7f080020;
+        public static final int view1=0x7f080013;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -138,13 +138,12 @@ public final class R {
         public static final int categories=0x7f030002;
         public static final int imageview=0x7f030003;
         public static final int left_nav_item=0x7f030004;
-        public static final int main_container=0x7f030005;
-        public static final int profile=0x7f030006;
-        public static final int profile_item=0x7f030007;
-        public static final int showcase=0x7f030008;
-        public static final int splash=0x7f030009;
-        public static final int store=0x7f03000a;
-        public static final int store_item=0x7f03000b;
+        public static final int list=0x7f030005;
+        public static final int list_item=0x7f030006;
+        public static final int main_container=0x7f030007;
+        public static final int profile=0x7f030008;
+        public static final int profile_item=0x7f030009;
+        public static final int splash=0x7f03000a;
     }
     public static final class string {
         public static final int app_name=0x7f060000;

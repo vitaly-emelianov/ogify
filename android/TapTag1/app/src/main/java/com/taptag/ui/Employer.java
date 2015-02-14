@@ -31,7 +31,7 @@ public class Employer extends CustomFragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
-		View v = inflater.inflate(R.layout.store, null);
+		View v = inflater.inflate(R.layout.list, null);
 
 		setupViewComponents(v);
 		return v;
@@ -125,7 +125,7 @@ public class Employer extends CustomFragment
 		{
 			if (v == null)
 				v = LayoutInflater.from(getActivity()).inflate(
-						R.layout.store_item, null);
+						R.layout.list_item, null);
 
 			TextView lbl = (TextView) v.findViewById(R.id.lbl1);
 			lbl.setText("Store " + (pos + 1));
