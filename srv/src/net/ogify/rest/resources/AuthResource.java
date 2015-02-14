@@ -65,7 +65,7 @@ public class AuthResource {
 
     @GET
     @PermitAll
-    @Path("/")
+    @Path("/do")
     public Response auth(
             @NotEmpty @QueryParam("code") String code,
             @QueryParam("sn") @NotNull SocialNetwork socialNetwork,

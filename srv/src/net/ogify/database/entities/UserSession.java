@@ -8,10 +8,7 @@ import java.util.Date;
  * Created by melges.morgen on 14.02.15.
  */
 @Entity
-@Table(name = "users_sessions",
-        uniqueConstraints = @UniqueConstraint(name = "sn_snId_session",
-                columnNames = {"sn", "sn_id", "session_secret"})
-)
+@Table(name = "users_sessions")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE) // Deny session transfer to client
 public class UserSession {

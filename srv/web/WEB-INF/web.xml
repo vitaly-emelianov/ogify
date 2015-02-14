@@ -16,13 +16,14 @@
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
             <param-value>
-                net.ogify.rest.resources
+                net.ogify.rest.resources,
+                net.ogify.engine.secure,
+                net.ogify.rest.exceptions;
             </param-value>
         </init-param>
         <init-param>
             <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
             <param-value>
-                com.sun.jersey.api.container.filter.LoggingFilter;
                 net.ogify.engine.secure.AuthFilter
             </param-value>
         </init-param>
