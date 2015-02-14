@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/C:/Users/illus_000/Documents/GitHub/eatfit/android/TapTag2/app/src/main/res/values/color.xml -->
+    <eat-comment/>
+    <color name="black">#000000</color>
+    <color name="blue_sky">#33b5e5</color>
+    <color name="dot_bar_bg">#1c1c1c</color>
+    <color name="gray_dk">#313031</color>
+    <color name="gray_light">#808080</color>
+    <color name="main_color_cyan">#6ca8a4</color>
+    <color name="main_color_cyan_dark">#3B616B</color>
+    <color name="red_light">#e74c3c</color>
+    <color name="theme_black">#313031</color>
+    <color name="theme_blue">#41b2ec</color>
+    <color name="theme_green">#97e365</color>
+    <color name="theme_red">#e74c3c</color>
+    <color name="transparent">#00000000</color>
+    <color name="white">#ffffff</color>
+    <color name="white_smoke">#F7F7F7</color>
+    <!-- From: file:/C:/Users/illus_000/Documents/GitHub/eatfit/android/TapTag2/app/src/main/res/values/dimens.xml -->
+    <eat-comment/>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="profile_col_w">145dp</dimen>
+    <dimen name="profile_grid_w">300dp</dimen>
+    <dimen name="store_img_height">185dp</dimen>
+    <!-- From: file:/C:/Users/illus_000/Documents/GitHub/eatfit/android/TapTag2/app/src/main/res/values/color.xml -->
+    <eat-comment/>
+    <drawable name="theme_black">#313031</drawable>
+    <drawable name="theme_blue">#41b2ec</drawable>
+    <drawable name="theme_green">#97e365</drawable>
+    <drawable name="theme_red">#e74c3c</drawable>
+    <!-- From: file:/C:/Users/illus_000/Documents/GitHub/eatfit/android/TapTag2/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="app_name">TapTag</string>
+    <string name="drawer_close">Close</string>
+    <string name="drawer_open">Open</string>
+    <string name="menu1">Menu</string>
+    <string name="settings">Settings</string>
+    <!-- From: file:/C:/Users/illus_000/Documents/GitHub/eatfit/android/TapTag2/app/src/main/res/values/styles.xml -->
+    <eat-comment/>
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    </style>
+    <style name="AppTheme" parent="AppBaseTheme">
+    </style>
+    <style name="btn_back" parent="android:Widget.Holo.Light.TextView">
+        <item name="android:background">@color/white</item>
+        <item name="android:drawableLeft">@drawable/arro_back</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:textColor">@color/main_color_cyan</item>
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    <style name="btn_next" parent="android:Widget.Holo.Light.TextView">
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/main_color_cyan</item>
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="custom_switch">
+        <item name="android:textStyle">bold</item>
+        <item name="android:thumb">@drawable/switch_thumb</item>
+        <item name="android:track">@drawable/switch_bg</item>
+    </style>
+    <style name="edittext_search" parent="android:Widget.Holo.Light.EditText">
+          <item name="android:background">@drawable/edittext_search</item>
+          <item name="android:drawableLeft">@drawable/ic_search</item>
+          <item name="android:drawablePadding">5dp</item>
+          <item name="android:ems">10</item>
+          <item name="android:inputType">textPersonName</item>
+          <item name="android:textColorHint">@color/main_color_cyan_dark</item>
+     </style>
+    <style name="lbl_pattern1" parent="android:Widget.Holo.Light.TextView">
+          <item name="android:textColor">@color/white</item>
+          <item name="android:textSize">20sp</item>
+          <item name="android:textStyle">bold</item>
+     </style>
+    <style name="lbl_pattern2" parent="android:Widget.Holo.Light.TextView">
+          <item name="android:textColor">@color/white</item>
+          <item name="android:textSize">18sp</item>
+          <item name="android:drawablePadding">3dp</item>
+     </style>
+    <style name="slider" parent="android:Widget.Holo.Light.SeekBar">
+          <item name="android:progress">60</item>
+          <item name="android:progressDrawable">@drawable/slider_progress_layer</item>
+          <item name="android:thumb">@drawable/slider_thumb</item>
+     </style>
+</resources>

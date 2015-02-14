@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/C:/Users/illus_000/Documents/GitHub/eatfit/android/TapTag2/app/src/main/res/values-large/dimens.xml -->
+    <eat-comment/>
+    <dimen name="store_img_height">360dp</dimen>
+</resources>

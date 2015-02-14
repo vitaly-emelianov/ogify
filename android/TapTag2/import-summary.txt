@@ -1,0 +1,173 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+* doc\
+* doc\allclasses-frame.html
+* doc\allclasses-noframe.html
+* doc\com\
+* doc\com\taptag\
+* doc\com\taptag\BuildConfig.html
+* doc\com\taptag\MainActivity.html
+* doc\com\taptag\R.attr.html
+* doc\com\taptag\R.color.html
+* doc\com\taptag\R.dimen.html
+* doc\com\taptag\R.drawable.html
+* doc\com\taptag\R.html
+* doc\com\taptag\R.id.html
+* doc\com\taptag\R.layout.html
+* doc\com\taptag\R.string.html
+* doc\com\taptag\R.style.html
+* doc\com\taptag\SplashScreen.html
+* doc\com\taptag\class-use\
+* doc\com\taptag\class-use\BuildConfig.html
+* doc\com\taptag\class-use\MainActivity.html
+* doc\com\taptag\class-use\R.attr.html
+* doc\com\taptag\class-use\R.color.html
+* doc\com\taptag\class-use\R.dimen.html
+* doc\com\taptag\class-use\R.drawable.html
+* doc\com\taptag\class-use\R.html
+* doc\com\taptag\class-use\R.id.html
+* doc\com\taptag\class-use\R.layout.html
+* doc\com\taptag\class-use\R.string.html
+* doc\com\taptag\class-use\R.style.html
+* doc\com\taptag\class-use\SplashScreen.html
+* doc\com\taptag\custom\
+* doc\com\taptag\custom\CustomActivity.html
+* doc\com\taptag\custom\CustomFragment.html
+* doc\com\taptag\custom\class-use\
+* doc\com\taptag\custom\class-use\CustomActivity.html
+* doc\com\taptag\custom\class-use\CustomFragment.html
+* doc\com\taptag\custom\package-frame.html
+* doc\com\taptag\custom\package-summary.html
+* doc\com\taptag\custom\package-tree.html
+* doc\com\taptag\custom\package-use.html
+* doc\com\taptag\model\
+* doc\com\taptag\model\Data.html
+* doc\com\taptag\model\class-use\
+* doc\com\taptag\model\class-use\Data.html
+* doc\com\taptag\model\package-frame.html
+* doc\com\taptag\model\package-summary.html
+* doc\com\taptag\model\package-tree.html
+* doc\com\taptag\model\package-use.html
+* doc\com\taptag\package-frame.html
+* doc\com\taptag\package-summary.html
+* doc\com\taptag\package-tree.html
+* doc\com\taptag\package-use.html
+* doc\com\taptag\ui\
+* doc\com\taptag\ui\Categories.GridAdapter.html
+* doc\com\taptag\ui\Categories.html
+* doc\com\taptag\ui\ImgFragment.html
+* doc\com\taptag\ui\LeftNavAdapter.html
+* doc\com\taptag\ui\MainFragment.html
+* doc\com\taptag\ui\Profile.GridAdapter.html
+* doc\com\taptag\ui\Profile.html
+* doc\com\taptag\ui\Search.html
+* doc\com\taptag\ui\Showcase.GridAdapter.html
+* doc\com\taptag\ui\Showcase.html
+* doc\com\taptag\ui\Store.ImgAdapter.html
+* doc\com\taptag\ui\Store.StoreAdapter.html
+* doc\com\taptag\ui\Store.html
+* doc\com\taptag\ui\class-use\
+* doc\com\taptag\ui\class-use\Categories.GridAdapter.html
+* doc\com\taptag\ui\class-use\Categories.html
+* doc\com\taptag\ui\class-use\ImgFragment.html
+* doc\com\taptag\ui\class-use\LeftNavAdapter.html
+* doc\com\taptag\ui\class-use\MainFragment.html
+* doc\com\taptag\ui\class-use\Profile.GridAdapter.html
+* doc\com\taptag\ui\class-use\Profile.html
+* doc\com\taptag\ui\class-use\Search.html
+* doc\com\taptag\ui\class-use\Showcase.GridAdapter.html
+* doc\com\taptag\ui\class-use\Showcase.html
+* doc\com\taptag\ui\class-use\Store.ImgAdapter.html
+* doc\com\taptag\ui\class-use\Store.StoreAdapter.html
+* doc\com\taptag\ui\class-use\Store.html
+* doc\com\taptag\ui\package-frame.html
+* doc\com\taptag\ui\package-summary.html
+* doc\com\taptag\ui\package-tree.html
+* doc\com\taptag\ui\package-use.html
+* doc\com\taptag\utils\
+* doc\com\taptag\utils\TouchEffect.html
+* doc\com\taptag\utils\class-use\
+* doc\com\taptag\utils\class-use\TouchEffect.html
+* doc\com\taptag\utils\package-frame.html
+* doc\com\taptag\utils\package-summary.html
+* doc\com\taptag\utils\package-tree.html
+* doc\com\taptag\utils\package-use.html
+* doc\constant-values.html
+* doc\deprecated-list.html
+* doc\help-doc.html
+* doc\index-files\
+* doc\index-files\index-1.html
+* doc\index-files\index-10.html
+* doc\index-files\index-11.html
+* doc\index-files\index-12.html
+* doc\index-files\index-13.html
+* doc\index-files\index-14.html
+* doc\index-files\index-15.html
+* doc\index-files\index-16.html
+* doc\index-files\index-17.html
+* doc\index-files\index-18.html
+* doc\index-files\index-2.html
+* doc\index-files\index-3.html
+* doc\index-files\index-4.html
+* doc\index-files\index-5.html
+* doc\index-files\index-6.html
+* doc\index-files\index-7.html
+* doc\index-files\index-8.html
+* doc\index-files\index-9.html
+* doc\index.html
+* doc\overview-frame.html
+* doc\overview-summary.html
+* doc\overview-tree.html
+* doc\package-list
+* doc\resources\
+* doc\resources\background.gif
+* doc\resources\tab.gif
+* doc\resources\titlebar.gif
+* doc\resources\titlebar_end.gif
+* doc\stylesheet.css
+* javadoc.xml
+* proguard-project.txt
+
+Replaced Jars with Dependencies:
+--------------------------------
+The importer recognized the following .jar files as third party
+libraries and replaced them with Gradle dependencies instead. This has
+the advantage that more explicit version information is known, and the
+libraries can be updated automatically. However, it is possible that
+the .jar file in your project was of an older version than the
+dependency we picked, which could render the project not compileable.
+You can disable the jar replacement in the import wizard and try again:
+
+android-support-v4.jar => com.android.support:support-v4:21.0.3
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => app\src\main\AndroidManifest.xml
+* assets\ => app\src\main\assets\
+* res\ => app\src\main\res\
+* src\ => app\src\main\java\
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)
