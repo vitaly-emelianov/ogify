@@ -8,16 +8,13 @@ import java.util.Date;
  * Created by melges.morgen on 14.02.15.
  */
 @Entity
-@Table(name = "users_sessions")
+@Table(name = "users_sessions",
+        uniqueConstraints = @UniqueConstraint(name = "sn_snId_session",
+                columnNames = {"sn", "sn_id", "session_secret"})
+)
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE) // Deny session transfer to client
 public class UserSession {
-    @XmlType(name = "social_network")
-    @XmlEnum
-    public enum SocialNetwork {
-        @XmlEnumValue("Facebook") FaceBook,
-        @XmlEnumValue("Vk") Vk
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,15 +23,6 @@ public class UserSession {
 
     @Column(name = "session_secret", nullable = false, unique = false, length = 32, updatable = false)
     private String sessionSecret;
-
-    @Column(name = "sn_id", nullable = false, unique = false)
-    Long snId;
-
-    @Column(name = "sn", nullable = false, unique = false)
-    SocialNetwork sn;
-
-    @Column(name = "auth_token", unique = false, nullable = false)
-    String authToken;
 
     @Temporal(TemporalType.TIMESTAMP)
     Date expireIn;

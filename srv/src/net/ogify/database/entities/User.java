@@ -15,9 +15,13 @@ import java.util.Map;
 @Entity
 @Table(name = "users")
 @XmlRootElement
-@NamedQueries(
-        @NamedQuery(name = "User.getById", query = "select user from User user where user.id = :id")
-)
+@NamedQueries({
+        @NamedQuery(name = "User.getById", query = "select user from User user where user.id = :id"),
+        @NamedQuery(name = "User.getByIdAndSession", query = "select user from User user " +
+                "where user.id = :userId " +
+                "and user = (select session.owner " +
+                "from UserSession session where session.sessionSecret = :sessionSecret)")
+})
 public class User {
     @Id
     @NotNull
@@ -25,6 +29,12 @@ public class User {
     @Column(name = "user_id", nullable = false, unique = true)
     @XmlElement(name = "user_id", nillable = false, required = true)
     Long id;
+
+    @Column(name = "facebook_id", nullable = true)
+    Long facebookId;
+
+    @Column(name = "vk_id", nullable = true)
+    Long vkId;
 
     @Column(name = "fullName", nullable = false, unique = false)
     @XmlElement(name = "fullName",required = true, nillable = false)
@@ -56,4 +66,62 @@ public class User {
 
     @OneToMany(mappedBy = "whom")
     List<Feedback> feedbackAboutUser = new ArrayList<Feedback>();
+
+    public User() {
+
+    }
+
+    public User(String fullname, String photoUri) {
+        this.fullname = fullname;
+        this.photoUri = photoUri;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public String getPhotoUri() {
+        return photoUri;
+    }
+
+    public Double getRatingAsCustomer() {
+        return ratingAsCustomer;
+    }
+
+    public void setRatingAsCustomer(Double ratingAsCustomer) {
+        this.ratingAsCustomer = ratingAsCustomer;
+    }
+
+    public Double getRatingAsExecutor() {
+        return ratingAsExecutor;
+    }
+
+    public void setRatingAsExecutor(Double ratingAsExecutor) {
+        this.ratingAsExecutor = ratingAsExecutor;
+    }
+
+    public Long getVkId() {
+        return vkId;
+    }
+
+    public void setVkId(Long vkId) {
+        this.vkId = vkId;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public void addSession(String sessionSecret, Long expireIn) {
+
+    }
+
+    public void addAuthToken(String token, SocialNetwork socialNetwork) {
+
+
+    }
 }
