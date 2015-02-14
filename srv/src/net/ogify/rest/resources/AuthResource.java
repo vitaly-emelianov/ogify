@@ -10,14 +10,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.CookieParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,6 +20,8 @@ import java.net.URISyntaxException;
  * Created by melges.morgen on 15.02.15.
  */
 @Path("/auth")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class AuthResource {
     /**
      * Field storing the session id of the user if the user has no session it is null.
@@ -69,6 +65,7 @@ public class AuthResource {
 
     @GET
     @PermitAll
+    @Path("/")
     public Response auth(
             @NotEmpty @QueryParam("code") String code,
             @QueryParam("sn") @NotNull SocialNetwork socialNetwork,

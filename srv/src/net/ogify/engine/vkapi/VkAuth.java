@@ -22,7 +22,7 @@ public class VkAuth {
     private final static Logger logger = Logger.getLogger(VkAuth.class);
 
     public static VkAuthUri getClientAuthUri(URI redirectUri) {
-        String scope = "notify,email,offline";
+        String scope = "notify,email,offline,friends";
         return new VkAuthUri(String.format("%s?client_id=%s&scope=%s&redirect_uri=%s&response_type=code&v=%s",
                 VK_CLIENT_ACCESS_URI, APP_ID, scope, redirectUri.toString(), VK_API_VERSION));
     }
