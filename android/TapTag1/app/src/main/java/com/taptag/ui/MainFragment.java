@@ -1,6 +1,7 @@
 package com.taptag.ui;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ public class MainFragment extends CustomFragment
 		setTouchNClick(v.findViewById(R.id.p1));
 		setTouchNClick(v.findViewById(R.id.p2));
 		setTouchNClick(v.findViewById(R.id.p3));
+
 		return v;
 	}
 

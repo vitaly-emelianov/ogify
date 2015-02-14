@@ -2,10 +2,13 @@ package com.taptag;
 
 import java.util.ArrayList;
 
+import android.app.ActionBar;
+import android.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
+
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +21,7 @@ import android.widget.ListView;
 
 import com.taptag.custom.CustomActivity;
 import com.taptag.model.DrawerItem;
+import com.taptag.ui.Employee;
 import com.taptag.ui.LeftNavAdapter;
 import com.taptag.ui.Profile;
 import com.taptag.ui.Employer;
@@ -105,8 +109,8 @@ public class MainActivity extends CustomActivity {
     }
 
     /**
-     * This method returns a list of dummy items for left navigation slider. You
-     * can write or replace this method with the actual implementation for list
+     * This method returns a offers_list of dummy items for left navigation slider. You
+     * can write or replace this method with the actual implementation for offers_list
      * items.
      *
      * @return the dummy items
@@ -125,12 +129,13 @@ public class MainActivity extends CustomActivity {
      *
      * @param pos the position of tab selected.
      */
+
     private void launchFragment(int pos) {
         Fragment f = null;
         String title = null;
         if (pos == 0) {
             title = "Employee";
-            f = new Employer();
+            f = new Employee();
         } else if (pos == 1) {
             title = "Employer";
             f = new Employer();

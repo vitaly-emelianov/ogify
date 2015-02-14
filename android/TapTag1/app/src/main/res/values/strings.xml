@@ -6,4 +6,12 @@
     <string name="menu1">Menu</string>
 <string name="drawer_open">Open</string>
 <string name="drawer_close">Close</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="text_tab1">Это первая вкладка</string>
+    <string name="text_tab2">Это вторая вкладка</string>
+    <string name="text_tab3">Это третья вкладка</string>
+    <string name="text_tab_header">Свой заголовок</string>
 </resources>

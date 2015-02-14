@@ -21,168 +21,121 @@ import com.taptag.custom.CustomFragment;
  * The Class Store is the Fragment class that is launched when the user
  * clicks on Store button in Left navigation drawer.
  */
-public class Employer extends CustomFragment
-{
+public class Employer extends CustomFragment {
 
-	/* (non-Javadoc)
-	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
-	 */
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState)
-	{
-		View v = inflater.inflate(R.layout.list, null);
+    /* (non-Javadoc)
+     * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+     */
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.offers_list, null);
 
-		setupViewComponents(v);
-		return v;
-	}
+        setupViewComponents(v);
+        return v;
+    }
 
-	/**
-	 * This method is called to initiate the view components and to apply listeners to view components.
-	 * 
-	 * @param v
-	 *            the container view
-	 */
-	private void setupViewComponents(View v)
-	{
-		ListView grid = (ListView) v.findViewById(R.id.list);
-		grid.setAdapter(new StoreAdapter());
+    /**
+     * This method is called to initiate the view components and to apply listeners to view components.
+     *
+     * @param v the container view
+     */
+    private void setupViewComponents(View v) {
+        ListView grid = (ListView) v.findViewById(R.id.list);
+        grid.setAdapter(new StoreAdapter());
+    }
 
-		ViewPager pager = (ViewPager) v.findViewById(R.id.pager);
-		pager.setAdapter(new ImgAdapter(getFragmentManager()));
+    /**
+     * The Class StoreAdapter is the adapter for displaying Products in GridView.
+     * The current implementation simply display dummy product images. You need
+     * to change it as per your needs.
+     */
+    private class StoreAdapter extends BaseAdapter {
 
-		final ImageView dot1 = (ImageView) v.findViewById(R.id.dot1);
-		final ImageView dot2 = (ImageView) v.findViewById(R.id.dot2);
-		final ImageView dot3 = (ImageView) v.findViewById(R.id.dot3);
-		pager.setOnPageChangeListener(new OnPageChangeListener() {
+        /* (non-Javadoc)
+         * @see android.widget.Adapter#getCount()
+         */
+        @Override
+        public int getCount() {
+            return 20;
+        }
 
-			@Override
-			public void onPageSelected(int pos)
-			{
-				dot1.setImageResource(R.drawable.dot_unselected);
-				dot2.setImageResource(R.drawable.dot_unselected);
-				dot3.setImageResource(R.drawable.dot_unselected);
-				if (pos == 0)
-					dot1.setImageResource(R.drawable.dot_selected);
-				else if (pos == 1)
-					dot2.setImageResource(R.drawable.dot_selected);
-				else if (pos == 2)
-					dot3.setImageResource(R.drawable.dot_selected);
-			}
+        /* (non-Javadoc)
+         * @see android.widget.Adapter#getItem(int)
+         */
+        @Override
+        public Object getItem(int arg0) {
+            return null;
+        }
 
-			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2)
-			{
-			}
+        /* (non-Javadoc)
+         * @see android.widget.Adapter#getItemId(int)
+         */
+        @Override
+        public long getItemId(int arg0) {
+            return arg0;
+        }
 
-			@Override
-			public void onPageScrollStateChanged(int arg0)
-			{
-			}
-		});
-	}
+        /* (non-Javadoc)
+         * @see android.widget.Adapter#getView(int, android.view.View, android.view.ViewGroup)
+         */
+        @Override
+        public View getView(int pos, View v, ViewGroup arg2) {
+            if (v == null)
+                v = LayoutInflater.from(getActivity()).inflate(
+                        R.layout.offers_list_item, null);
 
-	/**
-	 * The Class StoreAdapter is the adapter for displaying Products in GridView.
-	 * The current implementation simply display dummy product images. You need
-	 * to change it as per your needs.
-	 */
-	private class StoreAdapter extends BaseAdapter
-	{
+            TextView lbl = (TextView) v.findViewById(R.id.lbl1);
+            lbl.setText("Store " + (pos + 1));
 
-		/* (non-Javadoc)
-		 * @see android.widget.Adapter#getCount()
-		 */
-		@Override
-		public int getCount()
-		{
-			return 20;
-		}
+            lbl = (TextView) v.findViewById(R.id.lbl2);
+            lbl.setText((pos + 1) * 100 + " likes, " + (pos + 1) * 10
+                    + " products");
 
-		/* (non-Javadoc)
-		 * @see android.widget.Adapter#getItem(int)
-		 */
-		@Override
-		public Object getItem(int arg0)
-		{
-			return null;
-		}
+            return v;
+        }
 
-		/* (non-Javadoc)
-		 * @see android.widget.Adapter#getItemId(int)
-		 */
-		@Override
-		public long getItemId(int arg0)
-		{
-			return arg0;
-		}
+    }
 
-		/* (non-Javadoc)
-		 * @see android.widget.Adapter#getView(int, android.view.View, android.view.ViewGroup)
-		 */
-		@Override
-		public View getView(int pos, View v, ViewGroup arg2)
-		{
-			if (v == null)
-				v = LayoutInflater.from(getActivity()).inflate(
-						R.layout.list_item, null);
+    /**
+     * The Class ImgAdapter is the Adapter class for ViewPager to provide image sliding feature.
+     */
+    private class ImgAdapter extends FragmentStatePagerAdapter {
 
-			TextView lbl = (TextView) v.findViewById(R.id.lbl1);
-			lbl.setText("Store " + (pos + 1));
+        /**
+         * Instantiates a new img adapter.
+         *
+         * @param fm the fm
+         */
+        public ImgAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
-			lbl = (TextView) v.findViewById(R.id.lbl2);
-			lbl.setText((pos + 1) * 100 + " likes, " + (pos + 1) * 10
-					+ " products");
+        /* (non-Javadoc)
+         * @see android.support.v4.app.FragmentStatePagerAdapter#getItem(int)
+         */
+        @Override
+        public Fragment getItem(int pos) {
+            Bundle b = new Bundle();
+            if (pos == 0)
+                b.putInt("img", R.drawable.store_img1);
+            else if (pos == 1)
+                b.putInt("img", R.drawable.store_img2);
+            else if (pos == 2)
+                b.putInt("img", R.drawable.store_img3);
+            ImgFragment i = new ImgFragment();
+            i.setArguments(b);
+            return i;
+        }
 
-			return v;
-		}
+        /* (non-Javadoc)
+         * @see android.support.v4.view.PagerAdapter#getCount()
+         */
+        @Override
+        public int getCount() {
+            return 3;
+        }
 
-	}
-
-	/**
-	 * The Class ImgAdapter is the Adapter class for ViewPager to provide image sliding feature.
-	 */
-	private class ImgAdapter extends FragmentStatePagerAdapter
-	{
-
-		/**
-		 * Instantiates a new img adapter.
-		 * 
-		 * @param fm
-		 *            the fm
-		 */
-		public ImgAdapter(FragmentManager fm)
-		{
-			super(fm);
-		}
-
-		/* (non-Javadoc)
-		 * @see android.support.v4.app.FragmentStatePagerAdapter#getItem(int)
-		 */
-		@Override
-		public Fragment getItem(int pos)
-		{
-			Bundle b = new Bundle();
-			if (pos == 0)
-				b.putInt("img", R.drawable.store_img1);
-			else if (pos == 1)
-				b.putInt("img", R.drawable.store_img2);
-			else if (pos == 2)
-				b.putInt("img", R.drawable.store_img3);
-			ImgFragment i = new ImgFragment();
-			i.setArguments(b);
-			return i;
-		}
-
-		/* (non-Javadoc)
-		 * @see android.support.v4.view.PagerAdapter#getCount()
-		 */
-		@Override
-		public int getCount()
-		{
-			return 3;
-		}
-
-	}
+    }
 
 }
