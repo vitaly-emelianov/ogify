@@ -33,4 +33,13 @@ public class OrderController {
             em.close();
         }
     }
+
+    public static Order getOrderById(Long id) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.find(Order.class, id);
+        } finally {
+            em.close();
+        }
+    }
 }

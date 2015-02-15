@@ -95,7 +95,7 @@ public class Order {
     @XmlElement
     Date expireIn;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     @XmlElement(name = "items")
     List<OrderItem> items = new ArrayList<OrderItem>();
 

@@ -43,7 +43,7 @@ public class OrderResource {
     @GET
     @Path(("{orderId}"))
     public Order getOrder(@NotNull @PathParam("orderId") Long orderId) {
-        return new Order();
+        return OrderController.getOrderById(orderId);
     }
 
     @POST

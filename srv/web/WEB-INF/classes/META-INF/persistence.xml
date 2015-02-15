@@ -2,7 +2,7 @@
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
 
     <persistence-unit name="OgifyDataSource" transaction-type="JTA">
-        <jta-data-source>java:comp/env/jdbc/ogify</jta-data-source>
+        <jta-data-source>java:comp/env/jdbc/PostgreSQLDS</jta-data-source>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
