@@ -16,13 +16,14 @@ public class OrderItem {
     @Column(name = "expected_cost")
     Double expectedCost;
 
-    @Column(name = "reward")
-    Double reward;
-
     @Column(name = "item_comment")
     String comment;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_order", nullable = false)
     Order order;
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 }

@@ -1,9 +1,6 @@
 package net.ogify.database.entities;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
@@ -56,7 +53,8 @@ public class User {
     Double ratingAsExecutor = 3.5;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<UserSession> sessions = new ArrayList<UserSession>();
+    @MapKeyColumn(name = "session_secret",unique = true, updatable = false, insertable = false)
+    private Map<String, UserSession> sessions = new HashMap<String, UserSession>();
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<SocialToken> tokens = new ArrayList<SocialToken>();
@@ -123,8 +121,10 @@ public class User {
     }
 
     public void addSession(String sessionSecret, Long expireIn) {
+        if(sessions.containsKey(sessionSecret))
+            return; // Current user already have provided session
         UserSession session = new UserSession(sessionSecret, expireIn, this);
-        sessions.add(session);
+        sessions.put(session.getSessionSecret(), session);
     }
 
     public void addAuthToken(String token, SocialNetwork socialNetwork, Long expireIn) {
