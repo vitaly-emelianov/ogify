@@ -39,7 +39,7 @@
     <![endif]-->
 </head>
 
-<body class="skin-blue">
+<body class="skin-blue fixed ">
 
 <div class="wrapper">
     <!-- header logo: style can be found in header.less -->
@@ -52,7 +52,7 @@
             <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
                 <span class="sr-only">Toggle navigation</span>
             </a>
-            <div class="navbar-custom-menu">
+            <div class="navbar-custom-menu" >
                 <ul class="nav navbar-nav">
 
                     <!-- Messages: style can be found in dropdown.less-->
@@ -307,36 +307,54 @@
             <div class="row">
 
                 <section class="col-lg-4 connectedSortable">
-                    <div class="nav-tabs-custom">
+                    <div class="nav-tabs-custom fixedPro" >
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab_1" data-toggle="tab">Tab 1</a></li>
-                            <li class=""><a href="#tab_2" data-toggle="tab">Tab 2</a></li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    Dropdown <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
-                                    <li role="presentation" class="divider"></li>
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
-                                </ul>
-                            </li>
-                            <li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a></li>
+                            <li class="active"><a href="#tab_1" data-toggle="tab">Список заказы</a></li>
+                            <li class=""><a href="#tab_2" data-toggle="tab">Мои заказы</a></li>
+                            <li class=""><a href="#tab_3" data-toggle="tab">Уведомления</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab_1">
-                                <b>How to use:</b>
-                                <p>Exactly like the original bootstrap tabs except you should use
-                                    the custom wrapper <code>.nav-tabs-custom</code> to achieve this style.</p>
-                                A wonderful serenity has taken possession of my entire soul,
-                                like these sweet mornings of spring which I enjoy with my whole heart.
-                                I am alone, and feel the charm of existence in this spot,
-                                which was created for the bliss of souls like mine. I am so happy,
-                                my dear friend, so absorbed in the exquisite sense of mere tranquil existence,
-                                that I neglect my talents. I should be incapable of drawing a single stroke
-                                at the present moment; and yet I feel that I never was a greater artist than now.
+                                <div class="box-body" style="padding: 0px">
+                                    <ul class="menuShort" style="">
+                                        <li style="list-style: none;">
+
+                                            <div class="user-panel" style="color: black;">
+                                                <div class="pull-left image">
+                                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <div class="info avatarsIcons">
+                                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
+                                                    <a href="#" >Добавил вас в список нотификаций</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li style="list-style: none;">
+
+                                            <div class="user-panel" style="color: black;">
+                                                <div class="pull-left image">
+                                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <div class="info avatarsIcons">
+                                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
+                                                    <a href="#" >Добавил вас в список нотификаций</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li style="list-style: none;">
+
+                                            <div class="user-panel" style="color: black;">
+                                                <div class="pull-left image">
+                                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <div class="info avatarsIcons">
+                                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
+                                                    <a href="#" >Добавил вас в список нотификаций</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div><!-- /.box-body-->
                             </div><!-- /.tab-pane -->
                             <div class="tab-pane" id="tab_2">
                                 The European languages are members of the same family. Their separate existence is a myth.
@@ -346,13 +364,55 @@
                                 achieve this, it would be necessary to have uniform grammar, pronunciation and more common
                                 words. If several languages coalesce, the grammar of the resulting language is more simple
                                 and regular than that of the individual languages.
-                            </div><!-- /.tab-pane -->
+                            </div>
+                            <div class="tab-pane active" id="tab_3">
+                                <div class="box-body" style="padding: 0px">
+                                    <ul class="menuShort" style="">
+                                        <li style="list-style: none;">
+
+                                            <div class="user-panel" style="color: black;">
+                                                <div class="pull-left image">
+                                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <div class="info avatarsIcons">
+                                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
+                                                    <a href="#" >Добавил вас в список нотификаций</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li style="list-style: none;">
+
+                                            <div class="user-panel" style="color: black;">
+                                                <div class="pull-left image">
+                                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <div class="info avatarsIcons">
+                                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
+                                                    <a href="#" >Добавил вас в список нотификаций</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li style="list-style: none;">
+
+                                            <div class="user-panel" style="color: black;">
+                                                <div class="pull-left image">
+                                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <div class="info avatarsIcons">
+                                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
+                                                    <a href="#" >Добавил вас в список нотификаций</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div><!-- /.box-body-->
+                            </div><!-- /.tab-pane --><!-- /.tab-pane -->
                         </div><!-- /.tab-content -->
                     </div>
                 </section><!-- /.Left col -->
-                <section class="col-lg-5 connectedSortable">
+                <section class="col-lg-8 connectedSortable">
                     <!-- Map box -->
-                    <div class="box box-primary">
+                    <div class="box box-primary fixedPro" >
                         <div class="box-header">
                             <i class="fa fa-map-marker"></i>
                             <h3 class="box-title">
@@ -360,7 +420,7 @@
                             </h3>
                         </div>
                         <div class="box-body">
-                            <div id="world-map" style="height: 305px; width: 100%;"></div>
+                            <div id="world-map" style="height: -webkit-calc( 100vh - 185px );  width: 100%;"></div>
                         </div><!-- /.box-body-->
 
                     </div>
@@ -368,57 +428,7 @@
                     <!-- TO DO List -->
 
                 </section><!-- right col -->
-                <section class="col-lg-3 connectedSortable">
-                    <div class="box box-primary">
-                        <div class="box-header">
-                            <i class="fa fa-map-marker"></i>
-                            <h3 class="box-title">
-                                Уведомления
-                            </h3>
-                        </div>
-                        <div class="box-body" style="padding: 0px">
-                            <ul class="menuShort" style="">
-                                <li style="list-style: none;">
 
-                                <div class="user-panel" style="color: black;">
-                                <div class="pull-left image">
-                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                                </div>
-                                <div class="info avatarsIcons">
-                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
-                                    <a href="#" >Добавил вас в список нотификаций</a>
-                                </div>
-                                    </div>
-                                </li>
-                                <li style="list-style: none;">
-
-                                    <div class="user-panel" style="color: black;">
-                                        <div class="pull-left image">
-                                            <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                                        </div>
-                                        <div class="info avatarsIcons">
-                                            <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
-                                            <a href="#" >Добавил вас в список нотификаций</a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li style="list-style: none;">
-
-                                    <div class="user-panel" style="color: black;">
-                                        <div class="pull-left image">
-                                            <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                                        </div>
-                                        <div class="info avatarsIcons">
-                                            <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
-                                            <a href="#" >Добавил вас в список нотификаций</a>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div><!-- /.box-body-->
-
-                    </div>
-                </section><!-- /.Left col -->
 
 
             </div>
