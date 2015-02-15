@@ -48,10 +48,18 @@
                     <webResources>
                         <resource>
                             <directory>
-                                landing
+                                face/landing
                             </directory>
                             <targetPath>
-                                landing
+                                face/landing
+                            </targetPath>
+                        </resource>
+                        <resource>
+                            <directory>
+                                face/client
+                            </directory>
+                            <targetPath>
+                                client
                             </targetPath>
                         </resource>
                     </webResources>
