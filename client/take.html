@@ -306,15 +306,81 @@
 
             <div class="row">
 
-                <section class="col-lg-4 connectedSortable">
+                <section class="col-lg-5 connectedSortable">
                     <div class="nav-tabs-custom fixedPro" >
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab_1" data-toggle="tab">Список заказы</a></li>
+                            <li class="active"><a href="#tab_1" data-toggle="tab">Свободные заказы</a></li>
                             <li class=""><a href="#tab_2" data-toggle="tab">Мои заказы</a></li>
                             <li class=""><a href="#tab_3" data-toggle="tab">Уведомления</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab_1">
+                                <div class="box-body" style="padding: 0px">
+                                    <ul class="menuShort" style="">
+                                        <li style="list-style: none;">
+
+                                            <div class="user-panel" style="color: black;">
+                                                <div class="pull-left image">
+                                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <div class="info avatarsIcons">
+                                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
+                                                    <a href="#" >Купить 12 банок ред була</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li style="list-style: none;">
+
+                                            <div class="user-panel" style="color: black;">
+                                                <div class="pull-left image">
+                                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <div class="info avatarsIcons">
+                                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
+                                                    <a href="#" >Продать 12 банок томатного сока</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li style="list-style: none;">
+
+                                            <div class="user-panel" style="color: black;">
+                                                <div class="pull-left image">
+                                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <div class="info avatarsIcons">
+                                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
+                                                    <a href="#" >Поздравить бабушку с днем рождения</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li style="list-style: none;">
+
+                                            <div class="user-panel" style="color: black;">
+                                                <div class="pull-left image">
+                                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <div class="info avatarsIcons">
+                                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 2 час</small></h5>
+                                                    <a href="#" >Посмотреть телепередачу дома и пересказать сюжет</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li style="list-style: none;">
+
+                                            <div class="user-panel" style="color: black;">
+                                                <div class="pull-left image">
+                                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <div class="info avatarsIcons">
+                                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 50 мин</small></h5>
+                                                    <a href="#" >Преодолеть психологический возраст в 25</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div><!-- /.box-body-->
+                            </div><!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_2">
                                 <div class="box-body" style="padding: 0px">
                                     <ul class="menuShort" style="">
                                         <li style="list-style: none;">
@@ -355,17 +421,8 @@
                                         </li>
                                     </ul>
                                 </div><!-- /.box-body-->
-                            </div><!-- /.tab-pane -->
-                            <div class="tab-pane" id="tab_2">
-                                The European languages are members of the same family. Their separate existence is a myth.
-                                For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ
-                                in their grammar, their pronunciation and their most common words. Everyone realizes why a
-                                new common language would be desirable: one could refuse to pay expensive translators. To
-                                achieve this, it would be necessary to have uniform grammar, pronunciation and more common
-                                words. If several languages coalesce, the grammar of the resulting language is more simple
-                                and regular than that of the individual languages.
                             </div>
-                            <div class="tab-pane active" id="tab_3">
+                            <div class="tab-pane" id="tab_3">
                                 <div class="box-body" style="padding: 0px">
                                     <ul class="menuShort" style="">
                                         <li style="list-style: none;">
@@ -410,7 +467,7 @@
                         </div><!-- /.tab-content -->
                     </div>
                 </section><!-- /.Left col -->
-                <section class="col-lg-8 connectedSortable">
+                <section class="col-lg-7 connectedSortable">
                     <!-- Map box -->
                     <div class="box box-primary fixedPro" >
                         <div class="box-header">
@@ -420,7 +477,7 @@
                             </h3>
                         </div>
                         <div class="box-body">
-                            <div id="world-map" style="height: -webkit-calc( 100vh - 185px );  width: 100%;"></div>
+                            <div id="world-map" class="fixedProMap"></div>
                         </div><!-- /.box-body-->
 
                     </div>
