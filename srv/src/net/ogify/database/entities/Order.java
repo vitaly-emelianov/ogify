@@ -12,6 +12,11 @@ import java.util.List;
  */
 @Entity
 @Table(name = "orders")
+@NamedQueries({@NamedQuery(name = "Order.getNearestOrder", query = "select orders from Order orders " +
+        "where orders.latitude > (:latitude - 0.07) and orders.latitude < (:latitude + 0.07) " +
+        "and orders.longitude > (:longitude - 0.07) and orders.longitude < (:longitude + 0.07)" +
+        "and orders.expireIn > CURRENT_TIMESTAMP and orders.status = :orderStatus " +
+        "and orders.namespace = :orderNamespace")})
 @XmlRootElement
 public class Order {
     @XmlType(name = "order_status")
@@ -44,7 +49,7 @@ public class Order {
     User owner;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_executor", nullable = false)
+    @JoinColumn(name = "order_executor", nullable = true)
     @XmlElement(nillable = true, required = true)
     User executor;
 

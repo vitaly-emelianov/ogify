@@ -59,12 +59,12 @@ public class AuthFilter implements ContainerRequestFilter {
         Map<String, Cookie> cookieMap = requestContext.getCookies();
         Cookie vkIdCookie = cookieMap.get(AuthController.USER_ID_COOKIE_NAME);
         if (vkIdCookie == null)
-            throw new NotAuthenticatedException("No vkId in cookie.");
+            throw new NotAuthenticatedException("No cookie: " + AuthController.USER_ID_COOKIE_NAME);
         Long vkId;
         try {
             vkId = Long.parseLong(vkIdCookie.getValue());
         } catch (NumberFormatException exception) {
-            throw new NotAuthenticatedException("Invalid vkId in cookie");
+            throw new NotAuthenticatedException("Invalid cookie: " + AuthController.USER_ID_COOKIE_NAME);
         }
 
         Cookie sessionCookie = cookieMap.get(AuthController.SESSION_COOKIE_NAME);
