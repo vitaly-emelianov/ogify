@@ -39,7 +39,7 @@
     <![endif]-->
 </head>
 
-<body class="skin-blue">
+<body class="skin-blue fixed ">
 
 <div class="wrapper">
     <!-- header logo: style can be found in header.less -->
@@ -52,7 +52,7 @@
             <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
                 <span class="sr-only">Toggle navigation</span>
             </a>
-            <div class="navbar-custom-menu">
+            <div class="navbar-custom-menu" >
                 <ul class="nav navbar-nav">
 
                     <!-- Messages: style can be found in dropdown.less-->
@@ -270,13 +270,13 @@
                         <i class="fa fa-dashboard"></i> <span>Заказы</span> <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li class="active">
+                        <li >
                             <a href="add.html">
                                 <i class="fa fa-plus"></i>
                                 <span>Добавить</span>
                             </a>
                         </li>
-                        <li >
+                        <li class="active">
                             <a href="take.html">
                                 <i class="fa fa-envelope-o"></i>
                                 <span>Выполнить</span>
@@ -306,94 +306,130 @@
 
             <div class="row">
 
-                <section class="col-lg-7 connectedSortable">
+                <section class="col-lg-4 connectedSortable">
+                    <div class="nav-tabs-custom fixedPro" >
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_1" data-toggle="tab">Список заказы</a></li>
+                            <li class=""><a href="#tab_2" data-toggle="tab">Мои заказы</a></li>
+                            <li class=""><a href="#tab_3" data-toggle="tab">Уведомления</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+                                <div class="box-body" style="padding: 0px">
+                                    <ul class="menuShort" style="">
+                                        <li style="list-style: none;">
+
+                                            <div class="user-panel" style="color: black;">
+                                                <div class="pull-left image">
+                                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <div class="info avatarsIcons">
+                                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
+                                                    <a href="#" >Добавил вас в список нотификаций</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li style="list-style: none;">
+
+                                            <div class="user-panel" style="color: black;">
+                                                <div class="pull-left image">
+                                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <div class="info avatarsIcons">
+                                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
+                                                    <a href="#" >Добавил вас в список нотификаций</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li style="list-style: none;">
+
+                                            <div class="user-panel" style="color: black;">
+                                                <div class="pull-left image">
+                                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <div class="info avatarsIcons">
+                                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
+                                                    <a href="#" >Добавил вас в список нотификаций</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div><!-- /.box-body-->
+                            </div><!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_2">
+                                The European languages are members of the same family. Their separate existence is a myth.
+                                For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ
+                                in their grammar, their pronunciation and their most common words. Everyone realizes why a
+                                new common language would be desirable: one could refuse to pay expensive translators. To
+                                achieve this, it would be necessary to have uniform grammar, pronunciation and more common
+                                words. If several languages coalesce, the grammar of the resulting language is more simple
+                                and regular than that of the individual languages.
+                            </div>
+                            <div class="tab-pane active" id="tab_3">
+                                <div class="box-body" style="padding: 0px">
+                                    <ul class="menuShort" style="">
+                                        <li style="list-style: none;">
+
+                                            <div class="user-panel" style="color: black;">
+                                                <div class="pull-left image">
+                                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <div class="info avatarsIcons">
+                                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
+                                                    <a href="#" >Добавил вас в список нотификаций</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li style="list-style: none;">
+
+                                            <div class="user-panel" style="color: black;">
+                                                <div class="pull-left image">
+                                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <div class="info avatarsIcons">
+                                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
+                                                    <a href="#" >Добавил вас в список нотификаций</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li style="list-style: none;">
+
+                                            <div class="user-panel" style="color: black;">
+                                                <div class="pull-left image">
+                                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                </div>
+                                                <div class="info avatarsIcons">
+                                                    <h5 class="">Сергей Шилин <small class="pull-right" style="color: #d3d3d3;"><i class="fa fa-clock-o" ></i> 5 мин</small></h5>
+                                                    <a href="#" >Добавил вас в список нотификаций</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div><!-- /.box-body-->
+                            </div><!-- /.tab-pane --><!-- /.tab-pane -->
+                        </div><!-- /.tab-content -->
+                    </div>
+                </section><!-- /.Left col -->
+                <section class="col-lg-8 connectedSortable">
                     <!-- Map box -->
-                    <div class="box box-primary">
+                    <div class="box box-primary fixedPro" >
                         <div class="box-header">
                             <i class="fa fa-map-marker"></i>
                             <h3 class="box-title">
-                                Место доставки
+                                Карта заказов
                             </h3>
                         </div>
                         <div class="box-body">
-                            <div id="world-map" style="height: 305px; width: 100%;"></div>
+                            <div id="world-map" style="height: -webkit-calc( 100vh - 185px );  width: 100%;"></div>
                         </div><!-- /.box-body-->
 
                     </div>
                     <!-- /.box -->
-                </section><!-- /.Left col -->
-
-                <section class="col-lg-5 connectedSortable">
-
                     <!-- TO DO List -->
-                    <div class="box box-primary">
-                        <div class="box-header">
-                            <i class="ion ion-clipboard"></i>
-                            <h3 class="box-title">Информация о заказе</h3>
-                        </div><!-- /.box-header -->
-                        <div class="box-body">
-                            <div>
-                                <div class="form-group">
-                                    <label for="ordername">Название:</label>
-                                    <input type="email" class="form-control" id="ordername" placeholder="Введите название">
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label for="ordercost">Вознаграждение:</label>
-                                            <input type="text" class="form-control" id="ordercost" placeholder="100 рублей, попить чай...">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="orderdateto">Актуально до:</label>
-                                            <div class='input-group date' id='orderdateto'>
-                                                <input type='text' class="form-control" />
-                                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="additemlistel">Добавить товар:</label>
-                                        <div class="row input-group double-input"  >
-                                            <div class="col-md-8 col-md-offset-0" id='additemlistel'>
-                                                <input type="text" class="form-control" placeholder="Товар" >
-                                            </div>
-                                            <div class="col-md-offset-0 col-md-4">
-                                                <div class='input-group' id="itemPrice" >
-                                                    <input  type="text" class="form-control" placeholder="Цена" >
-                                                    <span onclick="addToList();" class="input-group-addon"><span class="glyphicon glyphicon-plus"></span>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                </div>
-                                <div class="form-group">
-                                    <ul class="todo-list" id="itemlist">
 
-                                    </ul>
-                                </div>
-                                <div class="form-group">
-                                    <label for="address">Адрес:</label>
-                                    <input class="form-control" type="text" id="address" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="comment">Комментарий:</label>
-                                    <textarea class="form-control" rows="3" id="comment"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="assignee">Кто может выполнить:</label>
-                                    <select id="assignee" class="form-control">
-                                        <option>Отдать другу</option>
-                                        <option>Все друзья</option>
-                                        <option selected>Все</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-default">Добавить</button>
-                            </div>
-                        </div>
-                    </div><!-- /.box -->
                 </section><!-- right col -->
+
+
 
             </div>
         </section><!-- /.content -->
@@ -640,12 +676,12 @@
 
                 if(status == google.maps.GeocoderStatus.OK){
 
-                var add = data[0].formatted_address; //this is the full address
+                    var add = data[0].formatted_address; //this is the full address
 
-                $("#address").val( add);
-            }
+                    $("#address").val( add);
+                }
 
-        });
+            });
 
 
             map = new google.maps.Map(document.getElementById('world-map'),
