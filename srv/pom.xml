@@ -51,7 +51,7 @@
                                 face/landing
                             </directory>
                             <targetPath>
-                                face/landing
+                                landing
                             </targetPath>
                         </resource>
                         <resource>
