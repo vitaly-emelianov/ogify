@@ -83,7 +83,7 @@ public class AuthResource {
         NewCookie sessionIdCookie = new NewCookie(AuthController.SESSION_COOKIE_NAME, sessionSecret, "/", null,
                 null, 2629744, false); // Valid for a month
 
-        return Response.ok()
+        return Response.temporaryRedirect(new URI("/client"))
                 .cookie(vkIdCookie)
                 .cookie(sessionIdCookie)
                 .build();
