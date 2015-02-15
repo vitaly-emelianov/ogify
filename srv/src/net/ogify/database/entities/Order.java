@@ -38,7 +38,7 @@ public class Order {
     Long id;
 
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_owner", nullable = false)
     @XmlElement(nillable = false, required = true)
     User owner;
@@ -95,11 +95,19 @@ public class Order {
     @XmlElement
     Date expireIn;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @XmlElement(name = "items")
     List<OrderItem> items = new ArrayList<OrderItem>();
 
     public List<OrderItem> getItems() {
         return items;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public User getOwner() {
+        return owner;
     }
 }

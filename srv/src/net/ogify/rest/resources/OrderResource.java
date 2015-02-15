@@ -1,6 +1,7 @@
 package net.ogify.rest.resources;
 
 import net.ogify.database.OrderController;
+import net.ogify.database.UserController;
 import net.ogify.database.entities.Order;
 import net.ogify.database.entities.OrderItem;
 import net.ogify.engine.secure.AuthController;
@@ -48,6 +49,7 @@ public class OrderResource {
 
     @POST
     public void createNewOrder(Order order) {
+        UserController.getUserByIdAndSession(userId, sessionSecret).addOrder(order);
         OrderController.createOrder(order);
     }
 

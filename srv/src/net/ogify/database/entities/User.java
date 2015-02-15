@@ -131,4 +131,9 @@ public class User {
         SocialToken authToken = new SocialToken(token, expireIn, socialNetwork, this);
         tokens.add(authToken);
     }
+
+    public void addOrder(Order order) {
+        orders.add(order);
+        order.setOwner(this);
+    }
 }

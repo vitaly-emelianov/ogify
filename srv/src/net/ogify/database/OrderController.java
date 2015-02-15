@@ -23,7 +23,7 @@ public class OrderController {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(order);
+            em.merge(order.getOwner());
             em.getTransaction().commit();
         } catch(RuntimeException e) {
             em.getTransaction().rollback();
