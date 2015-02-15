@@ -1,0 +1,5 @@
+C:\Users\illus_000\Documents\GitHub\eatfit\android\TapTag1\app\build\intermediates\classes\debug
+C:\Users\illus_000\Documents\GitHub\eatfit\android\TapTag1\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-d156491f91a9308005f846bcf354aa4227b2193c.jar
+C:\Users\illus_000\Documents\GitHub\eatfit\android\TapTag1\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-c41550d95b34baed72bcb0a10036b1fef31116d9.jar
+C:\Users\illus_000\Documents\GitHub\eatfit\android\TapTag1\app\build\intermediates\pre-dexed\debug\classes-be32fb0ab105b692fdf95f6a14d78389a9d1f9b7.jar
+C:\Users\illus_000\Documents\GitHub\eatfit\android\TapTag1\app\build\intermediates\pre-dexed\debug\classes-cb32a6f18a8aa140cf976a8e4744733df435b4a7.jar
