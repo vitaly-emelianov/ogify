@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8">
@@ -26,6 +27,17 @@
     <link href="dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
     <!-- iCheck -->
     <link href="plugins/iCheck/flat/blue.css" rel="stylesheet" type="text/css" />
+
+      <script type="text/javascript">
+          function getCookie(name) {
+              var matches = document.cookie.match(new RegExp(
+                      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+              ));
+              return matches ? decodeURIComponent(matches[1]) : undefined;
+          }
+          if(getCookie("sId") == null || getCookie("ogifySessionSecret") == null)
+              window.location.href = "login.html";
+      </script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
