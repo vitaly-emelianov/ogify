@@ -11,6 +11,5 @@
     <title>Start page</title>
 </head>
 <body>
-
 </body>
 </html>

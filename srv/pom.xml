@@ -46,6 +46,14 @@
                 <configuration>
                     <webappDirectory>web</webappDirectory>
                     <webResources>
+                        <resource>
+                            <directory>
+                                landing
+                            </directory>
+                            <targetPath>
+                                landing
+                            </targetPath>
+                        </resource>
                     </webResources>
                     <outputDirectory>deployments</outputDirectory>
                     <warName>ROOT</warName>
