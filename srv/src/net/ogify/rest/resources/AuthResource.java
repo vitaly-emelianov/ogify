@@ -44,13 +44,13 @@ public class AuthResource {
     @GET
     @PermitAll
     public SNRequestUri getRequestUri(@Context UriInfo uriInfo,
-                                      @QueryParam("sn") @NotNull SocialNetwork socialNetwork) {
+                                      @NotNull @QueryParam("sn") SocialNetworkParam socialNetwork) {
         URI authRequestUri = uriInfo.getBaseUriBuilder()
-                .path(AuthResource.class) // Add class path
-                .path(AuthResource.class, "auth").build();
+                .path(AuthResource.class) // Add class path;
+                .build();
 
         SNRequestUri generatedUriResponse;
-        switch(socialNetwork) {
+        switch(socialNetwork.getValue()) {
             case Vk:
                 generatedUriResponse = VkAuth.getClientAuthUri(authRequestUri);
                 break;
@@ -66,12 +66,13 @@ public class AuthResource {
 
     @GET
     @PermitAll
-    @Path("/do")
     @Consumes(MediaType.WILDCARD)
     public Response auth(
             @NotEmpty @QueryParam("code") String code,
-            @QueryParam("state") @NotNull SocialNetworkParam socialNetwork,
+            @NotNull @QueryParam("state") SocialNetworkParam socialNetwork,
             @Context HttpServletRequest request) throws MalformedURLException, VkSideError, URISyntaxException {
+        if(socialNetwork.getValue() == SocialNetwork.Other)
+            throw new WebApplicationException("sn must be vk or facebook", Response.Status.BAD_REQUEST);
         String uri = request.getRequestURL().toString();
         if(sessionSecret == null)
             sessionSecret = AuthController.generateSessionSecret();

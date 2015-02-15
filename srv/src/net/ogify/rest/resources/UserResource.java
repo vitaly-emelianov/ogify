@@ -15,7 +15,8 @@ import javax.ws.rs.ext.Provider;
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserResource {
     @GET
-    public User getUserById(@QueryParam("id") Long id) {
+    @Path("{id}")
+    public User getUserById(@PathParam("id") Long id) {
         return UserController.getUserById(id);
     }
 }

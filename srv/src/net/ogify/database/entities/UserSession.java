@@ -8,7 +8,8 @@ import java.util.Date;
  * Created by melges.morgen on 14.02.15.
  */
 @Entity
-@Table(name = "users_sessions")
+@Table(name = "users_sessions", uniqueConstraints = {
+        @UniqueConstraint(name = "user_and_session", columnNames = {"owner", "session_secret"})})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE) // Deny session transfer to client
 public class UserSession {
@@ -18,7 +19,7 @@ public class UserSession {
     @Column(name = "session_id")
     Long id;
 
-    @Column(name = "session_secret", nullable = false, unique = false, length = 32, updatable = false)
+    @Column(name = "session_secret", nullable = false, unique = true, length = 32, updatable = false)
     private String sessionSecret;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -41,5 +42,21 @@ public class UserSession {
         if (expireIn <= 0)
             expireIn = 2629743L * 1000L;
         this.expireIn = new Date(System.currentTimeMillis() + expireIn);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getSessionSecret() {
+        return sessionSecret;
+    }
+
+    public Date getExpireIn() {
+        return expireIn;
+    }
+
+    public User getOwner() {
+        return owner;
     }
 }
