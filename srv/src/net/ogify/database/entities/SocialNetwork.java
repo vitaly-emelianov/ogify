@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "social_network")
 @XmlEnum
 public enum SocialNetwork {
-    @XmlEnumValue("Facebook") FaceBook,
-    @XmlEnumValue("Vk") Vk
+    @XmlEnumValue("Other") Other,
+    @XmlEnumValue("facebook") FaceBook,
+    @XmlEnumValue("vk") Vk
 }

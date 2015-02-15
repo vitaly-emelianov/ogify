@@ -32,7 +32,7 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id", nullable = false, unique = true)
+    @Column(name = "order_id")
     @XmlElement(nillable = false, required = true)
     Long id;
 

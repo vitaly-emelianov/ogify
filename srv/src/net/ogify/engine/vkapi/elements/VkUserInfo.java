@@ -39,14 +39,6 @@ public class VkUserInfo {
     private String lastName;
 
     /**
-     * Users birth date without time, in format dd.MM.yyyy. For parse this field used special
-     * deserializer {@link net.ogify.engine.vkapi.marshals.VkDateDeserializer}
-     */
-    @XmlElement(name = "bdate")
-    @JsonDeserialize(using = VkDateDeserializer.class)
-    private Date birthDate;
-
-    /**
      * Url to users photo
      */
     @NotNull
@@ -69,10 +61,6 @@ public class VkUserInfo {
 
     public String getLastName() {
         return lastName;
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
     }
 
     public String getPhotoUri() {

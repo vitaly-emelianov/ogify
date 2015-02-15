@@ -14,7 +14,7 @@ import java.util.Date;
 public class SocialToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "token_id", nullable = false, unique = true)
+    @Column(name = "token_id")
     Long tokenId;
 
     @Column(name = "token_sn", nullable = false)
@@ -30,4 +30,20 @@ public class SocialToken {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "owner", nullable = false)
     User owner;
+
+    public SocialToken() {
+    }
+
+    public SocialToken(String token, Long expireIn, SocialNetwork socialNetwork, User owner) {
+        this.token = token;
+        this.tokensSocialNetwork = socialNetwork;
+        this.setExpireIn(expireIn);
+        this.owner = owner;
+    }
+
+    public void setExpireIn(Long expireIn) {
+        if (expireIn <= 0)
+            expireIn = 2629743L * 1000L;
+        this.expireIn = new Date(System.currentTimeMillis() + expireIn);;
+    }
 }

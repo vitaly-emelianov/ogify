@@ -15,7 +15,7 @@ public class UserSession {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "session_id", unique = true, nullable = false)
+    @Column(name = "session_id")
     Long id;
 
     @Column(name = "session_secret", nullable = false, unique = false, length = 32, updatable = false)
@@ -27,4 +27,19 @@ public class UserSession {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner", nullable = false, unique = false, updatable = false)
     User owner;
+
+    public UserSession() {
+    }
+
+    public UserSession(String sessionSecret, Long expireIn, User owner) {
+        this.sessionSecret = sessionSecret;
+        this.setExpireIn(expireIn);
+        this.owner = owner;
+    }
+
+    public void setExpireIn(Long expireIn) {
+        if (expireIn <= 0)
+            expireIn = 2629743L * 1000L;
+        this.expireIn = new Date(System.currentTimeMillis() + expireIn);
+    }
 }

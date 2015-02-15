@@ -5,6 +5,7 @@ import net.ogify.engine.secure.AuthController;
 import net.ogify.engine.vkapi.VkAuth;
 import net.ogify.engine.vkapi.exceptions.VkSideError;
 import net.ogify.rest.elements.SNRequestUri;
+import net.ogify.rest.elements.SocialNetworkParam;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.annotation.security.PermitAll;
@@ -66,16 +67,17 @@ public class AuthResource {
     @GET
     @PermitAll
     @Path("/do")
+    @Consumes(MediaType.WILDCARD)
     public Response auth(
             @NotEmpty @QueryParam("code") String code,
-            @QueryParam("sn") @NotNull SocialNetwork socialNetwork,
+            @QueryParam("state") @NotNull SocialNetworkParam socialNetwork,
             @Context HttpServletRequest request) throws MalformedURLException, VkSideError, URISyntaxException {
         String uri = request.getRequestURL().toString();
         if(sessionSecret == null)
             sessionSecret = AuthController.generateSessionSecret();
 
         NewCookie vkIdCookie = new NewCookie(AuthController.USER_ID_COOKIE_NAME,
-                AuthController.auth(code, uri, sessionSecret, socialNetwork).toString(), "/", null,
+                AuthController.auth(code, uri, sessionSecret, socialNetwork.getValue()).toString(), "/", null,
                 null, 2629744, false); // Valid for a month
         NewCookie sessionIdCookie = new NewCookie(AuthController.SESSION_COOKIE_NAME, sessionSecret, "/", null,
                 null, 2629744, false); // Valid for a month

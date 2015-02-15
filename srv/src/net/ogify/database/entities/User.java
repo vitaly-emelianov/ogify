@@ -2,6 +2,8 @@ package net.ogify.database.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
@@ -17,23 +19,24 @@ import java.util.Map;
 @XmlRootElement
 @NamedQueries({
         @NamedQuery(name = "User.getById", query = "select user from User user where user.id = :id"),
-        @NamedQuery(name = "User.getByIdAndSession", query = "select user from User user " +
+        @NamedQuery(name = "User.getByIdAndSession", query = "select user from User user, UserSession session " +
                 "where user.id = :userId " +
-                "and user = (select session.owner " +
-                "from UserSession session where session.sessionSecret = :sessionSecret)")
+                "and user = session.owner " +
+                "and session.sessionSecret = :sessionSecret"),
+        @NamedQuery(name = "User.getUserByVkId", query = "select user from User user where user.vkId = :vkId"),
+        @NamedQuery(name = "User.getUserByFbId", query = "select user from User user where user.facebookId = :fbId")
 })
 public class User {
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", nullable = false, unique = true)
+    @Column(name = "user_id")
     @XmlElement(name = "user_id", nillable = false, required = true)
     Long id;
 
-    @Column(name = "facebook_id", nullable = true)
+    @Column(name = "facebook_id", nullable = true, unique = true)
     Long facebookId;
 
-    @Column(name = "vk_id", nullable = true)
+    @Column(name = "vk_id", nullable = true, unique = true)
     Long vkId;
 
     @Column(name = "fullName", nullable = false, unique = false)
@@ -48,12 +51,15 @@ public class User {
     @XmlElement(name = "rating_as_customer", nillable = true, required = false)
     Double ratingAsCustomer = 3.5;
 
-    @XmlElement(name = "rating_as_customer", nillable = true, required = false)
+    @Column(name = "rating_as_executor", nullable = false, unique = false)
+    @XmlElement(name = "rating_as_executor", nillable = true, required = false)
     Double ratingAsExecutor = 3.5;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @MapKeyColumn(name = "session_secret", updatable = false, insertable = false, nullable = false)
-    private Map<String, UserSession> sessions = new HashMap<String, UserSession>();
+    private List<UserSession> sessions = new ArrayList<UserSession>();
+
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    List<SocialToken> tokens = new ArrayList<SocialToken>();
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Order> orders = new ArrayList<Order>();
@@ -117,11 +123,12 @@ public class User {
     }
 
     public void addSession(String sessionSecret, Long expireIn) {
-
+        UserSession session = new UserSession(sessionSecret, expireIn, this);
+        sessions.add(session);
     }
 
-    public void addAuthToken(String token, SocialNetwork socialNetwork) {
-
-
+    public void addAuthToken(String token, SocialNetwork socialNetwork, Long expireIn) {
+        SocialToken authToken = new SocialToken(token, expireIn, socialNetwork, this);
+        tokens.add(authToken);
     }
 }

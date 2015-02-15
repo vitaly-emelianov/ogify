@@ -60,7 +60,7 @@ public class AuthController {
 
     public static Long authVk(String code, String redirectUrl, String sessionSecret) throws VkSideError {
         VkAccessResponse response = VkAuth.auth(code, redirectUrl);
-        User user = UserController.getUserById(response.getUserId());
+        User user = UserController.getUserByVkId(response.getUserId());
         if(user == null) {
             VkUserInfo vkUserInfo = VkUsers.get(response.getUserId(), response.getAccessToken());
             user = new User(vkUserInfo.getFullName(), vkUserInfo.getPhotoUri());
@@ -68,7 +68,7 @@ public class AuthController {
         }
 
         user.addSession(sessionSecret, response.getExpiresIn());
-        user.addAuthToken(response.getAccessToken(), SocialNetwork.Vk);
+        user.addAuthToken(response.getAccessToken(), SocialNetwork.Vk, response.getExpiresIn());
 
         UserController.saveOrUpdate(user);
 

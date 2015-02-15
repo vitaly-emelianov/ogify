@@ -29,6 +29,42 @@ public class UserController {
         }
     }
 
+    public static User getUserByFbId(Long userId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<User> query = em.createNamedQuery("User.getUserByFbId", User.class);
+            query.setParameter("fbId", userId);
+            List<User> resultList = query.getResultList();
+
+            if(resultList.size() == 1)
+                return resultList.get(0);
+            if(resultList.size() == 0)
+                return null;
+
+            throw new NonUniqueResultException("We receive more then one user with specified id, it mustn't happened");
+        } finally {
+            em.close();
+        }
+    }
+
+    public static User getUserByVkId(Long userId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<User> query = em.createNamedQuery("User.getUserByVkId", User.class);
+            query.setParameter("vkId", userId);
+            List<User> resultList = query.getResultList();
+
+            if(resultList.size() == 1)
+                return resultList.get(0);
+            if(resultList.size() == 0)
+                return null;
+
+            throw new NonUniqueResultException("We receive more then one user with specified id, it mustn't happened");
+        } finally {
+            em.close();
+        }
+    }
+
     public static void saveOrUpdate(User user) {
         EntityManager em = emf.createEntityManager();
         try {

@@ -20,7 +20,7 @@ public class VkUsers {
         final String methodName = "users.get";
         final Map<String, Object> parametersMap = new HashMap<String, Object>();
         parametersMap.put("user_ids", vkId);
-        parametersMap.put("fields", "photo_max,bdate,sex");
+        parametersMap.put("fields", "photo_max");
         parametersMap.put("access_token", accessToken);
 
         VkUsersGetResponse response = VkClient.call(VK_API_URI + methodName, parametersMap, VkUsersGetResponse.class);

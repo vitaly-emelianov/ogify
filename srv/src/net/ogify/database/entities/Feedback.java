@@ -20,7 +20,7 @@ public class Feedback {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "feedback_id", nullable = false)
+    @Column(name = "feedback_id")
     Long id;
 
     String comment;
