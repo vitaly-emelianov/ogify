@@ -58,8 +58,8 @@
                         <li><a href="#footer">Contacts</a></li>
                     </ul>
                     <ul class="navigation-bar navigation-bar-right">
-                        <li><a href="#">Login</a></li>
-                        <li class="featured"><a href="register.html">Sign up</a></li>
+                        <li class="featured"><a href="#" data-toggle="modal" data-target="#login">Login</a></li>
+                        <!-- <li class="featured"><a href="register.html">Sign up</a></li> -->
                     </ul>  
                 </div>
             </div>
@@ -69,10 +69,10 @@
     <div id="hero" class="static-header light clearfix">
         <div class="text-heading">
             <h1 class="animated hiding" data-animation="bounceInDown" data-delay="0">Do not wait &mdash; <span class="highlight">start using</span> your connections!</h1>
-            <p class="animated hiding" data-animation="fadeInDown" data-delay="500">Help your friends or ask them for helping you</p>
+            <p class="animated hiding" data-animation="fadeInDown" data-delay="500">Ogify - others get it for you!</p>
             <ul class="list-inline">
-                <li><a href="#" class="btn btn-primary animated hiding" data-animation="bounceIn" data-delay="700">Log in</a></li>
-                <li><a href="register.html" class="btn btn-default animated hiding" data-animation="bounceIn" data-delay="900">Sign up</a></li>
+                <li><a href="#" class="btn btn-primary animated hiding" data-animation="bounceIn" data-delay="700" data-toggle="modal" data-target="#login">Log in</a></li>
+                <!-- <li><a href="register.html" class="btn btn-default animated hiding" data-animation="bounceIn" data-delay="900">Sign up</a></li> -->
             </ul>
         </div>
         <div class="video-wrapper">
@@ -467,6 +467,22 @@
     </footer>
     
     <div class="back-to-top"><i class="fa fa-angle-up fa-3x"></i></div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Log in</h4>
+          </div>
+          <div class="modal-body">
+                  <a href="#" class="btn btn-primary btn-block social-login facebook">Facebook</a>
+                  <a href="#" class="btn btn-primary btn-block social-login vkontakte">Vkontakte</a>
+          </div>
+        </div>
+      </div>
+    </div>
     
     <!--[if lt IE 9]>
         <script type="text/javascript" src="assets/js/jquery-1.11.0.min.js?ver=1"></script>

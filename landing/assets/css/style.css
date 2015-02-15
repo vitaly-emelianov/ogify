@@ -573,6 +573,15 @@ input[type=file]:focus, input[type=radio]:focus, input[type=checkbox]:focus { ou
 .fixmenu-clone.navigation-header .navigation-toggle { border: 1px solid #1ac6ff; opacity: 1;}
 .fixmenu-clone.navigation-header .navigation-toggle .icon-bar { background: #1ac6ff; }
 
+#login a.social-login {
+	background-color: #3a5795 !important;
+	border: 1px solid #3a5795;
+}
+
+#login a.vkontakte {
+	margin-top: 5px;
+}
+
 
 /* Mobile device 767px */
 @media (max-width: 767px) {
