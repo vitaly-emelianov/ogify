@@ -7,6 +7,8 @@ import org.apache.log4j.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 /**
  * Created by melges.morgen on 15.02.15.
@@ -38,6 +40,20 @@ public class OrderController {
         EntityManager em = emf.createEntityManager();
         try {
             return em.find(Order.class, id);
+        } finally {
+            em.close();
+        }
+    }
+
+    public static List<Order> getNearest(Double latitude, Double longitude) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Order> query = em.createNamedQuery("Order.getNearestOrder", Order.class);
+            query.setParameter("latitude", latitude);
+            query.setParameter("longitude", longitude);
+            query.setParameter("orderStatus", Order.OrderStatus.New);
+            query.setParameter("orderNamespace", Order.OrderNamespace.All);
+            return query.getResultList();
         } finally {
             em.close();
         }

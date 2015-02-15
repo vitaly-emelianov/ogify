@@ -38,7 +38,7 @@ public class OrderResource {
     @GET
     public List<Order> getOrders(@NotNull @QueryParam("latitude") Double latitude,
                           @NotNull @QueryParam("longitude") Double longitude) {
-        return new ArrayList<Order>();
+        return OrderController.getNearest(latitude, longitude);
     }
 
     @GET
@@ -56,7 +56,7 @@ public class OrderResource {
     @GET
     @Path("{orderId}/items}")
     public List<OrderItem> getOrderItems(@NotNull @PathParam("orderId") Long orderId) {
-        return new ArrayList<OrderItem>();
+        return OrderController.getOrderById(orderId).getItems();
     }
 
 
