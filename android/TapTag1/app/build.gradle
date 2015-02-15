@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.0.2"
 
     defaultConfig {
-        applicationId "com.ogify"
+        applicationId "net.ogify"
         minSdkVersion 14
         targetSdkVersion 21
     }

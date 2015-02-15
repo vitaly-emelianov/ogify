@@ -55,8 +55,8 @@
     <color name="link_text_material_light">@color/material_deep_teal_500</color>
     <!-- From: file:/C:/Users/illus_000/Documents/GitHub/eatfit/android/TapTag1/app/src/main/res/values/color.xml -->
     <eat-comment/>
-    <color name="main_color_cyan">#6ca8a4</color>
-    <color name="main_color_cyan_dark">#3B616B</color>
+    <color name="main_color_cyan">#ff367fa9</color>
+    <color name="main_color_cyan_dark">#ff013264</color>
     <!-- From: file:/C:/Users/illus_000/Documents/GitHub/eatfit/android/TapTag1/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <color name="material_blue_grey_800">#ff37474f</color>
@@ -158,7 +158,7 @@
     <dimen name="abc_text_size_title_material_toolbar">20dp</dimen>
     <!-- From: file:/C:/Users/illus_000/Documents/GitHub/eatfit/android/TapTag1/app/src/main/res/values/dimens.xml -->
     <eat-comment/>
-    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin">8dp</dimen>
     <dimen name="activity_vertical_margin">8dp</dimen>
     <!-- From: file:/C:/Users/illus_000/Documents/GitHub/eatfit/android/TapTag1/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
@@ -213,19 +213,23 @@
     <string name="action_assign_new">Assign new</string>
     <string name="action_assign_to_me">Assign To Me</string>
     <string name="action_submit">Submit</string>
-    <string name="app_name">TapTag</string>
+    <string name="app_name">Ogify</string>
     <string name="drawer_close">Close</string>
     <string name="drawer_open">Open</string>
+    <string name="login_with_fb">Login with Facebook</string>
+    <string name="login_with_vk">Login with VK</string>
     <string name="menu1">Ogify</string>
     <string name="new_order_description">Description</string>
     <string name="new_order_description_text">DESCRIPTION</string>
     <string name="new_order_radio_all">All</string>
     <string name="new_order_radio_friend">Friend</string>
     <string name="new_order_radio_friends">Friends</string>
+    <string name="new_order_radio_friends_of_friends">Friends of Friends</string>
     <string name="new_order_scope_text">SCOPE</string>
     <string name="new_order_title">Title</string>
     <string name="new_order_title_text">TITLE</string>
     <string name="settings">Settings</string>
+    <string name="title_activity_login">Ogify</string>
     <string name="title_activity_new_order">New Order</string>
     <string name="title_activity_order_info">Order Info</string>
     <!-- From: file:/C:/Users/illus_000/Documents/GitHub/eatfit/android/TapTag1/app/src/main/res/values/styles.xml -->

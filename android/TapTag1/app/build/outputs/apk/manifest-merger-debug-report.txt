@@ -55,7 +55,7 @@ MERGED from com.android.support:support-v4:21.0.3:16:5
 		ADDED from AndroidManifest.xml:21:9
 	android:theme
 		ADDED from AndroidManifest.xml:23:9
-activity#com.ogify.SplashScreen
+activity#net.ogify.SplashScreen
 ADDED from AndroidManifest.xml:24:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:27:13
@@ -77,7 +77,7 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:33:17
 	android:name
 		ADDED from AndroidManifest.xml:33:27
-activity#com.ogify.MainActivity
+activity#net.ogify.MainActivity
 ADDED from AndroidManifest.xml:36:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:39:13
@@ -85,15 +85,21 @@ ADDED from AndroidManifest.xml:36:9
 		ADDED from AndroidManifest.xml:38:13
 	android:name
 		ADDED from AndroidManifest.xml:37:13
-activity#com.ogify.NewOrderActivity
+activity#net.ogify.NewOrderActivity
 ADDED from AndroidManifest.xml:41:9
 	android:label
 		ADDED from AndroidManifest.xml:43:13
 	android:name
 		ADDED from AndroidManifest.xml:42:13
-activity#com.ogify.OrderInfoActivity
+activity#net.ogify.OrderInfoActivity
 ADDED from AndroidManifest.xml:45:9
 	android:label
 		ADDED from AndroidManifest.xml:47:13
 	android:name
 		ADDED from AndroidManifest.xml:46:13
+activity#net.ogify.LoginActivity
+ADDED from AndroidManifest.xml:49:9
+	android:label
+		ADDED from AndroidManifest.xml:51:13
+	android:name
+		ADDED from AndroidManifest.xml:50:13

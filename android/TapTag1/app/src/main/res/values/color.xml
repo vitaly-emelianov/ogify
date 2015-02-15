@@ -17,7 +17,7 @@
     <color name="transparent">#00000000</color>
     <color name="blue_sky">#33b5e5</color>
     <color name="dot_bar_bg">#1c1c1c</color>
-    <color name="main_color_cyan">#6ca8a4</color>
-    <color name="main_color_cyan_dark">#3B616B</color>
+    <color name="main_color_cyan">#ff367fa9</color>
+    <color name="main_color_cyan_dark">#ff013264</color>
     <color name="gray_light">#808080</color>
 </resources>
