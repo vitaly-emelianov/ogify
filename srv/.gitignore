@@ -2,5 +2,4 @@ target
 web/client
 web/face
 web/landing
-web/META-INF
 locale
