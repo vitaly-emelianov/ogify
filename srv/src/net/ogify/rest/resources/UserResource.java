@@ -2,6 +2,7 @@ package net.ogify.rest.resources;
 
 import net.ogify.database.UserController;
 import net.ogify.database.entities.User;
+import net.ogify.engine.secure.AuthController;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -18,5 +19,10 @@ public class UserResource {
     @Path("{id}")
     public User getUserById(@PathParam("id") Long id) {
         return UserController.getUserById(id);
+    }
+
+    @GET
+    public User getCurrentUser(@CookieParam(AuthController.USER_ID_COOKIE_NAME) Long userId) {
+        return UserController.getUserById(userId);
     }
 }
