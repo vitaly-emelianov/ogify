@@ -147,25 +147,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="DUE DATE"
-                android:textStyle="bold"
-                android:textColor="@color/dim_foreground_material_dark"
-                android:paddingTop="20dp"
-                android:paddingBottom="5dp"
-                android:paddingLeft="20dp" />
-
-            <EditText
-                android:id="@+id/editText5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Reward"
-                android:inputType="datetime" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/new_order_description_text"
                 android:textStyle="bold"
                 android:textColor="@color/dim_foreground_material_dark"

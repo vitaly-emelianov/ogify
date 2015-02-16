@@ -12,8 +12,17 @@ import android.widget.TextView;
 
 import net.ogify.OrderInfoActivity;
 import net.ogify.R;
+import net.ogify.backend.OrderResource;
+import net.ogify.backend.entities.Order;
+import net.ogify.backend.entities.OrderItem;
+import net.ogify.backend.helper.Callback;
 import net.ogify.custom.CustomFragment;
+import net.ogify.fragments.OrderItemFragment;
 import net.ogify.fragments.helpers.enums.OrderNamespace;
+import net.ogify.helper.Storage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TaskList extends CustomFragment {
     OrderNamespace namespace = null;
@@ -21,13 +30,14 @@ public class TaskList extends CustomFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.orders_list, null);
-        setupViewComponents(v);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             int index = bundle.getInt("namespace");
             namespace = OrderNamespace.values()[index];
         }
+
+        setupViewComponents(v);
 
         return v;
     }

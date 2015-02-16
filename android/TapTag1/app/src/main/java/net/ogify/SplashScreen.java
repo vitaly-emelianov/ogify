@@ -3,101 +3,92 @@ package net.ogify;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 
+import net.ogify.helper.Storage;
+
 // TODO: Auto-generated Javadoc
+
 /**
  * The Class SplashScreen will launched at the start of the application. It will
  * be displayed for 3 seconds and than finished automatically and it will also
  * start the next activity of app.
  */
-public class SplashScreen extends Activity
-{
+public class SplashScreen extends Activity {
 
-	/** Check if the app is running. */
-	private boolean isRunning;
+    /**
+     * Check if the app is running.
+     */
+    private boolean isRunning;
 
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onCreate(android.os.Bundle)
-	 */
-	@Override
-	public void onCreate(Bundle savedInstanceState)
-	{
+    /* (non-Javadoc)
+     * @see android.app.Activity#onCreate(android.os.Bundle)
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.splash);
 
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.splash);
+        isRunning = true;
 
-		isRunning = true;
+        startSplash();
 
-		startSplash();
+    }
 
-	}
+    /**
+     * Starts the count down timer for 3-seconds. It simply sleeps the thread
+     * for 3-seconds.
+     */
+    private void startSplash() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(3000);
 
-	/**
-	 * Starts the count down timer for 3-seconds. It simply sleeps the thread
-	 * for 3-seconds.
-	 */
-	private void startSplash()
-	{
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            doFinish();
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
 
-		new Thread(new Runnable() {
-			@Override
-			public void run()
-			{
+    /**
+     * If the app is still running than this method will start the MainActivity
+     * and finish the Splash.
+     */
+    private synchronized void doFinish() {
+        String cookies = Storage.getPreference("cookies", getApplicationContext());
+        Class clazz = cookies != null ? MainActivity.class : LoginActivity.class;
 
-				try
-				{
+        if (isRunning) {
+            isRunning = false;
+            Intent i = new Intent(SplashScreen.this, clazz);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        }
+    }
 
-					Thread.sleep(3000);
-
-				} catch (Exception e)
-				{
-					e.printStackTrace();
-				} finally
-				{
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run()
-						{
-							doFinish();
-						}
-					});
-				}
-			}
-		}).start();
-	}
-
-	/**
-	 * If the app is still running than this method will start the MainActivity
-	 * and finish the Splash.
-	 */
-	private synchronized void doFinish()
-	{
-
-		if (isRunning)
-		{
-			isRunning = false;
-			Intent i = new Intent(SplashScreen.this, MainActivity.class);
-			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(i);
-			finish();
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
-	 */
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event)
-	{
-
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
-			isRunning = false;
-			finish();
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+    /* (non-Javadoc)
+     * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            isRunning = false;
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
 }

@@ -1,5 +1,9 @@
 C:\Users\illus_000\Documents\GitHub\eatfit\android\TapTag1\app\build\intermediates\classes\debug
 C:\Users\illus_000\Documents\GitHub\eatfit\android\TapTag1\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-d156491f91a9308005f846bcf354aa4227b2193c.jar
+C:\Users\illus_000\Documents\GitHub\eatfit\android\TapTag1\app\build\intermediates\pre-dexed\debug\jsr311-api-1.1.1-5ccd14fea9bc4996e015365c20e14c79d9b80856.jar
+C:\Users\illus_000\Documents\GitHub\eatfit\android\TapTag1\app\build\intermediates\pre-dexed\debug\jersey-client-1.19-de7d21ea5ff88d3dbb3f09e80fbf3815bf00931e.jar
 C:\Users\illus_000\Documents\GitHub\eatfit\android\TapTag1\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-c41550d95b34baed72bcb0a10036b1fef31116d9.jar
+C:\Users\illus_000\Documents\GitHub\eatfit\android\TapTag1\app\build\intermediates\pre-dexed\debug\gson-2.3.1-4a7e4c57967b380008d177755cdfe3c371ac028a.jar
+C:\Users\illus_000\Documents\GitHub\eatfit\android\TapTag1\app\build\intermediates\pre-dexed\debug\jersey-core-1.19-f8519f75dfc1e9d711aa3411e1a969cc5aadc81f.jar
 C:\Users\illus_000\Documents\GitHub\eatfit\android\TapTag1\app\build\intermediates\pre-dexed\debug\classes-be32fb0ab105b692fdf95f6a14d78389a9d1f9b7.jar
 C:\Users\illus_000\Documents\GitHub\eatfit\android\TapTag1\app\build\intermediates\pre-dexed\debug\classes-cb32a6f18a8aa140cf976a8e4744733df435b4a7.jar

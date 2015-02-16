@@ -16,7 +16,7 @@ import net.ogify.R;
 import net.ogify.custom.CustomFragment;
 import net.ogify.fragments.helpers.enums.OrderNamespace;
 
-public class OrderItem extends CustomFragment {
+public class OrderItemFragment extends CustomFragment {
     OrderNamespace namespace = null;
 
     @Override
