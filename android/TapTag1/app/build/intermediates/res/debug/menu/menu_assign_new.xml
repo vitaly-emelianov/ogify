@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/action_assign"
-        android:showAsAction="always"
-        android:title="@string/action_assign_new" />
-</menu><!-- From: file:/C:/Users/illus_000/Documents/GitHub/eatfit/android/TapTag1/app/src/main/res/menu/menu_assign_new.xml -->
