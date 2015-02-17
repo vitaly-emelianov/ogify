@@ -1,14 +1,15 @@
 package net.ogify;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import net.ogify.backend.AuthResource;
+import net.ogify.backend.elements.rest.SocialNetworkParam;
 import net.ogify.custom.CustomActivity;
-import net.ogify.fragments.OrderItem;
+import net.ogify.fragments.OrderItemFragment;
 
 
 public class NewOrderActivity extends CustomActivity {
@@ -24,7 +25,7 @@ public class NewOrderActivity extends CustomActivity {
             @Override
             public void onClick(View view) {
                 getSupportFragmentManager().beginTransaction()
-                        .add(R.id.items_container, new OrderItem(), "item_" + counter.toString()).commit();
+                        .add(R.id.items_container, new OrderItemFragment(), "item_" + counter.toString()).commit();
                 counter++;
             }
         });
