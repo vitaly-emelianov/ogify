@@ -2,6 +2,7 @@ package net.ogify.database;
 
 import net.ogify.database.entities.Order;
 import net.ogify.database.entities.OrderItem;
+import net.ogify.database.entities.User;
 import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
@@ -18,14 +19,19 @@ public class OrderController {
 
     private final static Logger logger = Logger.getLogger(OrderController.class);
 
-    public static void createOrder(Order order) {
+    public static void createOrder(Long userId, Order order) {
+        order.setId(null);
         for(OrderItem item: order.getItems()) {
+            item.setId(null);
             item.setOrder(order);
         }
+
         EntityManager em = emf.createEntityManager();
         try {
+            User creator = em.find(User.class, userId);
+            order.setOwner(creator);
             em.getTransaction().begin();
-            em.merge(order.getOwner());
+            em.merge(order);
             em.getTransaction().commit();
         } catch(RuntimeException e) {
             em.getTransaction().rollback();

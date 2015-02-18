@@ -32,6 +32,10 @@ public class OrderItem {
     @JoinColumn(name = "parent_order", nullable = false)
     Order order;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setOrder(Order order) {
         this.order = order;
     }

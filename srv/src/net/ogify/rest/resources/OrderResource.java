@@ -20,14 +20,6 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class OrderResource {
     /**
-     * Field storing the session id of the user if the user has no session it is null.
-     *
-     * Can be null only in permitted for all methods.
-     */
-    @CookieParam(value = AuthController.SESSION_COOKIE_NAME)
-    private String sessionSecret;
-
-    /**
      * Field storing the vk id of the user if the user not authorized it is null.
      *
      * Can be null only in permitted for all methods.
@@ -49,8 +41,7 @@ public class OrderResource {
 
     @POST
     public void createNewOrder(Order order) {
-        UserController.getUserByIdAndSession(userId, sessionSecret).addOrder(order);
-        OrderController.createOrder(order);
+        OrderController.createOrder(userId, order);
     }
 
     @GET

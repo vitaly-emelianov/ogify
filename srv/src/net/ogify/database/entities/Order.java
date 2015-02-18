@@ -15,7 +15,7 @@ import java.util.List;
 @NamedQueries({@NamedQuery(name = "Order.getNearestOrder", query = "select orders from Order orders " +
         "where orders.latitude > (:latitude - 0.07) and orders.latitude < (:latitude + 0.07) " +
         "and orders.longitude > (:longitude - 0.07) and orders.longitude < (:longitude + 0.07)" +
-        "and orders.expireIn > CURRENT_TIMESTAMP and orders.status = :orderStatus " +
+        "and (orders.expireIn > CURRENT_TIMESTAMP or orders.expireIn is null) and orders.status = :orderStatus " +
         "and orders.namespace = :orderNamespace")})
 @XmlRootElement
 public class Order {
@@ -103,6 +103,10 @@ public class Order {
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @XmlElement(name = "items")
     List<OrderItem> items = new ArrayList<OrderItem>();
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public List<OrderItem> getItems() {
         return items;
