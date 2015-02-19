@@ -1,5 +1,9 @@
 package net.ogify.database.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.eclipse.persistence.oxm.annotations.XmlReadOnly;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.*;
@@ -12,11 +16,15 @@ import java.util.List;
  */
 @Entity
 @Table(name = "orders")
-@NamedQueries({@NamedQuery(name = "Order.getNearestOrder", query = "select orders from Order orders " +
+@NamedQueries({
+        @NamedQuery(name = "Order.getNearestOrder", query = "select orders from Order orders " +
         "where orders.latitude > (:latitude - 0.07) and orders.latitude < (:latitude + 0.07) " +
         "and orders.longitude > (:longitude - 0.07) and orders.longitude < (:longitude + 0.07)" +
         "and (orders.expireIn > CURRENT_TIMESTAMP or orders.expireIn is null) and orders.status = :orderStatus " +
-        "and orders.namespace = :orderNamespace")})
+        "and orders.namespace = :orderNamespace"),
+        @NamedQuery(name = "Order.getOrderByIdFiltered", query = "select orders from Order orders " +
+                "where orders.id = :orderId and orders.owner = :user ")
+})
 @XmlRootElement
 public class Order {
     @XmlType(name = "order_status")
@@ -55,11 +63,13 @@ public class Order {
 
     @NotNull
     @Column(name = "order_status", nullable = false)
+    @Enumerated(EnumType.STRING)
     @XmlElement(nillable = false, required = true)
     OrderStatus status;
 
     @NotNull
     @Column(name = "order_namespace", nullable = false)
+    @Enumerated(EnumType.STRING)
     @XmlElement(nillable = false, required = true)
     OrderNamespace namespace;
 
