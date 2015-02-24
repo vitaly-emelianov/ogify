@@ -18,30 +18,11 @@
     <![endif]-->
     <script src="libs/js/jquery.min.js"></script>
     <script src="libs/js/bootstrap.min.js"></script>
+    <script src="libs/js/main.js" type="text/javascript"></script>
+    <script src="libs/js/restapi.js" type="text/javascript"></script>
     <script type="text/javascript">
-        function getCookie(name) {
-            var matches = document.cookie.match(new RegExp(
-                    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-            ));
-            return matches ? decodeURIComponent(matches[1]) : undefined;
-        }
         if(getCookie("sId") != null && getCookie("ogifySessionSecret") != null)
             window.location.href = "index.html";
-        function loginVK() {
-            $.ajax({
-                type: "GET",
-                url: '/rest/auth/getRequestUri?sn=vk',
-                success: function(result) {
-                    var url = result["requestUri"];
-                    window.location.href = url;
-                },
-                error: function() {
-                    /**
-                     * nothing to do
-                     */
-                }
-            });
-        }
     </script>
 
 </head>

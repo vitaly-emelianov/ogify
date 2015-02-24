@@ -1,9 +1,9 @@
-//var REQUEST_URL = "http://ogify-miptsail.rhcloud.com";
+var REQUEST_URL = "//ogify.net";
 
 function getOrdersById(id) {
 	$.ajax({
         type: "GET",
-        url: "/rest/orders/" + id,
+        url: REQUEST_URL + "/rest/orders/" + id,
         data: {orderId: id},
         success: function(result) {
             console.log(result);
@@ -38,7 +38,7 @@ function getOrders(latitude, longitude) {
     //var order = JSON.parse(request);
 
     $.ajax({
-        url: '/rest/orders/',
+        url: REQUEST_URL + '/rest/orders/',
         type: 'GET',
         data: request,
         success: function(data) {
@@ -58,7 +58,7 @@ function createNewOrder(order) {
         order.namespace = "All"; //Private|Friends|FriendsOfFriends|All
     }
     $.ajax({
-        url: '/rest/orders/',
+        url: REQUEST_URL + '/rest/orders/',
         type: 'POST',
         data: JSON.stringify(order),
         dataType: 'json',
@@ -68,6 +68,22 @@ function createNewOrder(order) {
         },
         error: function() {
 
+        }
+    });
+}
+
+function loginVK() {
+    $.ajax({
+        type: "GET",
+        url: REQUEST_URL + '/rest/auth/getRequestUri?sn=vk',
+        success: function(result) {
+            var url = result["requestUri"];
+            window.location.href = url;
+        },
+        error: function() {
+            /**
+             * nothing to do
+             */
         }
     });
 }
