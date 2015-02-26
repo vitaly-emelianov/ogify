@@ -18,6 +18,10 @@ import java.util.Map;
 public class VkClient {
     private final static Logger logger = Logger.getLogger(VkClient.class);
 
+    public final static String VK_API_URI = "https://api.vk.com/method/";
+
+    public final static String VK_ACCESS_URI = "https://oauth.vk.com/access_token";
+
     public static <T> T call(String targetUri, Map<String, Object> parameters, Class<T> entityClass) throws VkSideError {
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
 

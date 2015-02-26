@@ -5,11 +5,9 @@ import net.ogify.database.entities.OrderItem;
 import net.ogify.database.entities.User;
 import org.apache.log4j.Logger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by melges.morgen on 15.02.15.
@@ -18,29 +16,6 @@ public class OrderController {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("OgifyDataSource");
 
     private final static Logger logger = Logger.getLogger(OrderController.class);
-
-    public static void createOrder(Long userId, Order order) {
-        order.setId(null);
-        for(OrderItem item: order.getItems()) {
-            item.setId(null);
-            item.setOrder(order);
-        }
-
-        EntityManager em = emf.createEntityManager();
-        try {
-            User creator = em.find(User.class, userId);
-            order.setOwner(creator);
-            em.getTransaction().begin();
-            em.merge(order);
-            em.getTransaction().commit();
-        } catch(RuntimeException e) {
-            em.getTransaction().rollback();
-            logger.error("Error on order creation!", e);
-            throw e;
-        } finally {
-            em.close();
-        }
-    }
 
     public static Order getOrderById(Long id) {
         EntityManager em = emf.createEntityManager();
@@ -57,9 +32,43 @@ public class OrderController {
             TypedQuery<Order> query = em.createNamedQuery("Order.getNearestOrder", Order.class);
             query.setParameter("latitude", latitude);
             query.setParameter("longitude", longitude);
-            query.setParameter("orderStatus", Order.OrderStatus.New);
-            query.setParameter("orderNamespace", Order.OrderNamespace.All);
             return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public static Order getOrderById(Long userId, Long orderId, Set<Long> friends, Set<Long> extendedFriends) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Order> query = em.createNamedQuery("Order.getOrderByIdFiltered", Order.class);
+            query.setParameter("orderId", orderId);
+            query.setParameter("userId", userId);
+            query.setParameter("friends", friends);
+            query.setParameter("extendedFriends", extendedFriends);
+
+            List<Order> resultList = query.getResultList();
+            if(resultList.size() == 1)
+                return resultList.get(0);
+            if(resultList.size() == 0)
+                return null;
+
+            throw new NonUniqueResultException("We receive more then one user with specified id, it mustn't happened");
+        } finally {
+            em.close();
+        }
+    }
+
+    public static void saveOrUpdate(Order order) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(order);
+            em.getTransaction().commit();
+        } catch(RuntimeException e) {
+            em.getTransaction().rollback();
+            logger.error("Error on order save!", e);
+            throw e;
         } finally {
             em.close();
         }

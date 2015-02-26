@@ -4,6 +4,7 @@ import net.ogify.database.OrderController;
 import net.ogify.database.UserController;
 import net.ogify.database.entities.Order;
 import net.ogify.database.entities.OrderItem;
+import net.ogify.engine.order.OrderProcessor;
 import net.ogify.engine.secure.AuthController;
 
 import javax.validation.constraints.NotNull;
@@ -41,7 +42,7 @@ public class OrderResource {
 
     @POST
     public void createNewOrder(Order order) {
-        OrderController.createOrder(userId, order);
+        OrderProcessor.createOrder(userId, order);
     }
 
     @GET

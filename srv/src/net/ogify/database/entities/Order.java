@@ -1,9 +1,5 @@
 package net.ogify.database.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.eclipse.persistence.oxm.annotations.XmlReadOnly;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.*;
@@ -18,12 +14,21 @@ import java.util.List;
 @Table(name = "orders")
 @NamedQueries({
         @NamedQuery(name = "Order.getNearestOrder", query = "select orders from Order orders " +
-        "where orders.latitude > (:latitude - 0.07) and orders.latitude < (:latitude + 0.07) " +
-        "and orders.longitude > (:longitude - 0.07) and orders.longitude < (:longitude + 0.07)" +
-        "and (orders.expireIn > CURRENT_TIMESTAMP or orders.expireIn is null) and orders.status = :orderStatus " +
-        "and orders.namespace = :orderNamespace"),
-        @NamedQuery(name = "Order.getOrderByIdFiltered", query = "select orders from Order orders " +
-                "where orders.id = :orderId and orders.owner = :user ")
+                "where orders.latitude > (:latitude - 0.07) and orders.latitude < (:latitude + 0.07) " +
+                "and orders.longitude > (:longitude - 0.07) and orders.longitude < (:longitude + 0.07)" +
+                "and (orders.expireIn > CURRENT_TIMESTAMP or orders.expireIn is null) " +
+                "and orders.status = 'New' and orders.namespace = 'All'"),
+        @NamedQuery(name = "Order.getOrderByIdFiltered", query = "SELECT orders FROM Order orders WHERE " +
+                    "orders.owner = :userId AND orders.id = :orderId " +
+                "UNION SELECT orders FROM Order orders, User owners WHERE " +
+                    "orders.namespace = VkFriends and " +
+                    "orders.owner in (:friends) " +
+                    "and orders.id = :orderId " +
+                "UNION SELECT orders FROM Order orders WHERE " +
+                    "orders.namespace = 'FriendsOfFriends' and orders.owner in (:extendedFriends) " +
+                    "and orders.id = :orderId " +
+                "UNION SELECT orders FROM Order orders WHERE orders.namespace = 'All' and orders.id = :orderId " +
+                "UNION SELECT orders FROM Order orders WHERE orders.executor = :userId")
 })
 @XmlRootElement
 public class Order {

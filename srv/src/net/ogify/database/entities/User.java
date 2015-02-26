@@ -21,6 +21,7 @@ import java.util.Map;
                 "and user = session.owner " +
                 "and session.sessionSecret = :sessionSecret"),
         @NamedQuery(name = "User.getUserByVkId", query = "select user from User user where user.vkId = :vkId"),
+        @NamedQuery(name = "User.getUsersByVkIds", query = "select user from User user where user.vkId in (:vkIds)"),
         @NamedQuery(name = "User.getUserByFbId", query = "select user from User user where user.facebookId = :fbId")
 })
 public class User {

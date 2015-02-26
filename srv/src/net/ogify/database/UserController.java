@@ -4,6 +4,7 @@ import net.ogify.database.entities.User;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by melges.morgen on 14.02.15.
@@ -24,6 +25,17 @@ public class UserController {
                 return null;
 
             throw new NonUniqueResultException("We receive more then one user with specified id, it mustn't happened");
+        } finally {
+            em.close();
+        }
+    }
+
+    public static List<User> getUserWithVkIds(Set<Long> userId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<User> query = em.createNamedQuery("User.getUsersByVkIds", User.class);
+            query.setParameter("vkIds", userId);
+            return query.getResultList();
         } finally {
             em.close();
         }

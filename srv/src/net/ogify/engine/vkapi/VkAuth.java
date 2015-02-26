@@ -13,7 +13,6 @@ import java.util.Map;
  * Created by melges on 16.12.14.
  */
 public class VkAuth {
-    private final static String VK_ACCESS_URI = "https://oauth.vk.com/access_token";
     private final static String VK_CLIENT_ACCESS_URI = "https://oauth.vk.com/authorize";
     private final static String VK_API_VERSION = "5.27";
     private static long APP_ID = 4684983;
@@ -40,6 +39,6 @@ public class VkAuth {
         parametersMap.put("code", code);
         parametersMap.put("redirect_uri", redirectUri);
 
-        return VkClient.call(VK_ACCESS_URI, parametersMap, VkAccessResponse.class);
+        return VkClient.call(VkClient.VK_ACCESS_URI, parametersMap, VkAccessResponse.class);
     }
 }
