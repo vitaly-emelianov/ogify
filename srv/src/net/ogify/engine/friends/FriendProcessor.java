@@ -33,7 +33,7 @@ public class FriendProcessor {
         if(user == null)
             return null;
 
-        Set<Long> vkFriendsIds = VkFriends.getFriends(user.getVkId());
+        Set<Long> vkFriendsIds = VkFriends.getFriends(user.getVkId(), user.getVkToken().getToken());
         List<User> filteredFriends = UserController.getUserWithVkIds(vkFriendsIds);
         HashSet<Long> resultSet = new HashSet<>(filteredFriends.size());
         for(User filteredUser : filteredFriends)

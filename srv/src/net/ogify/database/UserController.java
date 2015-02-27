@@ -1,5 +1,7 @@
 package net.ogify.database;
 
+import net.ogify.database.entities.SocialNetwork;
+import net.ogify.database.entities.SocialToken;
 import net.ogify.database.entities.User;
 
 import javax.persistence.*;
@@ -108,6 +110,26 @@ public class UserController {
                 return null;
 
             throw new NonUniqueResultException("We receive more then one user with specified id, it mustn't happened");
+        } finally {
+            em.close();
+        }
+    }
+
+    public static SocialToken getUserAuthToken(User owner, SocialNetwork network) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<SocialToken> query = em.createNamedQuery("SocialToken.getUsersToken", SocialToken.class);
+            query.setParameter("owner", owner);
+            query.setParameter("socialNetwork", network);
+
+            List<SocialToken> resultList = query.getResultList();
+
+            if(resultList.size() == 1)
+                return resultList.get(0);
+            if(resultList.size() == 0)
+                return null;
+
+            throw new NonUniqueResultException("We receive more then one tokens with, it mustn't happened");
         } finally {
             em.close();
         }

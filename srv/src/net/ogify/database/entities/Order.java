@@ -21,7 +21,7 @@ import java.util.List;
         @NamedQuery(name = "Order.getOrderByIdFiltered", query = "SELECT orders FROM Order orders WHERE " +
                     "orders.owner = :userId AND orders.id = :orderId " +
                 "UNION SELECT orders FROM Order orders, User owners WHERE " +
-                    "orders.namespace = VkFriends and " +
+                    "orders.namespace = 'Friends' and " +
                     "orders.owner in (:friends) " +
                     "and orders.id = :orderId " +
                 "UNION SELECT orders FROM Order orders WHERE " +

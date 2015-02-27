@@ -10,6 +10,11 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "social_tokens")
+@NamedQueries({
+        @NamedQuery(name = "SocialToken.getUsersToken", query = "select token from SocialToken token where " +
+                "token.owner = :owner and token.tokensSocialNetwork = :socialNetwork " +
+                "and token.expireIn > CURRENT_TIMESTAMP")
+})
 @XmlAccessorType(XmlAccessType.NONE)
 public class SocialToken {
     @Id
@@ -45,5 +50,21 @@ public class SocialToken {
         if (expireIn <= 0)
             expireIn = 2629743L * 1000L;
         this.expireIn = new Date(System.currentTimeMillis() + expireIn);;
+    }
+
+    public Date getExpireIn() {
+        return expireIn;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public SocialNetwork getTokensSocialNetwork() {
+        return tokensSocialNetwork;
+    }
+
+    public Long getTokenId() {
+        return tokenId;
     }
 }

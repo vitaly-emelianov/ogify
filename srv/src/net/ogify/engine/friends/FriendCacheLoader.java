@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public class FriendCacheLoader extends CacheLoader<Long, Set<Long>> {
     @Override
-    public Set<Long> load(Long aLong) throws VkSideError {
-        return new HashSet<Long>();
+    public Set<Long> load(Long userId) throws VkSideError {
+        return FriendProcessor.loadFriendList(userId);
     }
 }
