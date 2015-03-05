@@ -9,9 +9,11 @@
 <%
     String redirectPath = "/landing";
     boolean auth = false;
-    for(Cookie cookie : request.getCookies())
-        if(cookie.getName().equals("sId"))
-            redirectPath = "/client";
+    Cookie[] cookies = request.getCookies();
+    if(cookies != null)
+        for(Cookie cookie : request.getCookies())
+            if(cookie.getName().equals("sId"))
+                redirectPath = "/client";
 
     response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
     response.setHeader("Location", redirectPath);
