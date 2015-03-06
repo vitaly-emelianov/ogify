@@ -12,7 +12,7 @@
     Cookie[] cookies = request.getCookies();
     if(cookies != null)
         for(Cookie cookie : request.getCookies())
-            if(cookie.getName().equals("sId"))
+            if("sId".equals(cookie.getName()))
                 redirectPath = "/client";
 
     response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
