@@ -32,6 +32,8 @@ public class OrderController {
             TypedQuery<Order> query = em.createNamedQuery("Order.getNearestOrder", Order.class);
             query.setParameter("latitude", latitude);
             query.setParameter("longitude", longitude);
+            query.setParameter("enumOrderAll", Order.OrderNamespace.All);
+            query.setParameter("enumOrderNew", Order.OrderStatus.New);
             return query.getResultList();
         } finally {
             em.close();
@@ -42,12 +44,20 @@ public class OrderController {
                                                  Double latitude, Double longitude) {
         EntityManager em = emf.createEntityManager();
         try {
+            User user = em.find(User.class, userId);
+
             TypedQuery<Order> query = em.createNamedQuery("Order.getNearestOrdersFiltered", Order.class);
             query.setParameter("latitude", latitude);
             query.setParameter("longitude", longitude);
             query.setParameter("userExtendedFriends", extendedFriends);
             query.setParameter("userFriends", userFriends);
-            query.setParameter("userId", userId);
+            query.setParameter("user", user);
+
+            query.setParameter("enumOrderNew", Order.OrderStatus.New);
+            query.setParameter("enumOrderAll", Order.OrderNamespace.All);
+            query.setParameter("enumOrderFriends", Order.OrderNamespace.Friends);
+            query.setParameter("enumOrderFriendsOfFriends", Order.OrderNamespace.FriendsOfFriends);
+            query.setParameter("enumOrderPrivate", Order.OrderNamespace.Private);
 
             return query.getResultList();
         } finally {
@@ -59,11 +69,17 @@ public class OrderController {
     public static Order getOrderById(Long userId, Long orderId, Set<Long> friends, Set<Long> extendedFriends) {
         EntityManager em = emf.createEntityManager();
         try {
+            User user = em.find(User.class, userId);
+
             TypedQuery<Order> query = em.createNamedQuery("Order.getOrderByIdFiltered", Order.class);
             query.setParameter("orderId", orderId);
-            query.setParameter("userId", userId);
+            query.setParameter("user", user);
             query.setParameter("friends", friends);
             query.setParameter("extendedFriends", extendedFriends);
+
+            query.setParameter("enumOrderAll", Order.OrderNamespace.All);
+            query.setParameter("enumOrderFriends", Order.OrderNamespace.Friends);
+            query.setParameter("enumOrderFriendsOfFriends", Order.OrderNamespace.FriendsOfFriends);
 
             List<Order> resultList = query.getResultList();
             if(resultList.size() == 1)
