@@ -18,14 +18,28 @@ import java.util.List;
                 "and orders.longitude > (:longitude - 0.07) and orders.longitude < (:longitude + 0.07)" +
                 "and (orders.expireIn > CURRENT_TIMESTAMP or orders.expireIn is null) " +
                 "and orders.status = 'New' and orders.namespace = 'All'"),
+        @NamedQuery(name = "Order.getNearestOrdersFiltered", query = "select orders from Order orders " +
+                "where orders.id in (" +
+                    "select orders.id from Order orders where orders.latitude > (:latitude - 0.07) " +
+                    "and orders.latitude < (:latitude + 0.07) " +
+                    "and orders.longitude > (:longitude - 0.07) and orders.longitude < (:longitude + 0.07)" +
+                    "and (orders.expireIn > CURRENT_TIMESTAMP or orders.expireIn is null) " +
+                    "and orders.status = 'New') " +
+                "and (" +
+                    "orders.namespace = 'All' " +
+                    "or (orders.namespace = 'FriendsOfFriends' and orders.owner in :userExtendedFriends)" +
+                    "or (orders.namespace = 'Friends' and orders.owner in :userFriends)" +
+                    "or (orders.namespace = 'Private' and orders.executor = :userId)" +
+                    "or orders.owner = :userId" +
+                ")"),
         @NamedQuery(name = "Order.getOrderByIdFiltered", query = "SELECT orders FROM Order orders WHERE " +
                     "orders.owner = :userId AND orders.id = :orderId " +
                 "UNION SELECT orders FROM Order orders, User owners WHERE " +
                     "orders.namespace = 'Friends' and " +
-                    "orders.owner in (:friends) " +
+                    "orders.owner in :friends " +
                     "and orders.id = :orderId " +
                 "UNION SELECT orders FROM Order orders WHERE " +
-                    "orders.namespace = 'FriendsOfFriends' and orders.owner in (:extendedFriends) " +
+                    "orders.namespace = 'FriendsOfFriends' and orders.owner in :extendedFriends " +
                     "and orders.id = :orderId " +
                 "UNION SELECT orders FROM Order orders WHERE orders.namespace = 'All' and orders.id = :orderId " +
                 "UNION SELECT orders FROM Order orders WHERE orders.executor = :userId")

@@ -12,6 +12,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by melges.morgen on 15.02.15.
@@ -29,9 +31,9 @@ public class OrderResource {
     private Long userId;
 
     @GET
-    public List<Order> getOrders(@NotNull @QueryParam("latitude") Double latitude,
-                                 @NotNull @QueryParam("longitude") Double longitude) {
-        return OrderController.getNearest(latitude, longitude);
+    public Set<Order> getOrders(@NotNull @QueryParam("latitude") Double latitude,
+                                 @NotNull @QueryParam("longitude") Double longitude) throws ExecutionException {
+        return OrderProcessor.getNearestOrders(latitude, longitude, userId);
     }
 
     @GET

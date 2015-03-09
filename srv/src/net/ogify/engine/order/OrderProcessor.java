@@ -34,25 +34,29 @@ public class OrderProcessor {
     }
 
     /**
-     * Get order by id for specified user. R
+     * Get order by id for specified user.
      * @param userId id of user who requests order
      * @param orderId id of requested order
      * @return requested order or null if there are no order with specified id, or user haven't access to them.
      */
     public static Order getOrderById(Long userId, Long orderId) throws ExecutionException {
         Set<Long> friends = FriendProcessor.getUserFriendsIds(userId);
-        Set<Long> friendsOfFriends = new HashSet<>();
+        Set<Long> friendsOfFriends = FriendProcessor.getUserExtendedFriendsIds(userId);
         return OrderController.getOrderById(userId, orderId, friends, friendsOfFriends);
     }
 
     /**
-     * Search for orders near (in square with) specified point
-     * @param latitude longitude of
-     * @param longitude
-     * @param userId
-     * @return
+     * Search for orders near (in square with) specified point.
+     * @param latitude latitude of point.
+     * @param longitude longitude of point.
+     * @param userId id of user who make request.
+     * @return visible for specified user orders.
      */
-    public static Set<Order> getNearestOrders(Long latitude, Long longitude, Long userId) {
-        return null;
+    public static Set<Order> getNearestOrders(Double latitude, Double longitude, Long userId)
+            throws ExecutionException {
+        Set<Long> friends = FriendProcessor.getUserFriendsIds(userId);
+        Set<Long> friendsOfFriends = FriendProcessor.getUserExtendedFriendsIds(userId);
+        return new HashSet<Order>(
+                OrderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends, latitude, longitude));
     }
 }
