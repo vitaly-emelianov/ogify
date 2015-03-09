@@ -35,4 +35,10 @@ public class UserResource {
     public Set<Long> getUserFriends(@PathParam("id") Long userId) throws ExecutionException {
         return FriendProcessor.getUserFriendsIds(userId);
     }
+
+    @GET
+    @Path("{id}/extendedFriends")
+    public Set<Long> getUserExtendedFriends(@PathParam("id") Long userId) throws ExecutionException {
+        return FriendProcessor.getUserExtendedFriendsIds(userId);
+    }
 }

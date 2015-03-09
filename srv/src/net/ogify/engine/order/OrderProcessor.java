@@ -44,4 +44,15 @@ public class OrderProcessor {
         Set<Long> friendsOfFriends = new HashSet<>();
         return OrderController.getOrderById(userId, orderId, friends, friendsOfFriends);
     }
+
+    /**
+     * Search for orders near (in square with) specified point
+     * @param latitude longitude of
+     * @param longitude
+     * @param userId
+     * @return
+     */
+    public static Set<Order> getNearestOrders(Long latitude, Long longitude, Long userId) {
+        return null;
+    }
 }
