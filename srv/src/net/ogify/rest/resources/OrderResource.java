@@ -12,6 +12,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by melges.morgen on 15.02.15.
@@ -29,9 +31,9 @@ public class OrderResource {
     private Long userId;
 
     @GET
-    public List<Order> getOrders(@NotNull @QueryParam("latitude") Double latitude,
-                          @NotNull @QueryParam("longitude") Double longitude) {
-        return OrderController.getNearest(latitude, longitude);
+    public Set<Order> getOrders(@NotNull @QueryParam("latitude") Double latitude,
+                                 @NotNull @QueryParam("longitude") Double longitude) throws ExecutionException {
+        return OrderProcessor.getNearestOrders(latitude, longitude, userId);
     }
 
     @GET
@@ -40,16 +42,23 @@ public class OrderResource {
         return OrderController.getOrderById(orderId);
     }
 
-    @POST
-    public void createNewOrder(Order order) {
-        OrderProcessor.createOrder(userId, order);
-    }
-
     @GET
     @Path("{orderId}/items}")
     public List<OrderItem> getOrderItems(@NotNull @PathParam("orderId") Long orderId) {
         return OrderController.getOrderById(orderId).getItems();
     }
 
+    @POST
+    public void createNewOrder(Order order) {
+        OrderProcessor.createOrder(userId, order);
+    }
+
+
+    @POST
+    @Path("{orderId}/complete")
+    public void completeOrder(@PathParam("orderId") Long orderId,
+                              @NotNull @FormParam("status") @DefaultValue("true") Boolean status) {
+
+    }
 
 }

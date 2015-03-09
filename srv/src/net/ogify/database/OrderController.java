@@ -26,7 +26,7 @@ public class OrderController {
         }
     }
 
-    public static List<Order> getNearest(Double latitude, Double longitude) {
+    public static List<Order> getNearestOrders(Double latitude, Double longitude) {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Order> query = em.createNamedQuery("Order.getNearestOrder", Order.class);
@@ -37,6 +37,24 @@ public class OrderController {
             em.close();
         }
     }
+
+    public static List<Order> getNearestOrdersFiltered(Long userId, Set<Long> userFriends, Set<Long> extendedFriends,
+                                                 Double latitude, Double longitude) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Order> query = em.createNamedQuery("Order.getNearestOrdersFiltered", Order.class);
+            query.setParameter("latitude", latitude);
+            query.setParameter("longitude", longitude);
+            query.setParameter("userExtendedFriends", extendedFriends);
+            query.setParameter("userFriends", userFriends);
+            query.setParameter("userId", userId);
+
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
 
     public static Order getOrderById(Long userId, Long orderId, Set<Long> friends, Set<Long> extendedFriends) {
         EntityManager em = emf.createEntityManager();
