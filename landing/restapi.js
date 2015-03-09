@@ -33,3 +33,19 @@ function createOrder() {
         }
     });
 }
+
+function logInSN(opts) {
+    $.ajax({
+        type: "GET",
+        url: '/rest/auth/getRequestUri?sn=' + opts.sn,
+        success: function(result) {
+            var url = result["requestUri"];
+            window.location.href = url;
+        },
+        error: function() {
+            /**
+             * nothing to do
+             */
+        }
+    });
+}

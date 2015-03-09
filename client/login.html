@@ -27,21 +27,6 @@
         }
         if(getCookie("sId") != null && getCookie("ogifySessionSecret") != null)
             window.location.href = "index.html";
-        function loginVK() {
-            $.ajax({
-                type: "GET",
-                url: '/rest/auth/getRequestUri?sn=vk',
-                success: function(result) {
-                    var url = result["requestUri"];
-                    window.location.href = url;
-                },
-                error: function() {
-                    /**
-                     * nothing to do
-                     */
-                }
-            });
-        }
     </script>
 
 </head>
@@ -53,13 +38,13 @@
         <div class="social-box">
             <div class="row mg-btm">
                 <div class="col-md-12">
-                    <a href="#" class="btn btn-primary btn-block">
+                    <a href="#" onclick="logInSN({sn:'fb'})" class="btn btn-primary btn-block">
                         <i class="icon-facebook"></i>    Login with Facebook
                     </a>
                 </div>
             </div>
 
-            <div class="row mg-btm" style="margin-top: 5px" onclick="loginVK();">
+            <div class="row mg-btm" style="margin-top: 5px" onclick="logInSN({sn:'vk'})">
                 <div class="col-md-12">
                     <a href="#" class="btn btn-primary btn-block">
                         <i class="icon-facebook"></i>    Login with Vk.com
