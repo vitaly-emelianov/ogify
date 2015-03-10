@@ -5,6 +5,7 @@ import net.ogify.database.entities.SocialToken;
 import net.ogify.database.entities.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -32,11 +33,13 @@ public class UserController {
         }
     }
 
-    public static List<User> getUserWithVkIds(Set<Long> userId) {
+    public static List<User> getUserWithVkIds(Set<Long> userIds) {
+        if(userIds.isEmpty())
+            return new ArrayList<>();
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<User> query = em.createNamedQuery("User.getUsersByVkIds", User.class);
-            query.setParameter("vkIds", userId);
+            query.setParameter("vkIds", userIds);
             return query.getResultList();
         } finally {
             em.close();

@@ -6,6 +6,7 @@ import net.ogify.database.entities.User;
 import org.apache.log4j.Logger;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -41,16 +42,31 @@ public class OrderController {
     }
 
     public static List<Order> getNearestOrdersFiltered(Long userId, Set<Long> userFriends, Set<Long> extendedFriends,
-                                                 Double latitude, Double longitude) {
+                                                       Double latitude, Double longitude) {
         EntityManager em = emf.createEntityManager();
         try {
             User user = em.find(User.class, userId);
 
+            // If friends or extended friends set is empty add yourself for correct syntax in query
+            Set<Long> searchFriendsSet;
+            if(userFriends.isEmpty()) {
+                searchFriendsSet = new HashSet<>();
+                searchFriendsSet.add(userId);
+            } else
+                searchFriendsSet = userFriends;
+
+            Set<Long> searchExtendedFriendsSet;
+            if(extendedFriends.isEmpty()) {
+                searchExtendedFriendsSet = new HashSet<>();
+                searchExtendedFriendsSet.add(userId);
+            } else
+                searchExtendedFriendsSet = extendedFriends;
+
             TypedQuery<Order> query = em.createNamedQuery("Order.getNearestOrdersFiltered", Order.class);
             query.setParameter("latitude", latitude);
             query.setParameter("longitude", longitude);
-            query.setParameter("userExtendedFriends", extendedFriends);
-            query.setParameter("userFriends", userFriends);
+            query.setParameter("userExtendedFriends", searchExtendedFriendsSet);
+            query.setParameter("userFriends", searchFriendsSet);
             query.setParameter("user", user);
 
             query.setParameter("enumOrderNew", Order.OrderStatus.New);
@@ -71,11 +87,26 @@ public class OrderController {
         try {
             User user = em.find(User.class, userId);
 
+            // If friends or extended friends set is empty add yourself for correct syntax in query
+            Set<Long> searchFriendsSet;
+            if(friends.isEmpty()) {
+                searchFriendsSet = new HashSet<>();
+                searchFriendsSet.add(userId);
+            } else
+                searchFriendsSet = friends;
+
+            Set<Long> searchExtendedFriendsSet;
+            if(extendedFriends.isEmpty()) {
+                searchExtendedFriendsSet = new HashSet<>();
+                searchExtendedFriendsSet.add(userId);
+            } else
+                searchExtendedFriendsSet = extendedFriends;
+
             TypedQuery<Order> query = em.createNamedQuery("Order.getOrderByIdFiltered", Order.class);
             query.setParameter("orderId", orderId);
             query.setParameter("user", user);
-            query.setParameter("friends", friends);
-            query.setParameter("extendedFriends", extendedFriends);
+            query.setParameter("friends", searchFriendsSet);
+            query.setParameter("extendedFriends", searchExtendedFriendsSet);
 
             query.setParameter("enumOrderAll", Order.OrderNamespace.All);
             query.setParameter("enumOrderFriends", Order.OrderNamespace.Friends);
