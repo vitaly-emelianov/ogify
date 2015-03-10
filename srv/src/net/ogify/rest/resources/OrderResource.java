@@ -32,7 +32,7 @@ public class OrderResource {
 
     @GET
     public Set<Order> getOrders(@NotNull @QueryParam("latitude") Double latitude,
-                                 @NotNull @QueryParam("longitude") Double longitude) throws ExecutionException {
+                                @NotNull @QueryParam("longitude") Double longitude) throws ExecutionException {
         return OrderProcessor.getNearestOrders(latitude, longitude, userId);
     }
 
@@ -57,7 +57,14 @@ public class OrderResource {
     @POST
     @Path("{orderId}/complete")
     public void completeOrder(@PathParam("orderId") Long orderId,
-                              @NotNull @FormParam("status") @DefaultValue("true") Boolean status) {
+                              @FormParam("status") @DefaultValue("true") Boolean status) {
+
+    }
+
+    @POST
+    @Path("{orderId}/cancel")
+    public void cancelOrder(@PathParam("orderId") Long orderId,
+                            @NotNull @FormParam("reason") String reason) {
 
     }
 

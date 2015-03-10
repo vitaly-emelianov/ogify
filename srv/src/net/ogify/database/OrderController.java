@@ -47,18 +47,18 @@ public class OrderController {
         try {
             User user = em.find(User.class, userId);
 
-            // If friends or extended friends set is empty add yourself for correct syntax in query
+            // If friends or extended friends set is empty add dummy id for correct syntax in query
             Set<Long> searchFriendsSet;
             if(userFriends.isEmpty()) {
                 searchFriendsSet = new HashSet<>();
-                searchFriendsSet.add(userId);
+                searchFriendsSet.add(-1L);
             } else
                 searchFriendsSet = userFriends;
 
             Set<Long> searchExtendedFriendsSet;
             if(extendedFriends.isEmpty()) {
                 searchExtendedFriendsSet = new HashSet<>();
-                searchExtendedFriendsSet.add(userId);
+                searchExtendedFriendsSet.add(-1L);
             } else
                 searchExtendedFriendsSet = extendedFriends;
 
@@ -87,18 +87,18 @@ public class OrderController {
         try {
             User user = em.find(User.class, userId);
 
-            // If friends or extended friends set is empty add yourself for correct syntax in query
+            // If friends or extended friends set is empty add dummy id for correct syntax in query
             Set<Long> searchFriendsSet;
             if(friends.isEmpty()) {
                 searchFriendsSet = new HashSet<>();
-                searchFriendsSet.add(userId);
+                searchFriendsSet.add(-1L);
             } else
                 searchFriendsSet = friends;
 
             Set<Long> searchExtendedFriendsSet;
             if(extendedFriends.isEmpty()) {
                 searchExtendedFriendsSet = new HashSet<>();
-                searchExtendedFriendsSet.add(userId);
+                searchExtendedFriendsSet.add(-1L);
             } else
                 searchExtendedFriendsSet = extendedFriends;
 

@@ -5,6 +5,7 @@ import net.ogify.database.UserController;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +42,7 @@ public class User {
 
     @Column(name = "fullName", nullable = false, unique = false)
     @XmlElement(name = "fullName",required = true, nillable = false)
-    String fullname;
+    String fullName;
 
     @Column(name = "photo_uri", nullable = false, unique = false)
     @XmlElement(name = "photoUri",required = true, nillable = false)
@@ -78,8 +79,8 @@ public class User {
 
     }
 
-    public User(String fullname, String photoUri) {
-        this.fullname = fullname;
+    public User(String fullName, String photoUri) {
+        this.fullName = fullName;
         this.photoUri = photoUri;
     }
 
@@ -87,8 +88,8 @@ public class User {
         return id;
     }
 
-    public String getFullname() {
-        return fullname;
+    public String getFullName() {
+        return fullName;
     }
 
     public String getPhotoUri() {
@@ -119,10 +120,11 @@ public class User {
         this.vkId = vkId;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public void setFullName(String fullname) {
+        this.fullName = fullname;
     }
 
+    @XmlTransient
     public SocialToken getVkToken() {
         return UserController.getUserAuthToken(this, SocialNetwork.Vk);
     }

@@ -66,7 +66,7 @@ public class FriendProcessor {
                 extendedFriends.addAll(getUserFriendsIds(friendId));
             } catch (ExecutionException loadException) {
                 logger.warn(String.format("Error on loading friends for user with id %d: no valid social tokens",
-                        userId));
+                        friendId));
             }
 
         return extendedFriends;
