@@ -55,17 +55,11 @@ public class OrderResource {
 
 
     @POST
-    @Path("{orderId}/complete")
+    @Path("{orderId}/status")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void completeOrder(@PathParam("orderId") Long orderId,
-                              @FormParam("status") @DefaultValue("true") Boolean status) {
-
-    }
-
-    @POST
-    @Path("{orderId}/cancel")
-    public void cancelOrder(@PathParam("orderId") Long orderId,
-                            @NotNull @FormParam("reason") String reason) {
-
+                              @NotNull @FormParam("status") Order.OrderStatus status) {
+        OrderProcessor.changeOrderStatus(userId, orderId, status);
     }
 
 }

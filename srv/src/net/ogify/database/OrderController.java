@@ -6,6 +6,7 @@ import net.ogify.database.entities.User;
 import org.apache.log4j.Logger;
 
 import javax.persistence.*;
+import javax.persistence.metamodel.Type;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,9 +34,49 @@ public class OrderController {
             TypedQuery<Order> query = em.createNamedQuery("Order.getNearestOrder", Order.class);
             query.setParameter("latitude", latitude);
             query.setParameter("longitude", longitude);
+
             query.setParameter("enumOrderAll", Order.OrderNamespace.All);
             query.setParameter("enumOrderNew", Order.OrderStatus.New);
             return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    /**
+     * Method return all users orders (where user is owner or executor)
+     * @param userId id of user which orders should be returned.
+     * @return users orders.
+     */
+    public static List<Order> getUsersOrders(Long userId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            User user = em.find(User.class, userId);
+
+            TypedQuery<Order> query = em.createNamedQuery("Order.getUsersOrders", Order.class);
+            query.setParameter("user", user);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public static Order getUsersOrder(Long userId, Long orderId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            User user = em.find(User.class, userId);
+
+            TypedQuery<Order> query = em.createNamedQuery("Order.getUsersOrderById", Order.class);
+            query.setParameter("user", user);
+            query.setParameter("orderId", orderId);
+
+            List<Order> resultList = query.getResultList();
+            if(resultList.size() == 1)
+                return resultList.get(0);
+            if(resultList.size() == 0)
+                return null;
+
+            throw new NonUniqueResultException("We receive more then one order with specified id, it mustn't happened");
         } finally {
             em.close();
         }
@@ -82,7 +123,7 @@ public class OrderController {
     }
 
 
-    public static Order getOrderById(Long userId, Long orderId, Set<Long> friends, Set<Long> extendedFriends) {
+    public static Order getOrderByIdFiltered(Long userId, Long orderId, Set<Long> friends, Set<Long> extendedFriends) {
         EntityManager em = emf.createEntityManager();
         try {
             User user = em.find(User.class, userId);

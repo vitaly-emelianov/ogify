@@ -3,12 +3,14 @@ package net.ogify.engine.order;
 import net.ogify.database.OrderController;
 import net.ogify.database.UserController;
 import net.ogify.database.entities.Order;
+import net.ogify.database.entities.Order.OrderStatus;
 import net.ogify.database.entities.OrderItem;
 import net.ogify.database.entities.User;
 import net.ogify.engine.friends.FriendProcessor;
+import net.ogify.engine.secure.exceptions.ForbiddenException;
 
+import javax.ws.rs.NotFoundException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
@@ -42,7 +44,7 @@ public class OrderProcessor {
     public static Order getOrderById(Long userId, Long orderId) throws ExecutionException {
         Set<Long> friends = FriendProcessor.getUserFriendsIds(userId);
         Set<Long> friendsOfFriends = FriendProcessor.getUserExtendedFriendsIds(userId);
-        return OrderController.getOrderById(userId, orderId, friends, friendsOfFriends);
+        return OrderController.getOrderByIdFiltered(userId, orderId, friends, friendsOfFriends);
     }
 
     /**
@@ -58,5 +60,52 @@ public class OrderProcessor {
         Set<Long> friendsOfFriends = FriendProcessor.getUserExtendedFriendsIds(userId);
         return new HashSet<Order>(
                 OrderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends, latitude, longitude));
+    }
+
+    /**
+     * Method change workflow status of order.
+     * @param changerUserId who is changing status
+     * @param orderId id of changed order
+     * @param status status which order should have after change
+     */
+    public static void changeOrderStatus(Long changerUserId, Long orderId, OrderStatus status) {
+        User changer = UserController.getUserById(changerUserId);
+        assert changer != null;
+        Order order = OrderController.getOrderById(orderId);
+
+
+        if(order == null) // We can't work if order not founded
+            throw new NotFoundException(String.format("Order with id %d is not presented on server", orderId));
+        if(order.isUserOwner(changer) && order.isUserExecutor(changer)) // Check that we have access to order
+            throw new ForbiddenException("You haven't right for change status of the order");
+        if(order.isInFinalState()) // Check that order not in Completed or Canceled state
+            throw new ForbiddenException("You can't change status of completed or canceled orders");
+
+        if(order.isUserExecutor(changer)) { // Orders executor try to change status
+            switch(status) { // Executor can complete, start execution or take order back
+                case Running:
+                case Completed:
+                case New:
+                    order.setStatus(status);
+                    break;
+                default:
+                    throw new ForbiddenException(
+                            String.format("Executor can't change order status from %s to %s state",
+                                    order.getStatus().toString(), status.toString()));
+            }
+        } else if(order.getStatus() != OrderStatus.Running) { // Owner mustn't change status of running order
+            switch(status) {
+                case Canceled:
+                    order.setStatus(status);
+                    break;
+                default:
+                    throw new ForbiddenException(
+                            String.format("Owner can't change order status from %s to %s state",
+                                    order.getStatus().toString(), status.toString()));
+            }
+        }
+
+        // And finally, if we don't have errors save order
+        OrderController.saveOrUpdate(order);
     }
 }

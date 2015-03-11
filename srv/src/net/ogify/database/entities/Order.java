@@ -18,6 +18,10 @@ import java.util.List;
                 "and orders.longitude > (:longitude - 0.07) and orders.longitude < (:longitude + 0.07)" +
                 "and (orders.expireIn > CURRENT_TIMESTAMP or orders.expireIn is null) " +
                 "and orders.status = :enumOrderNew and orders.namespace = :enumOrderAll"),
+        @NamedQuery(name = "Order.getUsersOrders", query = "select orders from Order orders where " +
+                "orders.owner = :user or orders.executor = :user"),
+        @NamedQuery(name = "Order.getUsersOrderById", query = "select orders from Order orders where " +
+                "orders.id = :orderId and (orders.owner = :user or orders.executor = :user)"),
         @NamedQuery(name = "Order.getNearestOrdersFiltered", query = "select distinct orders from Order orders " +
                 "where orders.id in (" +
                     "select orders.id from Order orders where orders.latitude > (:latitude - 0.07) " +
@@ -51,7 +55,8 @@ public class Order {
     public enum OrderStatus {
         @XmlEnumValue("new") New,
         @XmlEnumValue("running") Running,
-        @XmlEnumValue("completed") Completed
+        @XmlEnumValue("completed") Completed,
+        @XmlEnumValue("canceled") Canceled
     }
 
     @XmlType(name = "order_namespace")
@@ -133,6 +138,18 @@ public class Order {
     @XmlElement(name = "items")
     List<OrderItem> items = new ArrayList<OrderItem>();
 
+    public boolean isUserOwner(User user) {
+        return user.equals(owner);
+    }
+
+    public boolean isUserExecutor(User user) {
+        return user.equals(executor);
+    }
+
+    public boolean isInFinalState() {
+        return status == OrderStatus.Completed || status == OrderStatus.Canceled;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -147,5 +164,17 @@ public class Order {
 
     public User getOwner() {
         return owner;
+    }
+
+    public User getExecutor() {
+        return executor;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 }
