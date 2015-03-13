@@ -31,9 +31,22 @@ public class OrderResource {
     private Long userId;
 
     @GET
-    public Set<Order> getOrders(@NotNull @QueryParam("latitude") Double latitude,
-                                @NotNull @QueryParam("longitude") Double longitude) throws ExecutionException {
+    @Path("near")
+    public Set<Order> getOrdersNear(@NotNull @QueryParam("latitude") Double latitude,
+                                    @NotNull @QueryParam("longitude") Double longitude) throws ExecutionException {
         return OrderProcessor.getNearestOrders(latitude, longitude, userId);
+    }
+
+    /**
+     * Return, not more then specified, users orders, where user is owner or executor.
+     * @param firstResult the position of the first result to retrieve.
+     * @param maxResults the maximum number of results to retrieve.
+     * @return found users orders.
+     */
+    @GET
+    public List<Order> getMyOrders(@QueryParam("offset") int firstResult,
+                                   @QueryParam("firstResult") int maxResults) {
+        return OrderProcessor.getUsersOrders(userId, firstResult, maxResults);
     }
 
     @GET

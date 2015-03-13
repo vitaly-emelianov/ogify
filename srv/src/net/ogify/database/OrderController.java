@@ -48,13 +48,17 @@ public class OrderController {
      * @param userId id of user which orders should be returned.
      * @return users orders.
      */
-    public static List<Order> getUsersOrders(Long userId) {
+    public static List<Order> getUsersOrders(Long userId, int firstResult, int maxResults) {
         EntityManager em = emf.createEntityManager();
         try {
             User user = em.find(User.class, userId);
 
             TypedQuery<Order> query = em.createNamedQuery("Order.getUsersOrders", Order.class);
             query.setParameter("user", user);
+
+            query.setFirstResult(firstResult);
+            query.setMaxResults(maxResults);
+
             return query.getResultList();
         } finally {
             em.close();

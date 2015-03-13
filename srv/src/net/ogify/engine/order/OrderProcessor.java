@@ -11,6 +11,7 @@ import net.ogify.engine.secure.exceptions.ForbiddenException;
 
 import javax.ws.rs.NotFoundException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
@@ -107,5 +108,16 @@ public class OrderProcessor {
 
         // And finally, if we don't have errors save order
         OrderController.saveOrUpdate(order);
+    }
+
+    /**
+     *
+     * @param userId id of user which orders should be retrieved.
+     * @param firstResult the position of the first result to retrieve.
+     * @param maxResults the maximum number of results to retrieve.
+     * @return users orders.
+     */
+    public static List<Order> getUsersOrders(Long userId, int firstResult, int maxResults) {
+        return OrderController.getUsersOrders(userId, firstResult, maxResults);
     }
 }
