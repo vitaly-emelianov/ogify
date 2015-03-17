@@ -1,5 +1,6 @@
 package net.ogify.database;
 
+import net.ogify.database.entities.Feedback;
 import net.ogify.database.entities.Order;
 import net.ogify.database.entities.OrderItem;
 import net.ogify.database.entities.User;
@@ -175,10 +176,29 @@ public class OrderController {
             em.getTransaction().begin();
             em.merge(order);
             em.getTransaction().commit();
-        } catch(RuntimeException e) {
-            em.getTransaction().rollback();
-            logger.error("Error on order save!", e);
-            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
+    public static void getRelatedFeedback(Order order, User who, User whom) {
+
+    }
+
+    /**
+     * Function check order on is specified user already rate other member of order.
+     * @param order
+     * @param user
+     * @return true if rated.
+     */
+    public static boolean isOrderRatedBy(Order order, User user) {
+        EntityManager em =emf.createEntityManager();
+        try {
+            TypedQuery<Feedback> query = em.createNamedQuery("Feedback.getFeedback", Feedback.class);
+            query.setParameter("whichOrder", order);
+            query.setParameter("whoRate", user);
+
+            return query.getResultList().size() == 1;
         } finally {
             em.close();
         }

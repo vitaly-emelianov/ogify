@@ -138,6 +138,9 @@ public class Order {
     @XmlElement(name = "items")
     List<OrderItem> items = new ArrayList<OrderItem>();
 
+    @OneToMany
+    List<Feedback> relatedFeedbacks;
+
     public boolean isUserOwner(User user) {
         return user.equals(owner);
     }

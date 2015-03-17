@@ -75,4 +75,11 @@ public class OrderResource {
         OrderProcessor.changeOrderStatus(userId, orderId, status);
     }
 
+    @POST
+    @Path("{orderId}/rate")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void rateOrder(@PathParam("orderId") Long orderId, @NotNull @FormParam("rate") double rate,
+                          @FormParam("comment") String comment) {
+        OrderProcessor.rateOrderParty(userId, orderId, rate, comment);
+    }
 }

@@ -16,7 +16,7 @@ public class WebExceptionMapper implements ExceptionMapper<WebApplicationExcepti
     public Response toResponse(WebApplicationException exception) {
         ErrorResponse response =
                 new ErrorResponse(exception.getResponse().getStatusInfo().toString(),
-                        exception.getLocalizedMessage());
+                        exception.getMessage());
         return Response.status(exception.getResponse().getStatus())
                 .entity(response)
                 .build();

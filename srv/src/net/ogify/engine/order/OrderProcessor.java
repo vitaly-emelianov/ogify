@@ -1,7 +1,9 @@
 package net.ogify.engine.order;
 
+import net.ogify.database.FeedbackController;
 import net.ogify.database.OrderController;
 import net.ogify.database.UserController;
+import net.ogify.database.entities.Feedback;
 import net.ogify.database.entities.Order;
 import net.ogify.database.entities.Order.OrderStatus;
 import net.ogify.database.entities.OrderItem;
@@ -9,7 +11,11 @@ import net.ogify.database.entities.User;
 import net.ogify.engine.friends.FriendProcessor;
 import net.ogify.engine.secure.exceptions.ForbiddenException;
 
+import javax.persistence.EntityExistsException;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -119,5 +125,42 @@ public class OrderProcessor {
      */
     public static List<Order> getUsersOrders(Long userId, int firstResult, int maxResults) {
         return OrderController.getUsersOrders(userId, firstResult, maxResults);
+    }
+
+    /**
+     * Methods rate second member of order execution.
+     * @param userId who rate.
+     * @param orderId related order.
+     * @param rate how he's rates.
+     */
+    public static void rateOrderParty(Long userId, Long orderId, double rate, String comment) {
+        if(rate > 5 || rate < 0)
+            throw new BadRequestException("Rate must be in [0, 5] range");
+
+        User userWho = UserController.getUserById(userId);
+        Order relatedOrder = OrderController.getUsersOrder(userId, orderId);
+
+        // Check all conditions for rate order execution
+        if(relatedOrder == null) // Check that order with specified id is presented
+            throw new NotFoundException(String.format("Order with id %d not found", orderId));
+        if(relatedOrder.getStatus() != OrderStatus.Completed) // Check that order is completed
+            throw new WebApplicationException("You can't rate user while order isn't completed",
+                    Response.Status.FORBIDDEN);
+        if(OrderController.isOrderRatedBy(relatedOrder, userWho)) // Check that user didn't rate order already
+            throw new WebApplicationException("You can't rate order again", Response.Status.GONE);
+
+
+        Feedback feedback;
+        if(userWho.equals(relatedOrder.getExecutor())) {
+            // Executor rates owner
+            User userWhom = relatedOrder.getOwner();
+            feedback = new Feedback(comment, userWho, userWhom, relatedOrder, rate);
+        } else {
+            // Owner rates executor
+            User userWhom = relatedOrder.getExecutor();
+            feedback = new Feedback(comment, userWho, userWhom, relatedOrder, rate);
+        }
+
+        FeedbackController.save(feedback);
     }
 }

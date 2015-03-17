@@ -82,23 +82,6 @@ public class UserController {
         }
     }
 
-    public static void saveOrUpdate(User user) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            em.getTransaction().begin();
-            if (user.getId() == null)
-                em.persist(user);
-            else
-                em.merge(user);
-            em.getTransaction().commit();
-        } catch (RuntimeException e) {
-            em.getTransaction().rollback();
-            throw e;
-        } finally {
-            em.close();
-        }
-    }
-
     public static User getUserByIdAndSession(Long userId, String sessionSecret) {
         EntityManager em = emf.createEntityManager();
         try {
@@ -137,4 +120,19 @@ public class UserController {
             em.close();
         }
     }
+
+    public static void saveOrUpdate(User user) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            if (user.getId() == null)
+                em.persist(user);
+            else
+                em.merge(user);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
 }
