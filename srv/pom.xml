@@ -9,40 +9,8 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-
-
     <build>
-        <sourceDirectory>src</sourceDirectory>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.5</version>
-                <configuration>
-                    <webappDirectory>web</webappDirectory>
-                    <webResources>
-                        <resource>
-                            <directory>
-                                ../landing
-                            </directory>
-                            <targetPath>
-                                landing
-                            </targetPath>
-                        </resource>
-                        <resource>
-                            <directory>
-                                ../client
-                            </directory>
-                            <targetPath>
-                                client
-                            </targetPath>
-                        </resource>
-                    </webResources>
-                    <outputDirectory>deployments</outputDirectory>
-                    <warName>ROOT</warName>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
