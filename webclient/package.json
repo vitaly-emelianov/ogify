@@ -1,0 +1,23 @@
+{
+  "name": "ogify-client",
+  "version": "0.0.1",
+  "description": "Web application for work with ogify servers from web page",
+  "author": "Morgen Matvey <melges.morgen@gmail.com>",
+  "dependencies": {
+    "angular": "~1.4.2",
+    "angular-resource": "~1.4.2",
+    "bootstrap": "~3.3.5"
+  },
+  "devDependencies": {
+    "http-server": "~0.8.0"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server -P http://melges-desktop.:8080/ -p 8000",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ogify"
+  ],
+  "license": "ISC"
+}

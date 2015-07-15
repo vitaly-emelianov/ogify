@@ -1,0 +1,13 @@
+.navbar-avatar {
+    width: 32px;
+}
+
+.navbar-nav>li>a.avatar-dropdown-toogle {
+    padding-top: 9px;
+    padding-bottom: 9px;
+    min-width: 200px;
+}
+
+.dropdown-menu {
+    min-width: 200px;
+}
