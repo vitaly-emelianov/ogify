@@ -3,3 +3,23 @@
  */
 
 var ogifyApp = angular.module('ogifyApp', ['ogifyServices']);
+
+ogifyApp.controller('TemplateController', function($scope) {
+    $scope.navBarTemplateUri = 'templates/navbar/navbar.html';
+});
+
+ogifyApp.controller('NavBarController', function($scope, $resource, AuthResource, UserProfile) {
+
+    $scope.isAuthenticated = AuthResource.isAuthenticated();
+
+    $scope.requestUri = AuthResource;
+    $scope.requestUri.getVkUri({}, function(uriObject) {
+        $scope.requestUri.vkUri = uriObject.requestUri;
+    });
+    $scope.requestUri.getFacebookUri({}, function(uriObject) {
+        $scope.requestUri.facebookUri = uriObject.requestUri;
+    });
+
+    $scope.user = UserProfile.getCurrentUser({}, function() {
+        $scope.user.loaded = true; });
+});

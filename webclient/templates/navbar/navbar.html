@@ -1,0 +1,108 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Ogify</a>
+        </div>
+        <span>
+
+        </span>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+                <li><a href="#">Link</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">One more separated link</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="navbar-right" ng-controller="NavBarController">
+                <!-- Modal -->
+                <div class="modal fade" id="authModal" tabindex="-1" role="dialog" aria-labelledby="authModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="authModalLabel">
+                                    Аутентифицируйтесь при помощи привычной вам социальной сети
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>
+                                    Аутентифицируйтесь при помощи любой социальной сети из списка. Ах, да, мы отказались
+                                    от собственной регистрации, вам не потребуется запоминать ещё один пароль.
+                                </p>
+
+                                <p>
+                                    Для пользователей, которые впервые на нашем ресурсе, регистраиция произойдёт
+                                    автоматически, при первой аутентификации.
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-social-icon btn-vk" ng-href="{{requestUri.vkUri}}">
+                                    <i class="fa fa-vk"></i>
+                                </a>
+                                <a class="btn btn-social-icon btn-facebook">
+                                    <i class="fa fa-facebook"></i>
+                                </a>
+                                <a class="btn btn-social-icon btn-google">
+                                    <i class="fa fa-google"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load animation -->
+                <div ng-if="isAuthenticated == null" class="navbar-form">
+                    <button class="btn btn-default">
+                        <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+                    </button>
+                </div>
+
+                <!-- Login button -->
+                <div ng-if="isAuthenticated == false" class="navbar-form">
+                    <button type="button"
+                            class="btn btn-default" data-toggle="modal" data-target="#authModal">Войти
+                    </button>
+                </div>
+
+                <!-- Profile widget -->
+                <ul ng-if="user.loaded == true" class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="avatar-dropdown-toogle" data-toggle="dropdown">
+                            <img ng-src="{{user.photoUri}}" class="navbar-avatar profile-image img-circle">
+                            <b>{{user.fullName}}</b><span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#"><i class="fa fa-cog"></i>Профиль</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#"><i class="fa fa-sign-out"></i>Выйти</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
