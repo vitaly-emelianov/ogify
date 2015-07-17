@@ -10,7 +10,9 @@ ogifyApp.controller('TemplateController', function($scope) {
 
 ogifyApp.controller('NavBarController', function($scope, $resource, AuthResource, UserProfile) {
 
-    $scope.isAuthenticated = AuthResource.isAuthenticated();
+    $scope.modalWindowTemplateUri = 'templates/navbar/auth-modal.html';
+
+    $scope.authenticationStatus = AuthResource.authenticationStatus();
 
     $scope.requestUri = AuthResource;
     $scope.requestUri.getVkUri({}, function(uriObject) {

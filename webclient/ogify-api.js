@@ -19,14 +19,17 @@ authServices.factory('AuthResource', ['$resource',
         return $resource(BASE_PATH + AUTH_PATH + '/getRequestUri', {}, {
             getVkUri: {method: 'GET', params: {sn: 'vk'}},
             getFacebookUri: {method: 'GET', params: {sn: 'facebook'}},
-            isAuthenticated: {method: 'GET', url: BASE_PATH + AUTH_PATH + '/isAuthenticated', params: {},
+            authenticationStatus: {method: 'GET', url: BASE_PATH + AUTH_PATH + '/isAuthenticated', params: {},
                 transformResponse: function(data, headersGetter, status) {
                     if(status == 200) {
-                        return true;
+                        data = {lastStatus: true};
+                        return data;
                     } else if(status == 401) {
-                        return false;
+                        data = {lastStatus: false};
+                        return data;
                     } else {
-                        return null;
+                        data = {lastStatus: null};
+                        return data;
                     }
                 }}
         });
