@@ -59,9 +59,21 @@ public class AuthResource {
                 break;
             default:
                 generatedUriResponse = new SNRequestUri();
-
         }
+
         return generatedUriResponse;
+    }
+
+    /**
+     * Method for simplify checking auth status from client side, return 200 OK if user authenticated,
+     * or 401 Unauthorized (Error will raised by AuthFilter).
+
+     * @return always return empty OK Response.
+     */
+    @Path("/isAuthenticated")
+    @GET
+    public Response isAuthenticated() {
+        return Response.ok().build();
     }
 
     @GET
@@ -77,14 +89,14 @@ public class AuthResource {
         if(sessionSecret == null)
             sessionSecret = AuthController.generateSessionSecret();
 
-        NewCookie vkIdCookie = new NewCookie(AuthController.USER_ID_COOKIE_NAME,
+        NewCookie snIdCookie = new NewCookie(AuthController.USER_ID_COOKIE_NAME,
                 AuthController.auth(code, uri, sessionSecret, socialNetwork.getValue()).toString(), "/", null,
                 null, 2629744, false); // Valid for a month
         NewCookie sessionIdCookie = new NewCookie(AuthController.SESSION_COOKIE_NAME, sessionSecret, "/", null,
                 null, 2629744, false); // Valid for a month
 
         return Response.temporaryRedirect(new URI("/client"))
-                .cookie(vkIdCookie)
+                .cookie(snIdCookie)
                 .cookie(sessionIdCookie)
                 .build();
 

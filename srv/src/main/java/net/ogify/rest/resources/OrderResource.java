@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created by melges.morgen on 15.02.15.
+ * Class represents
  */
 @Path("/orders")
 @Produces(MediaType.APPLICATION_JSON)
@@ -31,7 +31,7 @@ public class OrderResource {
     private Long userId;
 
     @GET
-    @Path("near")
+    @Path("/near")
     public Set<Order> getOrdersNear(@NotNull @QueryParam("latitude") Double latitude,
                                     @NotNull @QueryParam("longitude") Double longitude) throws ExecutionException {
         return OrderProcessor.getNearestOrders(latitude, longitude, userId);
@@ -50,13 +50,13 @@ public class OrderResource {
     }
 
     @GET
-    @Path(("{orderId}"))
+    @Path(("/{orderId}"))
     public Order getOrder(@NotNull @PathParam("orderId") Long orderId) {
         return OrderController.getOrderById(orderId);
     }
 
     @GET
-    @Path("{orderId}/items}")
+    @Path("/{orderId}/items}")
     public List<OrderItem> getOrderItems(@NotNull @PathParam("orderId") Long orderId) {
         return OrderController.getOrderById(orderId).getItems();
     }
@@ -68,7 +68,7 @@ public class OrderResource {
 
 
     @POST
-    @Path("{orderId}/status")
+    @Path("/{orderId}/status")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void completeOrder(@PathParam("orderId") Long orderId,
                               @NotNull @FormParam("status") Order.OrderStatus status) {
@@ -76,7 +76,7 @@ public class OrderResource {
     }
 
     @POST
-    @Path("{orderId}/rate")
+    @Path("/{orderId}/rate")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void rateOrder(@PathParam("orderId") Long orderId, @NotNull @FormParam("rate") double rate,
                           @FormParam("comment") String comment) {

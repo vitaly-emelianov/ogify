@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by melges.morgen on 14.02.15.
+ * Class for work with users records in database
+ *
+ * @author Morgen Matvey melges.morgen@gmail.com
  */
 public class UserController {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("OgifyDataSource");
