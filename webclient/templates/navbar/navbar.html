@@ -35,24 +35,59 @@
             </ul>
             <div class="navbar-right" ng-controller="NavBarController">
                 <!-- Modal -->
-                <div ng-include="modalWindowTemplateUri"></div>
+                <div class="modal fade" id="authModal" tabindex="-1" role="dialog" aria-labelledby="authModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="authModalLabel">
+                                    Аутентифицируйтесь при помощи привычной вам социальной сети
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>
+                                    Аутентифицируйтесь при помощи любой социальной сети из списка. Ах, да, мы отказались
+                                    от собственной регистрации, вам не потребуется запоминать ещё один пароль.
+                                </p>
+
+                                <p>
+                                    Для пользователей, которые впервые на нашем ресурсе, регистраиция произойдёт
+                                    автоматически, при первой аутентификации.
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-social-icon btn-vk" ng-click="authVk()">
+                                    <i class="fa fa-vk"></i>
+                                </a>
+                                <a class="btn btn-social-icon btn-facebook">
+                                    <i class="fa fa-facebook"></i>
+                                </a>
+                                <a class="btn btn-social-icon btn-google">
+                                    <i class="fa fa-google"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div ng-include="modalWindowTemplateUri"></div>-->
 
                 <!-- Load animation -->
-                <div ng-if="authenticationStatus.lastStatus == null" class="navbar-form">
+                <div ng-if="authenticated == null" class="navbar-form">
                     <button class="btn btn-default">
                         <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
                     </button>
                 </div>
 
                 <!-- Login button -->
-                <div ng-if="authenticationStatus.lastStatus == false" class="navbar-form">
+                <div ng-if="authenticated == false" class="navbar-form">
                     <button type="button"
                             class="btn btn-default" data-toggle="modal" data-target="#authModal">Войти
                     </button>
                 </div>
 
                 <!-- Profile widget -->
-                <ul ng-if="user.loaded == true" class="nav navbar-nav">
+                <ul ng-if="user.$resolved == true && authenticated == true" class="nav navbar-nav">
                     <li class="dropdown">
                         <a href="#" class="avatar-dropdown-toogle" data-toggle="dropdown">
                             <img ng-src="{{user.photoUri}}" class="navbar-avatar profile-image img-circle">

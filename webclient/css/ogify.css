@@ -11,3 +11,9 @@
 .dropdown-menu {
     min-width: 200px;
 }
+
+.order-short {
+    background: darkgray;
+}
+
+.angular-google-map-container { height: 800px; }

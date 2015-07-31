@@ -5,8 +5,28 @@
 var BASE_PATH = '/rest';
 var AUTH_PATH = '/auth';
 var PROFILE_PATH = '/user';
+var ORDER_PATH = '/orders';
 
-var authServices = angular.module('ogifyServices', ['ngResource']);
+var ogifyServices = angular.module('ogifyServices', ['ngResource']);
+
+ogifyServices.factory('AuthInterceptor', ['$q', '$rootScope', function ($q, $rootScope) {
+    return {
+        'response': function (response) {
+            if (response.config.url != BASE_PATH + AUTH_PATH + '/getRequestUri') {
+                $rootScope.authenticated = true;
+            }
+
+            return response;
+        },
+        'responseError': function (response) {
+            if (response.status == 401) {
+                $rootScope.authenticated = false;
+            }
+
+            return $q.reject(response);
+        }
+    };
+}]);
 
 /**
  * Resource for call to getRequestUri method on server.
@@ -14,34 +34,31 @@ var authServices = angular.module('ogifyServices', ['ngResource']);
  * Social network (sn) must be provided, or vk will be used instead.
  * @type {Object}
  */
-authServices.factory('AuthResource', ['$resource',
-    function($resource) {
+ogifyServices.factory('AuthResource', ['$resource', '$rootScope',
+    function ($resource, $rootScope, AuthInterceptor) {
         return $resource(BASE_PATH + AUTH_PATH + '/getRequestUri', {}, {
             getVkUri: {method: 'GET', params: {sn: 'vk'}},
             getFacebookUri: {method: 'GET', params: {sn: 'facebook'}},
-            authenticationStatus: {method: 'GET', url: BASE_PATH + AUTH_PATH + '/isAuthenticated', params: {},
-                transformResponse: function(data, headersGetter, status) {
-                    if(status == 200) {
-                        data = {lastStatus: true};
-                        return data;
-                    } else if(status == 401) {
-                        data = {lastStatus: false};
-                        return data;
-                    } else {
-                        data = {lastStatus: null};
-                        return data;
-                    }
-                }}
+            authenticationStatus: {
+                method: 'GET', url: BASE_PATH + AUTH_PATH + '/isAuthenticated', params: {},
+                interceptor: AuthInterceptor
+            }
         });
     }
 ]);
 
-authServices.factory('UserProfile', ['$resource',
-    function($resource) {
+ogifyServices.factory('UserProfile', ['$resource', 'AuthInterceptor',
+    function ($resource, AuthInterceptor) {
         return $resource(BASE_PATH + PROFILE_PATH, {}, {
-            getCurrentUser: {method: 'GET', params: {}, isArray: false}
+            getCurrentUser: {method: 'GET', params: {}, interceptor: AuthInterceptor},
+            get: {url: BASE_PATH + PROFILE_PATH + '/:userId', method: 'GET'},
+            getFriends: {url: BASE_PATH + PROFILE_PATH + '/:userId/friends', isArray: true, params: {
+                userId: '@userId'}}
         });
     }
 ]);
 
-
+ogifyServices.factory('Order', ['$resource', 'AuthInterceptor',
+    function($resource, AuthInterceptor) {
+        return $resource(BASE_PATH + ORDER_PATH, {});
+}]);

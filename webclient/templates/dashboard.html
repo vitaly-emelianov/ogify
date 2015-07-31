@@ -1,0 +1,26 @@
+<!-- -->
+<div class="col-sm-12 col-md-8 main">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <ui-gmap-google-map center='map.center' zoom='map.zoom' control="map.control">
+                <ui-gmap-markers
+                        models="currentUserOrders"
+                        idKey="'id'"
+                        coords="'self'"></ui-gmap-markers>
+            </ui-gmap-google-map>
+        </div>
+    </div>
+</div>
+<div class="col-sm-8 col-md-4">
+    <div class="panel panel-default">
+        <div class="panel-heading">Текущие заказы</div>
+        <div class="panel-body">
+            <div class="list-group">
+                <a id="{{order.id}}" href="#" class="list-group-item" ng-repeat="order in currentUserOrders">
+                    <h4 class="list-group-item-heading">Заказ №{{order.id}} от {{order.owner.fullName}}</h4>
+                    <p class="list-group-item-text">{{order.description}}</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
