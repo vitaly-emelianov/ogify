@@ -31,7 +31,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    @XmlElement(name = "user_id", nillable = false, required = true)
+    @XmlElement(name = "userId", nillable = false, required = true)
     Long id;
 
     @Column(name = "facebook_id", nullable = true, unique = true)
@@ -49,11 +49,11 @@ public class User {
     String photoUri;
 
     @Column(name = "rating_as_customer", nullable = false, unique = false)
-    @XmlElement(name = "rating_as_customer", nillable = true, required = false)
+    @XmlElement(name = "ratingAsCustomer", nillable = true, required = false)
     Double ratingAsCustomer = 3.5;
 
     @Column(name = "rating_as_executor", nullable = false, unique = false)
-    @XmlElement(name = "rating_as_executor", nillable = true, required = false)
+    @XmlElement(name = "ratingAsExecutor", nillable = true, required = false)
     Double ratingAsExecutor = 3.5;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
