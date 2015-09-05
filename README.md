@@ -9,8 +9,8 @@ Treat people the way you want them to treat you.
 
 - [Prerequisites](#prerequisites)
 - [Setup](#setup)
-- [Configure Database](#DB)
-- [Configure Tomcat](#tomcat)
+- [Configure Database](#configure-database)
+- [Configure Tomcat](#configure-tomcat)
 - [Additional Information](#additional-information)
 - [Contacts](#contacts)
 
@@ -42,9 +42,9 @@ Execute maven task to build web archive package like:
       cd srv
       mvn package
 
-[Configure database](#DB)
+[Configure database](#configure-database)
 
-[Copy artifacts and configure Tomcat](#tomcat)
+[Copy artifacts and configure Tomcat](#configure-tomcat)
 
 Start Tomcat using startup script.
 
