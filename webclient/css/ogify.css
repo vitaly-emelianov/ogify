@@ -16,4 +16,20 @@
     background: darkgray;
 }
 
-.angular-google-map-container { height: 800px; }
+.angular-google-map-container {
+    height: calc(100vh - 150px);
+    height: -webkit-calc(100vh - 150px);
+    height: -moz-calc(100vh - 150px);
+}
+
+.map-container-height {
+    height: calc(100vh - 120px);
+    height: -webkit-calc(100vh - 120px);
+    height: -moz-calc(100vh - 120px);
+}
+
+.current-orders-height {
+    height: calc(100vh - 120px);
+    height: -webkit-calc(100vh - 120px);
+    height: -moz-calc(100vh - 120px);
+}
