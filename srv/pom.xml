@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+    <scm>
+        <connection>scm:git:git@github.com:ogify/ogify.git</connection>
+        <url>scm:git:git@github.com:ogify/ogify.git</url>
+        <developerConnection>scm:git:git@github.com:ogify/ogify.git</developerConnection>
+      <tag>v1.0.0</tag>
+  </scm>
 
     <groupId>hackaton.mipt.ru</groupId>
     <artifactId>net.ogify</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
+
+    <properties>
+        <build.manifest.section>Build Details</build.manifest.section>
+        <build.unknown>UNKNOWN</build.unknown>
+        <build.number>${build.unknown}</build.number>
+        <build.revision>${build.unknown}</build.revision>
+    </properties>
 
     <build>
         <plugins>
@@ -29,8 +41,73 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                        <manifestEntries>
+                            <Build-Time>${maven.build.timestamp}</Build-Time>
+                        </manifestEntries>
+                        <manifestSections>
+                            <manifestSection>
+                                <name>${build.manifest.section}</name>
+                                <manifestEntries>
+                                    <Implementation-Title>${project.name}</Implementation-Title>
+                                    <Implementation-Version>${project.version}</Implementation-Version>
+                                    <Implementation-Build-Number>${build.number}</Implementation-Build-Number>
+                                    <Implementation-SCM-Revision>${build.revision}</Implementation-SCM-Revision>
+                                </manifestEntries>
+                            </manifestSection>
+                        </manifestSections>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <releaseProfiles>releases</releaseProfiles>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>releases</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.6</version>
+                        <executions>
+                            <execution>
+                                <id>default-deploy</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <serverId>nexus-releases</serverId>
+                            <nexusUrl>http://nexus.ogify.net/</nexusUrl>
+                            <skipStaging>true</skipStaging>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>
