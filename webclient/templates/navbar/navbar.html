@@ -89,14 +89,14 @@
                 <!-- Profile widget -->
                 <ul ng-if="user.$resolved == true && authenticated == true" class="nav navbar-nav">
                     <li class="dropdown">
-                        <a href="#" class="avatar-dropdown-toogle" data-toggle="dropdown">
+                        <a href="javascript:void(0)" class="avatar-dropdown-toogle" data-toggle="dropdown">
                             <img ng-src="{{user.photoUri}}" class="navbar-avatar profile-image img-circle">
                             <b>{{user.fullName}}</b><span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="#"><i class="fa fa-cog"></i>Профиль</a></li>
                             <li class="divider"></li>
-                            <li><a href="#"><i class="fa fa-sign-out"></i>Выйти</a></li>
+                            <li><a ng-click="logoutSN()"><i class="fa fa-sign-out"></i>Выйти</a></li>
                         </ul>
                     </li>
                 </ul>

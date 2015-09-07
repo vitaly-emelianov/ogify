@@ -2,7 +2,7 @@
  * Created by melge on 12.07.2015.
  */
 
-var ogifyApp = angular.module('ogifyApp', ['ogifyServices', 'ngRoute', 'uiGmapgoogle-maps']);
+var ogifyApp = angular.module('ogifyApp', ['ogifyServices', 'ngRoute', 'ngCookies', 'uiGmapgoogle-maps']);
 
 ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
     $routeProvider
@@ -38,7 +38,7 @@ ogifyApp.controller('TemplateController', function ($scope) {
     $scope.navBarTemplateUri = 'templates/navbar/navbar.html';
 });
 
-ogifyApp.controller('NavBarController', function ($scope, $window, AuthResource, UserProfile) {
+ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, AuthResource, UserProfile) {
 
     $scope.modalWindowTemplateUri = 'templates/navbar/auth-modal.html';
 
@@ -48,6 +48,14 @@ ogifyApp.controller('NavBarController', function ($scope, $window, AuthResource,
         AuthResource.getVkUri(function (data) {
             $window.location.href = data.requestUri;
         });
+    };
+
+    $scope.logoutSN = function () {
+        $cookies.remove("JSESSIONID");
+        $cookies.remove("ogifySessionSecret");
+        $cookies.remove("sID");
+
+        $window.location.reload();
     };
 
     $scope.user = UserProfile.getCurrentUser();

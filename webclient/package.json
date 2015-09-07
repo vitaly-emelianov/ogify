@@ -7,6 +7,7 @@
     "angular": "~1.4.2",
     "angular-resource": "~1.4.2",
     "angular-route": "~1.4.2",
+    "angular-cookies": "~1.4.2",
     "angular-google-maps": "~2.1.5",
     "lodash": "~3.10.0",
     "bootstrap": "~3.3.5",
@@ -17,7 +18,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "start": "http-server -P http://melges-desktop.:8080/ -p 8000",
+    "start": "http-server -P http://localhost:8080/ogify -p 8000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
