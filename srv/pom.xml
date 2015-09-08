@@ -6,8 +6,8 @@
         <connection>scm:git:git@github.com:ogify/ogify.git</connection>
         <url>scm:git:git@github.com:ogify/ogify.git/srv</url>
         <developerConnection>scm:git:git@github.com:ogify/ogify.git</developerConnection>
-        <tag>v${version}</tag>
     </scm>
+
     <distributionManagement>
         <repository>
             <id>nexus-releases</id>
