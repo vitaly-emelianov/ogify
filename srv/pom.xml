@@ -7,11 +7,17 @@
         <url>scm:git:git@github.com:ogify/ogify.git</url>
         <developerConnection>scm:git:git@github.com:ogify/ogify.git</developerConnection>
       <tag>v1.0.0</tag>
-  </scm>
+    </scm>
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <url>http://nexus.ogify.net/content/repositories/releases</url>
+        </repository>
+    </distributionManagement>
 
     <groupId>hackaton.mipt.ru</groupId>
     <artifactId>net.ogify</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <properties>
