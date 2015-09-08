@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Class represent answer which contain array of users info objects (such is returned from users.get method),
- * @{link VkUserInfo}.
+ * {@link VkUserInfo}
  *
  * May be serialized in JSON or XML.
  *

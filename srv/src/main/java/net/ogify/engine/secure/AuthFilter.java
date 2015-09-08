@@ -1,27 +1,25 @@
 package net.ogify.engine.secure;
 
-import org.apache.log4j.Logger;
 import net.ogify.engine.secure.exceptions.ForbiddenException;
 import net.ogify.engine.secure.exceptions.NotAuthenticatedException;
+import org.apache.log4j.Logger;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
  * Filter class, jersey invoke filter method of this class before invoke any
  * resource methods.
- * <p/>
+ *
  * Class must check is the client which is try to call resource method has a right for that.
  */
 @Provider
@@ -42,11 +40,12 @@ public class AuthFilter implements ContainerRequestFilter {
      * exception will throw.
      *
      * @param requestContext context for get information about client and requested method and other.
-     * @throws IOException
-     * @throws WebApplicationException
+     * @throws ForbiddenException on illegal access to resource.
+     * @throws NotAuthenticatedException when unauthenticated user tries to get resource which wasn't annotated with
+     * PermitAll.
      */
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException, WebApplicationException {
+    public void filter(ContainerRequestContext requestContext) throws ForbiddenException, NotAuthenticatedException {
         // Get method which will be invoked by jersey if we don't deny it
         Method resourceMethod = resourceInfo.getResourceMethod();
 

@@ -11,7 +11,6 @@ import net.ogify.database.entities.User;
 import net.ogify.engine.friends.FriendProcessor;
 import net.ogify.engine.secure.exceptions.ForbiddenException;
 
-import javax.persistence.EntityExistsException;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
@@ -47,6 +46,7 @@ public class OrderProcessor {
      * @param userId id of user who requests order
      * @param orderId id of requested order
      * @return requested order or null if there are no order with specified id, or user haven't access to them.
+     * @throws ExecutionException on any exception thrown while attempting to get results.
      */
     public static Order getOrderById(Long userId, Long orderId) throws ExecutionException {
         Set<Long> friends = FriendProcessor.getUserFriendsIds(userId);
@@ -60,6 +60,7 @@ public class OrderProcessor {
      * @param longitude longitude of point.
      * @param userId id of user who make request.
      * @return visible for specified user orders.
+     * @throws ExecutionException on any exception thrown while attempting to get results.
      */
     public static Set<Order> getNearestOrders(Double latitude, Double longitude, Long userId)
             throws ExecutionException {
@@ -132,6 +133,7 @@ public class OrderProcessor {
      * @param userId who rate.
      * @param orderId related order.
      * @param rate how he's rates.
+     * @param comment additional comment for rate.
      */
     public static void rateOrderParty(Long userId, Long orderId, double rate, String comment) {
         if(rate > 5 || rate < 0)

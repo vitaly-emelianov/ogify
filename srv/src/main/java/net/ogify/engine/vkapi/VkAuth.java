@@ -30,7 +30,9 @@ public class VkAuth {
      * Get user information for provided code from vk. Associate vk user with out user, create session and return
      * session secret string, which should be sended to client.
      * @param code special string from client provided by vk.
+     * @param redirectUri uri on which user will be redirected back by vk after auth procedure.
      * @return parsed to object vk response.
+     * @throws VkSideError on any errors with communicating with vk.
      */
     public static VkAccessResponse auth(String code, String redirectUri) throws VkSideError {
         final Map<String, Object> parametersMap = new HashMap<String, Object>();

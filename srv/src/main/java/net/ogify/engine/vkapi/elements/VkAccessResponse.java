@@ -45,10 +45,11 @@ public class VkAccessResponse {
     }
 
     /**
+     * Construct object represents response on access request to vk.
      *
      * @param accessToken vk access token
-     * @param userId
-     * @param expiresIn
+     * @param userId id of user, who allowed access.
+     * @param expiresIn number of seconds after token will be incorrect.
      */
     public VkAccessResponse(String accessToken, long userId, long expiresIn) {
         this.accessToken = accessToken;

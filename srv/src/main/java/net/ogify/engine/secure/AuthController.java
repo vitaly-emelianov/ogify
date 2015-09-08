@@ -38,6 +38,7 @@ public class AuthController {
      * @param code code provided by client (client must request it from vk first).
      * @param redirectUrl redirect uri which client provide to vk client and which client call for invoke auth.
      * @param sessionSecret client session secret.
+     * @param socialNetwork argument specify which social network we use to authentication.
      * @return vk id returned from
      * @throws VkSideError if vk say about error, or we have a trouble when connecting to vk.
      */

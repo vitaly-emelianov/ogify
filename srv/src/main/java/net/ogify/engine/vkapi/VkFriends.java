@@ -13,8 +13,10 @@ import java.util.Set;
 public class VkFriends {
     /**
      * Method returns set of users friends ids.
-     * @param vkUserId user id.
+     * @param vkUserId user id whose friends will be retrieved.
+     * @param accessToken access token provided by vk.
      * @return set of friends ids.
+     * @throws VkSideError on any errors with communicating with vk.
      */
     public static Set<Long> getFriends(Long vkUserId, String accessToken) throws VkSideError {
         final String methodName = "friends.get";
