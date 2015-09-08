@@ -4,7 +4,7 @@
 
     <scm>
         <connection>scm:git:git@github.com:ogify/ogify.git</connection>
-        <url>scm:git:git@github.com:ogify/ogify.git</url>
+        <url>scm:git:git@github.com:ogify/ogify.git/srv</url>
         <developerConnection>scm:git:git@github.com:ogify/ogify.git</developerConnection>
       <tag>v1.0.0</tag>
     </scm>
@@ -15,8 +15,8 @@
         </repository>
     </distributionManagement>
 
-    <groupId>hackaton.mipt.ru</groupId>
-    <artifactId>net.ogify</artifactId>
+    <groupId>net.ogify</groupId>
+    <artifactId>www</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
