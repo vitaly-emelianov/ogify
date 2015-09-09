@@ -11,9 +11,13 @@
 
     <distributionManagement>
         <repository>
-            <id>nexus-releases</id>
+            <id>ogify-nexus</id>
             <url>http://nexus.ogify.net/content/repositories/releases</url>
         </repository>
+        <snapshotRepository>
+            <id>ogify-nexus</id>
+            <url>http://nexus.ogify.net/content/repositories/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <groupId>net.ogify</groupId>
