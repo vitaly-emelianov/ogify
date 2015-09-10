@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
+
+    <persistence-unit name="OgifyDataSource" transaction-type="JTA">
+        <jta-data-source>java:comp/env/jdbc/ogify</jta-data-source>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
+            <property name="eclipselink.ddl-generation.output-mode"
+                      value="database" />
+            <property name="eclipselink.logging.level" value="SEVERE"/>
+        </properties>
+    </persistence-unit>
+</persistence>
