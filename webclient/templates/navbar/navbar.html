@@ -71,9 +71,9 @@
 
                                     </ul>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" ng-controller="DashboardController">
                                     <label for="address">Адрес:</label>
-                                    <input class="form-control" type="text" id="address" />
+                                    <input class="form-control" type="text" id="address" value="{{map.center_address}}" />
                                 </div>
                                 <div class="form-group">
                                     <label for="comment">Комментарий:</label>
@@ -171,3 +171,42 @@
     </div>
     <!-- /.container-fluid -->
 </nav>
+
+<script type="text/javascript">
+    $("#orderdateto").datetimepicker({
+        format: "dd MM yyyy - hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    });
+
+    today = new Date();
+    today.setHours(today.getHours() + 2);
+    $("#orderdateto input").val(dateFormat( today, "dd mmmm yyyy - hh:MM"));
+    function addToList() {
+        $val1 = $("#additemlistel input")[0].value;
+        $val2 = $("#itemPrice input")[0].value;
+
+        if(!$val1.localeCompare("") || !$val2.localeCompare(""))
+            return;
+        $span = $("<span/>", {
+            class: 'text',
+            text: $val1
+        });
+        $rub = $("<i class='fa fa-rub'></i>");
+        $price = $("<small/>", {
+            class: "label label-success",
+            text: $val2
+
+        });
+
+        $i = $("<i/>", {
+            class: 'tools fa fa-trash-o '
+        }).click(function(){
+            $(this).parent().remove();
+        });
+        $price.append($rub);
+        $li = $("<li/>").append($span).append($price).append($i).appendTo($("#itemlist"));
+    }
+
+</script>

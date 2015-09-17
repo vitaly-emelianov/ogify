@@ -67,7 +67,8 @@ ogifyApp.controller('DashboardController', function ($scope, uiGmapGoogleMapApi,
     $scope.map = {
         center: { latitude: 55.7, longitude: 37.6 },
         zoom: 10,
-        control: {}
+        control: {},
+        center_address: ""
     };
 
     uiGmapGoogleMapApi.then(function(maps) {
@@ -75,6 +76,15 @@ ogifyApp.controller('DashboardController', function ($scope, uiGmapGoogleMapApi,
         if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 $scope.map.center = { latitude: position.coords.latitude, longitude: position.coords.longitude };
+
+                var geocoder = new google.maps.Geocoder();
+                var myposition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                geocoder.geocode({'latLng': myposition},function(data,status) {
+                    if(status == google.maps.GeocoderStatus.OK)
+                        $scope.map.center_address = data[0].formatted_address; //this is the full address
+                    console.log(data[0]);
+                });
+
                 $scope.map.control.refresh($scope.map.center);
                 $scope.map.zoom = 11;
 
