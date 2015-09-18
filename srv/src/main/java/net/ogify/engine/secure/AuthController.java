@@ -8,6 +8,8 @@ import net.ogify.engine.vkapi.VkUsers;
 import net.ogify.engine.vkapi.elements.VkAccessResponse;
 import net.ogify.engine.vkapi.elements.VkUserInfo;
 import net.ogify.engine.vkapi.exceptions.VkSideError;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.SecureRandom;
@@ -16,10 +18,14 @@ import java.util.Random;
 /**
  * Class contain methods for work with user authentication.
  */
+@Component
 public class AuthController {
     public static final String SESSION_COOKIE_NAME = "ogifySessionSecret";
 
     public static final String USER_ID_COOKIE_NAME = "sId";
+
+    @Autowired
+    VkAuth vkAuth;
 
     /**
      * Method check data provided by client for correctness and session validity.
@@ -42,7 +48,7 @@ public class AuthController {
      * @return vk id returned from
      * @throws VkSideError if vk say about error, or we have a trouble when connecting to vk.
      */
-    public static Long auth(String code, String redirectUrl, String sessionSecret, SocialNetwork socialNetwork)
+    public Long auth(String code, String redirectUrl, String sessionSecret, SocialNetwork socialNetwork)
             throws VkSideError {
         Long userId;
         switch(socialNetwork) {
@@ -59,8 +65,8 @@ public class AuthController {
         return userId;
     }
 
-    public static Long authVk(String code, String redirectUrl, String sessionSecret) throws VkSideError {
-        VkAccessResponse response = VkAuth.auth(code, redirectUrl);
+    public Long authVk(String code, String redirectUrl, String sessionSecret) throws VkSideError {
+        VkAccessResponse response = vkAuth.auth(code, redirectUrl);
         User user = UserController.getUserByVkId(response.getUserId());
         if(user == null) {
             VkUserInfo vkUserInfo = VkUsers.get(response.getUserId(), response.getAccessToken());

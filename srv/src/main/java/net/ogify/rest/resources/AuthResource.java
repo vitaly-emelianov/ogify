@@ -7,6 +7,8 @@ import net.ogify.engine.vkapi.exceptions.VkSideError;
 import net.ogify.rest.elements.SNRequestUri;
 import net.ogify.rest.elements.SocialNetworkParam;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +25,15 @@ import java.net.URISyntaxException;
 @Path("/auth")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Component
 public class AuthResource {
+
+    @Autowired
+    VkAuth vkAuth;
+
+    @Autowired
+    AuthController authController;
+
     /**
      * Field storing the session id of the user if the user has no session it is null.
      *
@@ -52,7 +62,7 @@ public class AuthResource {
         SNRequestUri generatedUriResponse;
         switch(socialNetwork.getValue()) {
             case Vk:
-                generatedUriResponse = VkAuth.getClientAuthUri(authRequestUri);
+                generatedUriResponse = vkAuth.getClientAuthUri(authRequestUri);
                 break;
             case FaceBook:
                 generatedUriResponse = new SNRequestUri();
@@ -90,7 +100,7 @@ public class AuthResource {
             sessionSecret = AuthController.generateSessionSecret();
 
         NewCookie snIdCookie = new NewCookie(AuthController.USER_ID_COOKIE_NAME,
-                AuthController.auth(code, uri, sessionSecret, socialNetwork.getValue()).toString(), "/", null,
+                authController.auth(code, uri, sessionSecret, socialNetwork.getValue()).toString(), "/", null,
                 null, 2629744, false); // Valid for a month
         NewCookie sessionIdCookie = new NewCookie(AuthController.SESSION_COOKIE_NAME, sessionSecret, "/", null,
                 null, 2629744, false); // Valid for a month
