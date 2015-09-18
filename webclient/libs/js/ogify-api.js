@@ -60,5 +60,7 @@ ogifyServices.factory('UserProfile', ['$resource', 'AuthInterceptor',
 
 ogifyServices.factory('Order', ['$resource', 'AuthInterceptor',
     function($resource, AuthInterceptor) {
-        return $resource(BASE_PATH + ORDER_PATH, {});
+        return $resource(BASE_PATH + ORDER_PATH, {}, {
+            create: {method: 'GET', params: {}, interceptor: AuthInterceptor}
+        });
 }]);

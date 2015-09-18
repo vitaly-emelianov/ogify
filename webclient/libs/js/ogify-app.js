@@ -38,7 +38,7 @@ ogifyApp.controller('TemplateController', function ($scope) {
     $scope.navBarTemplateUri = 'templates/navbar/navbar.html';
 });
 
-ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, AuthResource, UserProfile) {
+ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, AuthResource, UserProfile, Order) {
 
     $scope.modalWindowTemplateUri = 'templates/navbar/auth-modal.html';
 
@@ -57,6 +57,14 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
 
         $window.location.reload();
     };
+
+    $scope.createOrder = function() {
+        var neworder = {
+            svekla : 'heyhey',
+            morkov : 'nounou'
+        }
+        Order.create(neworder);
+    }
 
     $scope.user = UserProfile.getCurrentUser();
 });
@@ -82,7 +90,6 @@ ogifyApp.controller('DashboardController', function ($scope, uiGmapGoogleMapApi,
                 geocoder.geocode({'latLng': myposition},function(data,status) {
                     if(status == google.maps.GeocoderStatus.OK)
                         $scope.map.center_address = data[0].formatted_address; //this is the full address
-                    console.log(data[0]);
                 });
 
                 $scope.map.control.refresh($scope.map.center);
