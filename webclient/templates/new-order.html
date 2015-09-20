@@ -1,0 +1,78 @@
+<div class="modal fade" id="createOrder" tabindex="-1" role="dialog" aria-labelledby="createOrderLabel">
+    <div class="modal-dialog" role="document" ng-controller="CreateOrderModalController">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="createOrderLabel">
+                    Создать заказ
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="ordername">Название:</label>
+                    <input type="email" class="form-control" id="ordername" placeholder="Введите название">
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="ordercost">Вознаграждение:</label>
+                            <input type="text" class="form-control" id="ordercost"
+                                   placeholder="100 рублей, попить чай...">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="expire_in">Актуально до:</label>
+
+                            <div class="input-group date" id="expire_in">
+                                <input type="text" class="form-control"><span class="input-group-addon">
+                                <i class="glyphicon glyphicon-th"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="additemlistel">Добавить товар:</label>
+
+                    <div class="row input-group double-input">
+                        <div class="col-md-8 col-md-offset-0" id='additemlistel'>
+                            <input type="text" class="form-control" placeholder="Товар">
+                        </div>
+                        <div class="col-md-offset-0 col-md-4">
+                            <div class='input-group' id="itemPrice">
+                                <input type="text" class="form-control" placeholder="Цена">
+                                <span onclick="addToList();" class="input-group-addon">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <ul class="todo-list" id="itemlist">
+
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label for="address">Адрес:</label>
+                    <input class="form-control" type="text" id="address" value="{{map.center_address}}"/>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Комментарий:</label>
+                    <textarea class="form-control" rows="3" id="comment"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="assignee">Кто может выполнить:</label>
+                    <select id="assignee" class="form-control">
+                        <option>Отдать другу</option>
+                        <option selected>Все друзья</option>
+                        <option>Все</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Отменить</button>
+                <button ng-click="createOrder()" type="button" class="btn btn-primary">Создать</button>
+            </div>
+        </div>
+    </div>
+</div>

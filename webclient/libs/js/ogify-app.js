@@ -23,6 +23,9 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
 });
 
 ogifyApp.run(function ($rootScope, $http) {
+    $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
+    $rootScope.createOrderTemplateUri = 'templates/new-order.html'
+
     $rootScope.$watch(function () {
         return $http.pendingRequests.length > 0;
     }, function (v) {
@@ -32,10 +35,6 @@ ogifyApp.run(function ($rootScope, $http) {
             waitingDialog.hide();
         }
     });
-});
-
-ogifyApp.controller('TemplateController', function ($scope) {
-    $scope.navBarTemplateUri = 'templates/navbar/navbar.html';
 });
 
 ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, AuthResource, UserProfile, Order) {
@@ -62,17 +61,17 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
         var neworder = {
             svekla : 'heyhey',
             morkov : 'nounou'
-        }
+        };
         Order.create(neworder);
-    }
+    };
 
     $scope.user = UserProfile.getCurrentUser();
 });
 
-ogifyApp.controller('DashboardController', function ($scope, uiGmapGoogleMapApi, Order) {
+ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi, Order) {
     $scope.currentUserOrders = Order.query();
 
-    $scope.map = {
+    $rootScope.map = {
         center: { latitude: 55.7, longitude: 37.6 },
         zoom: 10,
         control: {},
@@ -98,4 +97,9 @@ ogifyApp.controller('DashboardController', function ($scope, uiGmapGoogleMapApi,
             });
         }
     });
+});
+
+ogifyApp.controller('CreateOrderModalController', function ($scope) {
+    $scope.a = 's';
+
 });
