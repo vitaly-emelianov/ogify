@@ -100,6 +100,5 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
 });
 
 ogifyApp.controller('CreateOrderModalController', function ($scope) {
-    $scope.a = 's';
 
 });

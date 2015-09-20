@@ -16,15 +16,19 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="ordercost">Вознаграждение:</label>
-                            <input type="text" class="form-control" id="ordercost"
+                            <label for="order_cost">Вознаграждение:</label>
+                            <input type="text" class="form-control" id="order_cost"
                                    placeholder="100 рублей, попить чай...">
                         </div>
                         <div class="col-md-6">
                             <label for="expire_in">Актуально до:</label>
 
                             <div class="input-group date" id="expire_in">
-                                <input type="text" class="form-control"><span class="input-group-addon">
+                                <input type="text" class="form-control" data-provide="datepicker"
+                                       data-date-format="dd.mm.yy" data-date-week-start="1"
+                                       data-date-today-btn="linked" data-date-language="ru"
+                                       data-date-today-highlight="true">
+                                <span class="input-group-addon">
                                 <i class="glyphicon glyphicon-th"></i></span>
                             </div>
                         </div>
