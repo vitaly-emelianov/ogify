@@ -78,6 +78,15 @@ ogifyApp.controller('DashboardController', function ($scope, uiGmapGoogleMapApi,
                 $scope.map.control.refresh($scope.map.center);
                 $scope.map.zoom = 11;
 
+                //personal marker init
+                $scope.selfMarker = {
+                    options: {
+                        draggable: true,
+                        animation: google.maps.Animation.DROP,
+                        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                    },
+                    coords: position.coords
+                };
             });
         }
     });
