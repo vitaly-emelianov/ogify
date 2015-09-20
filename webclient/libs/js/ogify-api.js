@@ -65,6 +65,8 @@ ogifyServices.factory('Order', ['$resource',
             create: {method: 'POST'},
             getNearMe: {url: BASE_PATH + ORDER_PATH + '/near', method: 'GET',
                 params: {latitude: '', longitude: ''}},
+            getDoneOrders: {url: BASE_PATH + ORDER_PATH + '/done', method: 'GET',
+                params: {latitude: '', longitude: ''}},
             getMyOrders: {method: 'GET', isArray: true}
         });
 }]);

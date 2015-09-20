@@ -12,19 +12,19 @@
     </div>
 </div>
 <div class="col-sm-8 col-md-4 ">
-    <div class="panel panel-default current-orders-height">
+    <div id="orders" class="panel panel-default current-orders-height">
         <div class="panel-heading">
             Текущие заказы
-            <div class="btn-group" role="group" aria-label="...">
-                <button type="button" class="btn btn-default">Мои</button>
-                <button type="button" class="btn btn-default">Рядом</button>
-                <button type="button" class="btn btn-default">Выполненные</button>
+            <div class="btn-group" role="group">
+                <button type="button" ng-click="orderViewModeChanged('my')" class="active btn btn-default">Мои</button>
+                <button type="button" ng-click="orderViewModeChanged('near')" class="btn btn-default">Рядом</button>
+                <button type="button" ng-click="orderViewModeChanged('done')" class="btn btn-default">Выполненные</button>
             </div>
         </div>
 
         <div class="panel-body">
             <div class="list-group">
-                <a id="{{order.id}}" href="#" class="list-group-item" ng-repeat="order in currentUserOrders">
+                <a id="{{order.id}}" href="#" class="order-list list-group-item" ng-repeat="order in currentUserOrders">
                     <h4 class="list-group-item-heading">Заказ №{{order.id}} от {{order.owner.fullName}}</h4>
                     <p class="list-group-item-text">{{order.description}}</p>
                 </a>
