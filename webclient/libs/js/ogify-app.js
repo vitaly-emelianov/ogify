@@ -69,10 +69,28 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
 });
 
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi, Order) {
-    $scope.showingOrders = Order.query();
     $scope.currentUserOrders = Order.getMyOrders();
-    $scope.nearUserOrders = Order.getNearMe();
-    $scope.userDoneOrders = Order.getNearMe();
+    $scope.showingOrders = $scope.currentUserOrders;
+
+    $scope.current_active = "my";
+
+    $scope.orderGroups = [{
+        name: 'near',
+        value: 'Все заказы',
+        orderViewModeChanged: function() {
+            $scope.current_active = "near";
+            $scope.showingOrders = Order.getNearMe($scope.map.center);
+        }
+    }, {
+        name: 'my',
+        value: 'Мои заказы',
+        orderViewModeChanged: function() {
+            $scope.current_active = "my";
+            $scope.showingOrders = Order.getMyOrders();
+        }
+    }];
+
+    // $scope.orderGroups
 
     $rootScope.map = {
         center: { latitude: 55.7, longitude: 37.6 },
@@ -80,22 +98,6 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
         control: {},
         center_address: ""
     };
-
-    $scope.orderViewModeChanged = function(mode) {
-        // $(this).addClass("active").siblings().removeClass("active");
-        
-        switch(mode) {
-            case "my":
-                $scope.showingOrders = $scope.currentUserOrders.get
-                break
-            case "near":
-                $scope.showingOrders = $scope.nearUserOrders.get
-                break
-            case "done":
-                $scope.showingOrders = $scope.userDoneOrders.get
-                break
-        }
-    }
 
     uiGmapGoogleMapApi.then(function(maps) {
         $scope.maps = maps;
