@@ -23,6 +23,9 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
 });
 
 ogifyApp.run(function ($rootScope, $http) {
+    $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
+    $rootScope.createOrderTemplateUri = 'templates/new-order.html'
+
     $rootScope.$watch(function () {
         return $http.pendingRequests.length > 0;
     }, function (v) {
@@ -34,11 +37,7 @@ ogifyApp.run(function ($rootScope, $http) {
     });
 });
 
-ogifyApp.controller('TemplateController', function ($scope) {
-    $scope.navBarTemplateUri = 'templates/navbar/navbar.html';
-});
-
-ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, AuthResource, UserProfile) {
+ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, AuthResource, UserProfile, Order) {
 
     $scope.modalWindowTemplateUri = 'templates/navbar/auth-modal.html';
 
@@ -58,16 +57,25 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
         $window.location.reload();
     };
 
+    $scope.createOrder = function() {
+        var neworder = {
+            svekla : 'heyhey',
+            morkov : 'nounou'
+        };
+        Order.create(neworder);
+    };
+
     $scope.user = UserProfile.getCurrentUser();
 });
 
-ogifyApp.controller('DashboardController', function ($scope, uiGmapGoogleMapApi, Order) {
+ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi, Order) {
     $scope.currentUserOrders = Order.query();
 
-    $scope.map = {
+    $rootScope.map = {
         center: { latitude: 55.7, longitude: 37.6 },
         zoom: 10,
-        control: {}
+        control: {},
+        center_address: ""
     };
 
     uiGmapGoogleMapApi.then(function(maps) {
@@ -75,10 +83,22 @@ ogifyApp.controller('DashboardController', function ($scope, uiGmapGoogleMapApi,
         if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 $scope.map.center = { latitude: position.coords.latitude, longitude: position.coords.longitude };
+
+                var geocoder = new google.maps.Geocoder();
+                var myposition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                geocoder.geocode({'latLng': myposition},function(data,status) {
+                    if(status == google.maps.GeocoderStatus.OK)
+                        $scope.map.center_address = data[0].formatted_address; //this is the full address
+                });
+
                 $scope.map.control.refresh($scope.map.center);
                 $scope.map.zoom = 11;
 
             });
         }
     });
+});
+
+ogifyApp.controller('CreateOrderModalController', function ($scope) {
+
 });

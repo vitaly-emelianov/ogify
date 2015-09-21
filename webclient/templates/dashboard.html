@@ -13,7 +13,15 @@
 </div>
 <div class="col-sm-8 col-md-4 ">
     <div class="panel panel-default current-orders-height">
-        <div class="panel-heading">Текущие заказы</div>
+        <div class="panel-heading">
+            Текущие заказы
+            <div class="btn-group" role="group" aria-label="...">
+                <button type="button" class="btn btn-default">Мои</button>
+                <button type="button" class="btn btn-default">Рядом</button>
+                <button type="button" class="btn btn-default">Выполненные</button>
+            </div>
+        </div>
+
         <div class="panel-body">
             <div class="list-group">
                 <a id="{{order.id}}" href="#" class="list-group-item" ng-repeat="order in currentUserOrders">
