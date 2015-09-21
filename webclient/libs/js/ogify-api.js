@@ -58,7 +58,13 @@ ogifyServices.factory('UserProfile', ['$resource', 'AuthInterceptor',
     }
 ]);
 
-ogifyServices.factory('Order', ['$resource', 'AuthInterceptor',
-    function($resource, AuthInterceptor) {
-        return $resource(BASE_PATH + ORDER_PATH, {});
+ogifyServices.factory('Order', ['$resource',
+    function($resource) {
+        return $resource(BASE_PATH + ORDER_PATH, {}, {
+            get: {url: BASE_PATH + ORDER_PATH + '/:orderId', method: 'GET', params: {orderId: '@orderId'}},
+            create: {method: 'POST'},
+            getNearMe: {url: BASE_PATH + ORDER_PATH + '/near', method: 'GET',
+                params: {latitude: '', longitude: ''}},
+            getMyOrders: {method: 'GET', isArray: true}
+        });
 }]);
