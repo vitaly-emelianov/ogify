@@ -12,7 +12,8 @@
     "lodash": "~3.10.0",
     "bootstrap": "~3.3.5",
     "bootstrap-social": "~4.9.1",
-    "bootstrap-datepicker": "~1.4.0"
+    "bootstrap-datepicker": "~1.4.0",
+    "clockpicker": "~0.0.7"
   },
   "devDependencies": {
     "http-server": "~0.8.0"
