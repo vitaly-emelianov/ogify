@@ -57,6 +57,11 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
         $window.location.reload();
     };
 
+    $scope.updateOrderData = function() {
+        //TODO fix this hack
+        //hack invokes controller update my position in Order form
+    };
+
     $scope.createOrder = function() {
         var neworder = {
             svekla : 'heyhey',
@@ -101,7 +106,24 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
                         animation: google.maps.Animation.DROP,
                         icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
                     },
-                    coords: position.coords
+                    coords: {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    },
+                    events: {
+                        dragend: function (marker, eventName, args) {
+                            var lat = marker.getPosition().lat();
+                            var lon = marker.getPosition().lng();
+
+                            var geocoder = new google.maps.Geocoder();
+                            var myposition = new google.maps.LatLng(lat, lon);
+                            geocoder.geocode({'latLng': myposition},function(data,status) {
+                                if(status == google.maps.GeocoderStatus.OK)
+                                    $scope.map.center_address = data[0].formatted_address;
+                            });
+                        }
+                    },
+                    id: "currentPosition"
                 };
             });
         }
