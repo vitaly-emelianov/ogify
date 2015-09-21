@@ -106,9 +106,10 @@ public class UserController {
     public static SocialToken getUserAuthToken(User owner, SocialNetwork network) {
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<SocialToken> query = em.createNamedQuery("SocialToken.getUsersToken", SocialToken.class);
+            TypedQuery<SocialToken> query = em.createNamedQuery("SocialToken.getNewestUsersToken", SocialToken.class);
             query.setParameter("owner", owner);
             query.setParameter("socialNetwork", network);
+            query.setMaxResults(1);
 
             List<SocialToken> resultList = query.getResultList();
 
