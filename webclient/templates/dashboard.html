@@ -3,6 +3,14 @@
     <div class="panel panel-default map-container-height">
         <div class="panel-body">
             <ui-gmap-google-map center='map.center' zoom='map.zoom' control="map.control">
+                <ui-gmap-marker
+                        coords="selfMarker.coords"
+                        options="selfMarker.options"
+                        idkey="selfMarker.id"
+                        events="selfMarker.events"
+                        >
+                </ui-gmap-marker>
+
                 <ui-gmap-markers
                         models="showingOrders"
                         idKey="'id'"
