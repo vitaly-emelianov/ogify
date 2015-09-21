@@ -3,8 +3,16 @@
     <div class="panel panel-default map-container-height">
         <div class="panel-body">
             <ui-gmap-google-map center='map.center' zoom='map.zoom' control="map.control">
+                <ui-gmap-marker
+                        coords="selfMarker.coords"
+                        options="selfMarker.options"
+                        idkey="selfMarker.id"
+                        events="selfMarker.events"
+                        >
+                </ui-gmap-marker>
+
                 <ui-gmap-markers
-                        models="currentUserOrders"
+                        models="showingOrders"
                         idKey="'id'"
                         coords="'self'"></ui-gmap-markers>
             </ui-gmap-google-map>
@@ -12,19 +20,28 @@
     </div>
 </div>
 <div class="col-sm-8 col-md-4 ">
-    <div class="panel panel-default current-orders-height">
+    <div id="orders" class="panel panel-default current-orders-height">
         <div class="panel-heading">
-            Текущие заказы
-            <div class="btn-group" role="group" aria-label="...">
-                <button type="button" class="btn btn-default">Мои</button>
-                <button type="button" class="btn btn-default">Рядом</button>
-                <button type="button" class="btn btn-default">Выполненные</button>
+            <div class="row">
+                <div class="col-md-4 col-sm-4">Текущие заказы</div>
+                <div class="col-md-8 col-sm-8" style="text-align:center">
+                    <div class="btn-group" role="group">
+                        <button ng-repeat="group in orderGroups" 
+                                ng-class="{'active':group.name == current_active}" 
+                                ng-click="group.orderViewModeChanged()" 
+                                class="btn btn-default">
+                               {{group.value}}
+                        </button>
+                        <!-- <button type="button" ng-click="orderViewModeChanged('near')" class="btn btn-default">Все заказы</button>
+                        <button type="button" ng-click="orderViewModeChanged('my')" class="btn btn-default">Мои заказы</button> -->
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="panel-body">
             <div class="list-group">
-                <a id="{{order.id}}" href="#" class="list-group-item" ng-repeat="order in currentUserOrders">
+                <a id="{{order.id}}" href="#" class="order-list list-group-item" ng-repeat="order in showingOrders">
                     <h4 class="list-group-item-heading">Заказ №{{order.id}} от {{order.owner.fullName}}</h4>
                     <p class="list-group-item-text">{{order.description}}</p>
                 </a>

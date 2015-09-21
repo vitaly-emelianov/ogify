@@ -57,6 +57,11 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
         $window.location.reload();
     };
 
+    $scope.updateOrderData = function() {
+        //TODO fix this hack
+        //hack invokes controller update my position in Order form
+    };
+
     $scope.createOrder = function() {
         var neworder = {
             svekla : 'heyhey',
@@ -69,7 +74,28 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
 });
 
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi, Order) {
-    $scope.currentUserOrders = Order.query();
+    $scope.currentUserOrders = Order.getMyOrders();
+    $scope.showingOrders = $scope.currentUserOrders;
+
+    $scope.current_active = "my";
+
+    $scope.orderGroups = [{
+        name: 'near',
+        value: 'Все заказы',
+        orderViewModeChanged: function() {
+            $scope.current_active = "near";
+            $scope.showingOrders = Order.getNearMe($scope.map.center);
+        }
+    }, {
+        name: 'my',
+        value: 'Мои заказы',
+        orderViewModeChanged: function() {
+            $scope.current_active = "my";
+            $scope.showingOrders = Order.getMyOrders();
+        }
+    }];
+
+    // $scope.orderGroups
 
     $rootScope.map = {
         center: { latitude: 55.7, longitude: 37.6 },
@@ -94,6 +120,32 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
                 $scope.map.control.refresh($scope.map.center);
                 $scope.map.zoom = 11;
 
+                //personal marker init
+                $scope.selfMarker = {
+                    options: {
+                        draggable: true,
+                        animation: google.maps.Animation.DROP,
+                        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                    },
+                    coords: {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    },
+                    events: {
+                        dragend: function (marker, eventName, args) {
+                            var lat = marker.getPosition().lat();
+                            var lon = marker.getPosition().lng();
+
+                            var geocoder = new google.maps.Geocoder();
+                            var myposition = new google.maps.LatLng(lat, lon);
+                            geocoder.geocode({'latLng': myposition},function(data,status) {
+                                if(status == google.maps.GeocoderStatus.OK)
+                                    $scope.map.center_address = data[0].formatted_address;
+                            });
+                        }
+                    },
+                    id: "currentPosition"
+                };
             });
         }
     });
