@@ -134,6 +134,7 @@ public class Order {
     @XmlElement
     Date expireIn;
 
+    @NotNull
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @XmlElement(name = "items")
     List<OrderItem> items = new ArrayList<OrderItem>();
@@ -163,6 +164,10 @@ public class Order {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public void makeCreatedNow() {
+        createdAt = new Date();
     }
 
     public User getOwner() {

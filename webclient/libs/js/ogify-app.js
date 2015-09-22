@@ -37,7 +37,7 @@ ogifyApp.run(function ($rootScope, $http) {
     });
 });
 
-ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, AuthResource, UserProfile, Order) {
+ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, AuthResource, UserProfile) {
 
     $scope.modalWindowTemplateUri = 'templates/navbar/auth-modal.html';
 
@@ -55,14 +55,6 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
         $cookies.remove("sID");
 
         $window.location.reload();
-    };
-
-    $scope.createOrder = function() {
-        var neworder = {
-            svekla : 'heyhey',
-            morkov : 'nounou'
-        };
-        Order.create(neworder);
     };
 
     $scope.user = UserProfile.getCurrentUser();
@@ -99,6 +91,38 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
     });
 });
 
-ogifyApp.controller('CreateOrderModalController', function ($scope) {
+ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order) {
+    $scope.order = {
+        expireDate: $filter('date')(new Date(), 'dd.MM.yy'),
+        expireTime: $filter('date')(new Date(), 'hh:mm'),
+        reward: '',
+        address: $rootScope.map.center_address,
+        namespace: 'Friends'
+
+    };
+
+    $scope.chooseTime = function() {
+        var input = angular.element('#expire_in_time').clockpicker();
+        input.clockpicker('show');
+    };
+
+    $scope.createOrder = function() {
+        Order.create({
+            items: [],
+            expireIn: parseDate($scope.order.expireDate, $scope.order.expireTime).getTime(),
+            latitude: $rootScope.map.center.latitude,
+            longitude: $rootScope.map.center.longitude,
+            reward: $scope.order.reward,
+            status: 'New',
+            owner: null,
+            executor: null,
+            address: $scope.order.address,
+            doneAt: null,
+            id: null,
+            createdAt: null,
+            namespace: $scope.order.namespace,
+            description: $scope.order.description
+        });
+    };
 
 });
