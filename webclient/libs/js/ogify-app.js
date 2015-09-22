@@ -74,7 +74,36 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
 });
 
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi, Order) {
+    //group orders as is
+    var groupExistingOrdersByLocation = function(ordersList) {
+        var outputOrders = [];
+        var gap = 0.02;
+        var groupCounter = 0;
+        for(order in ordersList){
+            for(var i = 0; i < outputOrders.length; i++){
+                if(ordersList[order].latitude - outputOrders[i].latitude < gap && ordersList[order].longitude - outputOrders[i].longitude < gap){
+                    //adding to group
+                    outputOrders[i].orders.push(ordersList[order]);
+                    break;
+                }
+            }
+            //creating new Group of orders
+            var newGroup = {
+                id: "group" + groupCounter,
+                orders: [ordersList[order]],
+                longitude: ordersList[order].longitude,
+                latitude : ordersList[order].latitude
+            };
+            outputOrders.push(newGroup);
+            groupCounter++;
+        }
+        return outputOrders;
+    };
+
     $scope.currentUserOrders = Order.query();
+    Order.query(function(result) {
+        $scope.currentUserOrdersOnMap = groupExistingOrdersByLocation(result);
+    });
 
     $rootScope.map = {
         center: { latitude: 55.7, longitude: 37.6 },

@@ -12,9 +12,12 @@
                 </ui-gmap-marker>
 
                 <ui-gmap-markers
-                        models="currentUserOrders"
-                        idKey="'id'"
-                        coords="'self'"></ui-gmap-markers>
+                        models="currentUserOrdersOnMap"
+                        coords="'self'">
+                    <ui-gmap-windows show="show">
+                        <div ng-non-bindable>{{orders}}</div>
+                    </ui-gmap-windows>
+                </ui-gmap-markers>
             </ui-gmap-google-map>
         </div>
     </div>
