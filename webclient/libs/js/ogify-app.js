@@ -100,5 +100,9 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
 });
 
 ogifyApp.controller('CreateOrderModalController', function ($scope) {
+    $scope.chooseTime = function() {
+        var input = angular.element('#expire_in_time').clockpicker();
+        input.clockpicker('show');
+    }
 
 });
