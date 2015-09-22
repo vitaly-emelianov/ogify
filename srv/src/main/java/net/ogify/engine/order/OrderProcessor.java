@@ -31,6 +31,7 @@ public class OrderProcessor {
      */
     public static void createOrder(Long userId, Order order) {
         order.setId(null); // It is a new order, id must be null
+        order.makeCreatedNow(); // It was created just now
         for(OrderItem item: order.getItems()) {
             item.setId(null); // It is a new item, id must be null
             item.setOrder(order); // Create relation between item and orders
