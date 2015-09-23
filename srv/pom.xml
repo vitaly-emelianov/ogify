@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <scm>
@@ -7,7 +8,7 @@
         <url>scm:git:git@github.com:ogify/ogify.git/srv</url>
         <developerConnection>scm:git:git@github.com:ogify/ogify.git</developerConnection>
         <tag>HEAD</tag>
-  </scm>
+    </scm>
 
     <distributionManagement>
         <repository>
@@ -45,6 +46,28 @@
             </plugin>
 
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>exec-npm-install</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <workingDirectory>../webclient</workingDirectory>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>install</argument>
+                                <argument>--production</argument>
+                            </arguments>
+                        </configuration>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.7</version>
@@ -57,6 +80,24 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.6</version>
                 <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>
+                                ../webclient
+                            </directory>
+                            <excludes>
+                                <exclude>
+                                    package.json
+                                </exclude>
+                                <exclude>
+                                    .idea
+                                </exclude>
+                            </excludes>
+                            <targetPath>
+                                client
+                            </targetPath>
+                        </resource>
+                    </webResources>
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
