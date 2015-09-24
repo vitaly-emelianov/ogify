@@ -148,7 +148,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
 
 ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order) {
     $scope.order = {
-        expireDate: $filter('date')(new Date(), 'dd.MM.yy'),
+        expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
         expireTime: $filter('date')(new Date(), 'hh:mm'),
         reward: '',
         address: $rootScope.map.center_address,
@@ -177,6 +177,10 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             createdAt: null,
             namespace: $scope.order.namespace,
             description: $scope.order.description
+        }, function(successResponse) { // success
+            angular.element('#createOrderModal').modal('hide');
+        }, function(errorResponse) { // error
+            // TODO: Add error handler
         });
     };
 

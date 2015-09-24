@@ -1,4 +1,4 @@
-<div class="modal fade" id="createOrder" tabindex="-1" role="dialog" aria-labelledby="createOrderLabel">
+<div class="modal fade" id="createOrderModal" tabindex="-1" role="dialog" aria-labelledby="createOrderLabel">
     <div class="modal-dialog" role="document" ng-controller="CreateOrderModalController">
         <div class="modal-content">
             <div class="modal-header">
@@ -85,7 +85,7 @@
                     <label for="namespace">Кто может выполнить:</label>
                     <select id="namespace" class="form-control">
                         <option value="Private">Отдать другу</option>
-                        <option value="Friends" selected>Все друзья</option>
+                        <option value="Friends">Все друзья</option>
                         <option value="FriendsOfFriends" selected>Все друзья и друзья друзей</option>
                         <option value="All">Все</option>
                     </select>
