@@ -11,4 +11,8 @@
             <property name="eclipselink.logging.level" value="SEVERE"/>
         </properties>
     </persistence-unit>
+
+    <persistence-unit name="LocalDataSource" transaction-type="RESOURCE_LOCAL">
+
+    </persistence-unit>
 </persistence>
