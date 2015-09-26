@@ -1,6 +1,7 @@
 package net.ogify.database.entities;
 
 import net.ogify.database.UserController;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
@@ -28,6 +29,10 @@ import java.util.Map;
         @NamedQuery(name = "User.getUserByFbId", query = "select user from User user where user.facebookId = :fbId")
 })
 public class User {
+    @Transient
+    @Autowired
+    UserController userController;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -126,7 +131,7 @@ public class User {
 
     @XmlTransient
     public SocialToken getVkToken() {
-        return UserController.getUserAuthToken(this, SocialNetwork.Vk);
+        return userController.getUserAuthToken(this, SocialNetwork.Vk);
     }
 
     public void addSession(String sessionSecret, Long expireIn) {

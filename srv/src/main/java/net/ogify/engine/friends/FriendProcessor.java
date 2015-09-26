@@ -8,6 +8,9 @@ import net.ogify.engine.exceptions.SocialNetworkTokenMissedException;
 import net.ogify.engine.vkapi.VkFriends;
 import net.ogify.engine.vkapi.exceptions.VkSideError;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
@@ -18,30 +21,35 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by melges on 24.02.2015.
  */
+@Service
 public class FriendProcessor {
     private final static Logger logger = Logger.getLogger(FriendProcessor.class);
 
-    private static final long cacheSize = 10000;
+    private final static long cacheSize = 10000;
 
-    protected static LoadingCache<Long, Set<Long>> friendsCache;
+    protected LoadingCache<Long, Set<Long>> friendsCache;
 
-    protected static LoadingCache<Long, Set<Long>> extendedFriendsCache;
+    protected LoadingCache<Long, Set<Long>> extendedFriendsCache;
 
-    static {
+    @Autowired
+    UserController userController;
+
+    public FriendProcessor() {
         friendsCache = CacheBuilder.newBuilder()
                 .maximumSize(cacheSize)
                 .expireAfterWrite(2, TimeUnit.HOURS)
-                .build(new FriendCacheLoader());
+                .build(new FriendCacheLoader(this));
 
         extendedFriendsCache = CacheBuilder.newBuilder()
                 .maximumSize(cacheSize)
                 .expireAfterWrite(2, TimeUnit.HOURS)
-                .build(new ExtendedFriendCacheLoader());
+                .build(new ExtendedFriendCacheLoader(this));
     }
 
-    protected static Set<Long> loadFriendList(Long userId)
+
+    protected Set<Long> loadFriendList(Long userId)
             throws VkSideError, IllegalArgumentException, SocialNetworkTokenMissedException {
-        User user = UserController.getUserById(userId);
+        User user = userController.getUserById(userId);
         if(user == null)
             throw new IllegalArgumentException(String.format("Invalid user with id: %d", userId));
 
@@ -49,7 +57,7 @@ public class FriendProcessor {
             throw new SocialNetworkTokenMissedException(userId);
 
         Set<Long> vkFriendsIds = VkFriends.getFriends(user.getVkId(), user.getVkToken().getToken());
-        List<User> filteredFriends = UserController.getUserWithVkIds(vkFriendsIds);
+        List<User> filteredFriends = userController.getUserWithVkIds(vkFriendsIds);
         HashSet<Long> resultSet = new HashSet<>(filteredFriends.size());
         for(User filteredUser : filteredFriends)
             resultSet.add(filteredUser.getId());
@@ -57,7 +65,7 @@ public class FriendProcessor {
         return resultSet;
     }
 
-    protected static Set<Long> loadExtendedFriendList(Long userId) throws ExecutionException {
+    protected Set<Long> loadExtendedFriendList(Long userId) throws ExecutionException {
         Set<Long> friends = getUserFriendsIds(userId);
 
         Set<Long> extendedFriends = new HashSet<>();
@@ -72,11 +80,11 @@ public class FriendProcessor {
         return extendedFriends;
     }
 
-    public static Set<Long> getUserFriendsIds(Long userId) throws ExecutionException {
+    public Set<Long> getUserFriendsIds(Long userId) throws ExecutionException {
         return friendsCache.get(userId);
     }
 
-    public static Set<Long> getUserExtendedFriendsIds(Long userId) throws ExecutionException {
+    public Set<Long> getUserExtendedFriendsIds(Long userId) throws ExecutionException {
         return extendedFriendsCache.get(userId);
     }
 

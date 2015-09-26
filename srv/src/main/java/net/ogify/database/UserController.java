@@ -3,6 +3,8 @@ package net.ogify.database;
 import net.ogify.database.entities.SocialNetwork;
 import net.ogify.database.entities.SocialToken;
 import net.ogify.database.entities.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,11 +16,13 @@ import java.util.Set;
  *
  * @author Morgen Matvey melges.morgen@gmail.com
  */
+@Component
 public class UserController {
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("OgifyDataSource");
+    @Autowired
+    private EntityManagerService entityManagerService;
 
-    public static User getUserById(Long userId) {
-        EntityManager em = emf.createEntityManager();
+    public User getUserById(Long userId) {
+        EntityManager em = entityManagerService.createEntityManager();
         try {
             TypedQuery<User> query = em.createNamedQuery("User.getById", User.class);
             query.setParameter("id", userId);
@@ -35,10 +39,10 @@ public class UserController {
         }
     }
 
-    public static List<User> getUserWithVkIds(Set<Long> userIds) {
+    public List<User> getUserWithVkIds(Set<Long> userIds) {
         if(userIds.isEmpty())
             return new ArrayList<>();
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = entityManagerService.createEntityManager();
         try {
             TypedQuery<User> query = em.createNamedQuery("User.getUsersByVkIds", User.class);
             query.setParameter("vkIds", userIds);
@@ -48,8 +52,8 @@ public class UserController {
         }
     }
 
-    public static User getUserByFbId(Long userId) {
-        EntityManager em = emf.createEntityManager();
+    public User getUserByFbId(Long userId) {
+        EntityManager em = entityManagerService.createEntityManager();
         try {
             TypedQuery<User> query = em.createNamedQuery("User.getUserByFbId", User.class);
             query.setParameter("fbId", userId);
@@ -66,8 +70,8 @@ public class UserController {
         }
     }
 
-    public static User getUserByVkId(Long userId) {
-        EntityManager em = emf.createEntityManager();
+    public User getUserByVkId(Long userId) {
+        EntityManager em = entityManagerService.createEntityManager();
         try {
             TypedQuery<User> query = em.createNamedQuery("User.getUserByVkId", User.class);
             query.setParameter("vkId", userId);
@@ -84,8 +88,8 @@ public class UserController {
         }
     }
 
-    public static User getUserByIdAndSession(Long userId, String sessionSecret) {
-        EntityManager em = emf.createEntityManager();
+    public User getUserByIdAndSession(Long userId, String sessionSecret) {
+        EntityManager em = entityManagerService.createEntityManager();
         try {
             TypedQuery<User> query = em.createNamedQuery("User.getByIdAndSession", User.class);
             query.setParameter("userId", userId);
@@ -103,8 +107,8 @@ public class UserController {
         }
     }
 
-    public static SocialToken getUserAuthToken(User owner, SocialNetwork network) {
-        EntityManager em = emf.createEntityManager();
+    public SocialToken getUserAuthToken(User owner, SocialNetwork network) {
+        EntityManager em = entityManagerService.createEntityManager();
         try {
             TypedQuery<SocialToken> query = em.createNamedQuery("SocialToken.getNewestUsersToken", SocialToken.class);
             query.setParameter("owner", owner);
@@ -124,8 +128,8 @@ public class UserController {
         }
     }
 
-    public static void saveOrUpdate(User user) {
-        EntityManager em = emf.createEntityManager();
+    public void saveOrUpdate(User user) {
+        EntityManager em = entityManagerService.createEntityManager();
         try {
             em.getTransaction().begin();
             if (user.getId() == null)
@@ -137,5 +141,4 @@ public class UserController {
             em.close();
         }
     }
-
 }

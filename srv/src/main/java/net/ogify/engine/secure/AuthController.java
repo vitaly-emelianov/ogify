@@ -27,14 +27,17 @@ public class AuthController {
     @Autowired
     VkAuth vkAuth;
 
+    @Autowired
+    UserController userController;
+
     /**
      * Method check data provided by client for correctness and session validity.
      * @param userId vkId of user, provided by client.
      * @param sessionSecret session id provided by client (session secret).
      * @return true if clint give correct data, or false if client is liar or his session expired.
      */
-    public static boolean isSessionCorrect(Long userId, String sessionSecret) {
-        return UserController.getUserByIdAndSession(userId, sessionSecret) != null;
+    public boolean isSessionCorrect(Long userId, String sessionSecret) {
+        return userController.getUserByIdAndSession(userId, sessionSecret) != null;
     }
 
     /**
@@ -67,7 +70,7 @@ public class AuthController {
 
     public Long authVk(String code, String redirectUrl, String sessionSecret) throws VkSideError {
         VkAccessResponse response = vkAuth.auth(code, redirectUrl);
-        User user = UserController.getUserByVkId(response.getUserId());
+        User user = userController.getUserByVkId(response.getUserId());
         if(user == null) {
             VkUserInfo vkUserInfo = VkUsers.get(response.getUserId(), response.getAccessToken());
             user = new User(vkUserInfo.getFullName(), vkUserInfo.getPhotoUri());
@@ -77,7 +80,7 @@ public class AuthController {
         user.addSession(sessionSecret, response.getExpiresIn());
         user.addAuthToken(response.getAccessToken(), SocialNetwork.Vk, response.getExpiresIn());
 
-        UserController.saveOrUpdate(user);
+        userController.saveOrUpdate(user);
 
         return user.getId();
     }
