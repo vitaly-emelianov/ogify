@@ -1,16 +1,10 @@
 package net.ogify.database.entities;
 
-import net.ogify.database.UserController;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by melges.morgen on 14.02.15.
@@ -29,10 +23,6 @@ import java.util.Map;
         @NamedQuery(name = "User.getUserByFbId", query = "select user from User user where user.facebookId = :fbId")
 })
 public class User {
-    @Transient
-    @Autowired
-    UserController userController;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -131,7 +121,14 @@ public class User {
 
     @XmlTransient
     public SocialToken getVkToken() {
-        return userController.getUserAuthToken(this, SocialNetwork.Vk);
+        tokens.sort(new Comparator<SocialToken>() {
+            @Override
+            public int compare(SocialToken o1, SocialToken o2) {
+                return o1.getExpireIn().compareTo(o2.getExpireIn());
+            }
+        });
+
+        return tokens.get(0);
     }
 
     public void addSession(String sessionSecret, Long expireIn) {

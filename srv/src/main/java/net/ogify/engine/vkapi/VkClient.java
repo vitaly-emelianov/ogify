@@ -30,7 +30,7 @@ public class VkClient {
             WebTarget target = client.target(targetUri);
             for(Map.Entry<String, Object> entry : parameters.entrySet())
                 target = target.queryParam(entry.getKey(), entry.getValue());
-            target = target.queryParam("v", "5.27");
+            target = target.queryParam("v", "5.37");
 
             response = target.request(MediaType.APPLICATION_JSON).get();
         } catch (RuntimeException ignore) {
