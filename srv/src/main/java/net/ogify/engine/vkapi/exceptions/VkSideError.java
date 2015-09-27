@@ -42,6 +42,11 @@ public class VkSideError extends RemoteException {
         this.httpCode = httpCode;
     }
 
+    public VkSideError(String s, Throwable cause, int httpCode) {
+        super(s, cause);
+        this.httpCode = httpCode;
+    }
+
     public int getHttpCode() {
         return httpCode;
     }

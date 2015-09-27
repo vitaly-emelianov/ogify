@@ -11,6 +11,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Class represents api for getting wall posts collected from vk
@@ -32,7 +33,8 @@ public class WallsDataResource {
 
     @GET
     @Path("/my")
-    public Set<WallPost> getMyPosts(@CookieParam(AuthController.USER_ID_COOKIE_NAME) Long userId) throws VkSideError {
+    public Set<WallPost> getMyPosts(@CookieParam(AuthController.USER_ID_COOKIE_NAME) Long userId)
+            throws VkSideError, ExecutionException {
         return wallPostsService.getWallPostsOfUser(userController.getUserById(userId));
     }
 

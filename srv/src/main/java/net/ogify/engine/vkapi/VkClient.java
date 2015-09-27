@@ -25,17 +25,30 @@ public class VkClient {
     public static <T> T call(String targetUri, Map<String, Object> parameters, Class<T> entityClass) throws VkSideError {
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
 
-        Response response;
+        Response response = null;
         try {
             WebTarget target = client.target(targetUri);
             for(Map.Entry<String, Object> entry : parameters.entrySet())
                 target = target.queryParam(entry.getKey(), entry.getValue());
             target = target.queryParam("v", "5.37");
 
-            response = target.request(MediaType.APPLICATION_JSON).get();
+            for(int attempt = 0; attempt < 3; attempt++) {
+                try {
+                    response = target.request(MediaType.APPLICATION_JSON).get();
+                    break;
+                } catch (RuntimeException e) {
+                    logger.warn("Error while making request to vk, wait for 8000ms", e);
+                    Thread.sleep(8000);
+                }
+
+                throw new VkSideError("Coudn't make request, aborting");
+            }
         } catch (RuntimeException ignore) {
             logger.warn(String.format("Can't processing with vk servers: %s", ignore.getLocalizedMessage()));
             throw new VkSideError(ignore.getLocalizedMessage());
+        } catch (InterruptedException interruptedException) {
+            logger.error("Wait for next attempt on calling vk, but was interrupted, aborting");
+            throw new IllegalStateException("Wait for next attempt on calling vk, but was interrupted, aborting");
         }
 
         if(response.getStatus() != Response.Status.OK.getStatusCode()) {
@@ -55,10 +68,11 @@ public class VkClient {
 
         try {
             return response.readEntity(entityClass);
-        } catch (RuntimeException ignore) {
+        } catch (RuntimeException e) {
             logger.warn(String.format("Vk return http ok code, but data in response is incorrect. Exception: %s",
-                    ignore.getLocalizedMessage()));
-            throw new VkSideError("Vk return http ok code, but data in response is incorrect", response.getStatus());
+                    e.getLocalizedMessage()));
+            throw new VkSideError("Vk return http ok code, but data in response is incorrect", e,
+                    response.getStatus());
         }
     }
 }

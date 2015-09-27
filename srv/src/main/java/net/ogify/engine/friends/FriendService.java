@@ -2,10 +2,10 @@ package net.ogify.engine.friends;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
+import com.google.common.collect.ImmutableSet;
 import net.ogify.database.UserController;
 import net.ogify.database.entities.User;
 import net.ogify.engine.exceptions.SocialNetworkTokenMissedException;
-import net.ogify.engine.vkapi.VkFriends;
 import net.ogify.engine.vkapi.exceptions.VkSideError;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +30,8 @@ public class FriendService {
 
     protected LoadingCache<Long, Set<Long>> extendedFriendsCache;
 
+    protected LoadingCache<User, Set<Long>> vkFriendsCache;
+
     @Autowired
     UserController userController;
 
@@ -43,11 +45,16 @@ public class FriendService {
                 .maximumSize(cacheSize)
                 .expireAfterWrite(2, TimeUnit.HOURS)
                 .build(new ExtendedFriendCacheLoader(this));
+
+        vkFriendsCache = CacheBuilder.newBuilder()
+                .maximumSize(cacheSize)
+                .expireAfterWrite(2, TimeUnit.HOURS)
+                .build(new VkFriendsCacheLoader());
+
     }
 
-
     protected Set<Long> loadFriendList(Long userId)
-            throws VkSideError, IllegalArgumentException, SocialNetworkTokenMissedException {
+            throws VkSideError, IllegalArgumentException, SocialNetworkTokenMissedException, ExecutionException {
         User user = userController.getUserById(userId);
         if(user == null)
             throw new IllegalArgumentException(String.format("Invalid user with id: %d", userId));
@@ -55,7 +62,7 @@ public class FriendService {
         if(user.getVkToken() == null)
             throw new SocialNetworkTokenMissedException(userId);
 
-        Set<Long> vkFriendsIds = VkFriends.getFriends(user.getVkId(), user.getVkToken().getToken());
+        Set<Long> vkFriendsIds = vkFriendsCache.get(user);
         List<User> filteredFriends = userController.getUserWithVkIds(vkFriendsIds);
         HashSet<Long> resultSet = new HashSet<>(filteredFriends.size());
         for(User filteredUser : filteredFriends)
@@ -87,5 +94,12 @@ public class FriendService {
         return extendedFriendsCache.get(userId);
     }
 
-
+    public Set<Long> getUserVkFriends(User user) {
+        try {
+            return vkFriendsCache.get(user);
+        } catch (ExecutionException e) {
+            logger.warn(String.format("Error on retrieving friends from vk for user %d", user.getId()), e);
+            return ImmutableSet.of();
+        }
+    }
 }

@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Service for retrieving wall posts from vk
@@ -30,7 +32,7 @@ public class WallPostsService {
 
     private final static long cacheSize = 10000;
 
-    LoadingCache<Long, Set<WallPost>> wallPostCache;
+    private LoadingCache<GetPostsFromWallRequest, Set<WallPost>> wallPostCache;
 
     @Autowired
     UserController userController;
@@ -42,48 +44,57 @@ public class WallPostsService {
         wallPostCache = CacheBuilder.newBuilder()
                 .maximumSize(cacheSize)
                 .expireAfterWrite(1, TimeUnit.DAYS)
-                .build(new CacheLoader<Long, Set<WallPost>>() {
+                .build(new CacheLoader<GetPostsFromWallRequest, Set<WallPost>>() {
                     @Override
-                    public Set<WallPost> load(Long userId) throws Exception {
-                        return getWallPostsOfUser(userId);
+                    public Set<WallPost> load(GetPostsFromWallRequest request) throws Exception {
+                        return getWallPostsOfVkUser(request);
                     }
                 });
     }
 
-    public Set<WallPost> getWallPostsOfUser(Long userId) throws VkSideError {
-        User user = userController.getUserById(userId);
-        return VkWall.getPosts(user.getVkId(), user.getVkToken().getToken());
+    public Set<WallPost> getWallPostsOfVkUser(GetPostsFromWallRequest request) throws VkSideError {
+        return VkWall.getPosts(request.getTargetVkId(), request.getRequestOwnerToken());
     }
 
-    public Set<WallPost> getWallPostsOfUser(User user) throws LoadWallPostsException {
-        Exception lastException = null;
-        for (int tries = 0; tries < 3; tries++) {
+    public Set<WallPost> getWallPostsOfUser(User user) throws LoadWallPostsException, ExecutionException {
+        return wallPostCache.get(new GetPostsFromWallRequest(user.getVkToken().getToken(), user.getVkId()));
+    }
+
+    public Set<WallPost> getWallPostsOfUserFriends(User user) {
+        Set<Long> friendsVkIds = friendService.getUserVkFriends(user);
+        Set<WallPost> resultSet = new HashSet<>();
+
+        for(Long friendVkId : friendsVkIds) {
             try {
-                return wallPostCache.get(user.getId());
+                resultSet.addAll(wallPostCache.get(new GetPostsFromWallRequest(user.getVkToken().getToken(), friendVkId)));
             } catch (ExecutionException e) {
-                logger.warn(String.format("Error while retrieving wall posts from vk: %s, attempt %d from 3",
-                        e.getCause().getLocalizedMessage(), tries));
-                lastException = e;
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e1) {
-                    throw new RuntimeException("Can't wait for next attempt while download posts from vk walls",
-                            e1);
-                }
+                logger.warn(String.format("Can't load wall for user with id %d", friendVkId), e);
             }
         }
 
-        throw new LoadWallPostsException("Error loading posts in 3 attempts", lastException);
+        return resultSet;
     }
 
-    public Set<WallPost> getWallPostsOfUsers(Set<Long> userIds) throws VkSideError {
+    public Set<WallPost> getWallPostsRelatedWithUsers(Set<Long> userIds) throws VkSideError {
         List<User> usersList = userController.getUsersWithIds(userIds);
 
         Set<WallPost> resultSet = new HashSet<>();
-        for(User user : usersList)
-            resultSet.addAll(getWallPostsOfUser(user));
+        for(User user : usersList) {
+            try {
+                resultSet.addAll(getWallPostsOfUser(user));
+                resultSet.addAll(getWallPostsOfUserFriends(user));
+            } catch (ExecutionException e) {
+                logger.warn(String.format("Error while loading wall posts related with user %d", user.getId()), e);
+            }
+        }
 
-        return resultSet;
+        return resultSet.stream()
+                .filter(new Predicate<WallPost>() {
+                    @Override
+                    public boolean test(WallPost wallPost) {
+                        return !wallPost.getText().isEmpty();
+                    }
+                }).collect(Collectors.<WallPost>toSet());
     }
 
     public List<WallPost> getAllPosts(int maxCount) throws VkSideError {
@@ -93,9 +104,46 @@ public class WallPostsService {
             if(usersList.isEmpty())
                 break;
 
-            resultList.addAll(getWallPostsOfUsers(new HashSet<>(usersList)));
+            resultList.addAll(getWallPostsRelatedWithUsers(new HashSet<>(usersList)));
         }
 
         return resultList;
+    }
+
+    private class GetPostsFromWallRequest {
+        private String requestOwnerToken;
+
+        private Long targetVkId;
+
+        public GetPostsFromWallRequest(String requestOwnerToken, Long targetVkId) {
+            this.requestOwnerToken = requestOwnerToken;
+            this.targetVkId = targetVkId;
+        }
+
+        public String getRequestOwnerToken() {
+            return requestOwnerToken;
+        }
+
+        public Long getTargetVkId() {
+            return targetVkId;
+        }
+
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
+
+            GetPostsFromWallRequest that = (GetPostsFromWallRequest) o;
+
+            return !(targetVkId != null ? !targetVkId.equals(that.targetVkId) : that.targetVkId != null);
+        }
+
+        @Override
+        public int hashCode() {
+            return targetVkId != null ? targetVkId.hashCode() : 0;
+        }
     }
 }
