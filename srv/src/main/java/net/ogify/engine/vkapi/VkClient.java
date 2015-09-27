@@ -32,23 +32,11 @@ public class VkClient {
                 target = target.queryParam(entry.getKey(), entry.getValue());
             target = target.queryParam("v", "5.37");
 
-            for(int attempt = 0; attempt < 3; attempt++) {
-                try { // TODO: Rewrite this part
-                    response = target.request(MediaType.APPLICATION_JSON).get();
-                    break;
-                } catch (RuntimeException e) {
-                    logger.warn("Error while making request to vk, wait for 8000ms", e);
-                    Thread.sleep(8000);
-                }
-
-                throw new VkSideError("Coudn't make request, aborting");
-            }
+            // TODO: Rewrite this part, add reconnecting
+            response = target.request(MediaType.APPLICATION_JSON).get();
         } catch (RuntimeException ignore) {
             logger.warn(String.format("Can't processing with vk servers: %s", ignore.getLocalizedMessage()));
             throw new VkSideError(ignore.getLocalizedMessage());
-        } catch (InterruptedException interruptedException) {
-            logger.error("Wait for next attempt on calling vk, but was interrupted, aborting");
-            throw new IllegalStateException("Wait for next attempt on calling vk, but was interrupted, aborting");
         }
 
         if(response.getStatus() != Response.Status.OK.getStatusCode()) {
