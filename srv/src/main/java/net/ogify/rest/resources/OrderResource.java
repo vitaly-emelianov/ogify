@@ -1,16 +1,15 @@
 package net.ogify.rest.resources;
 
 import net.ogify.database.OrderController;
-import net.ogify.database.UserController;
 import net.ogify.database.entities.Order;
 import net.ogify.database.entities.OrderItem;
 import net.ogify.engine.order.OrderProcessor;
 import net.ogify.engine.secure.AuthController;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -30,11 +29,17 @@ public class OrderResource {
     @CookieParam(value = AuthController.USER_ID_COOKIE_NAME)
     private Long userId;
 
+    @Autowired
+    OrderController orderController;
+
+    @Autowired
+    OrderProcessor orderProcessor;
+
     @GET
     @Path("/near")
     public Set<Order> getOrdersNear(@NotNull @QueryParam("latitude") Double latitude,
                                     @NotNull @QueryParam("longitude") Double longitude) throws ExecutionException {
-        return OrderProcessor.getNearestOrders(latitude, longitude, userId);
+        return orderProcessor.getNearestOrders(latitude, longitude, userId);
     }
 
     /**
@@ -46,24 +51,24 @@ public class OrderResource {
     @GET
     public List<Order> getMyOrders(@QueryParam("offset") int firstResult,
                                    @QueryParam("firstResult") int maxResults) {
-        return OrderProcessor.getUsersOrders(userId, firstResult, maxResults);
+        return orderProcessor.getUsersOrders(userId, firstResult, maxResults);
     }
 
     @GET
     @Path(("/{orderId}"))
     public Order getOrder(@NotNull @PathParam("orderId") Long orderId) {
-        return OrderController.getOrderById(orderId);
+        return orderController.getOrderById(orderId);
     }
 
     @GET
     @Path("/{orderId}/items}")
     public List<OrderItem> getOrderItems(@NotNull @PathParam("orderId") Long orderId) {
-        return OrderController.getOrderById(orderId).getItems();
+        return orderController.getOrderById(orderId).getItems();
     }
 
     @POST
     public void createNewOrder(Order order) {
-        OrderProcessor.createOrder(userId, order);
+        orderProcessor.createOrder(userId, order);
     }
 
 
@@ -72,7 +77,7 @@ public class OrderResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void completeOrder(@PathParam("orderId") Long orderId,
                               @NotNull @FormParam("status") Order.OrderStatus status) {
-        OrderProcessor.changeOrderStatus(userId, orderId, status);
+        orderProcessor.changeOrderStatus(userId, orderId, status);
     }
 
     @POST
@@ -80,6 +85,6 @@ public class OrderResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void rateOrder(@PathParam("orderId") Long orderId, @NotNull @FormParam("rate") double rate,
                           @FormParam("comment") String comment) {
-        OrderProcessor.rateOrderParty(userId, orderId, rate, comment);
+        orderProcessor.rateOrderParty(userId, orderId, rate, comment);
     }
 }

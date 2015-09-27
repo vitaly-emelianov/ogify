@@ -3,6 +3,7 @@ package net.ogify.engine.secure;
 import net.ogify.engine.secure.exceptions.ForbiddenException;
 import net.ogify.engine.secure.exceptions.NotAuthenticatedException;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
@@ -34,6 +35,9 @@ public class AuthFilter implements ContainerRequestFilter {
      */
     @Context
     private ResourceInfo resourceInfo;
+
+    @Autowired
+    AuthController authController;
 
     /**
      * Check is client has right to invoke requested method. If client haven't right invoke will be denied and
@@ -80,7 +84,7 @@ public class AuthFilter implements ContainerRequestFilter {
             return;
         }
 
-        if (!AuthController.isSessionCorrect(vkId, sessionSecret))
+        if (!authController.isSessionCorrect(vkId, sessionSecret))
             throw new NotAuthenticatedException("Session incorrect or expired");
 
     }

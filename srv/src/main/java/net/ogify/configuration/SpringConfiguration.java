@@ -10,7 +10,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
  * Spring Configuration file
  */
 @Configuration
-@ComponentScan(basePackages = {"net.ogify.engine.*", "net.ogify.rest.resources"})
+@ComponentScan(basePackages = {"net.ogify.engine", "net.ogify.rest.resources", "net.ogify.database"})
 @PropertySource("classpath:ogify.properties")
 public class SpringConfiguration {
     @Bean
