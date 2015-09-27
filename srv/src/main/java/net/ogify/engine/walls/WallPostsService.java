@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Service for retrieving wall posts from vk
@@ -82,19 +80,17 @@ public class WallPostsService {
         for(User user : usersList) {
             try {
                 resultSet.addAll(getWallPostsOfUser(user));
+                Thread.sleep(600); // Reduce number of calls to vk in second
                 resultSet.addAll(getWallPostsOfUserFriends(user));
+                Thread.sleep(600);
             } catch (ExecutionException e) {
                 logger.warn(String.format("Error while loading wall posts related with user %d", user.getId()), e);
+            } catch (InterruptedException e) {
+                logger.warn("Error while wait for 600ms");
             }
         }
 
-        return resultSet.stream()
-                .filter(new Predicate<WallPost>() {
-                    @Override
-                    public boolean test(WallPost wallPost) {
-                        return !wallPost.getText().isEmpty();
-                    }
-                }).collect(Collectors.<WallPost>toSet());
+        return resultSet;
     }
 
     public List<WallPost> getAllPosts(int maxCount) throws VkSideError {

@@ -1,5 +1,8 @@
 package net.ogify.engine.vkapi.elements.wall;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.collect.ImmutableSet;
+
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -9,6 +12,7 @@ import java.util.Set;
  * Class represents response on
  */
 @XmlRootElement
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WallGetResponse {
     public static class ResponseBody {
         @XmlElement(name = "count", required = true)
@@ -27,6 +31,8 @@ public class WallGetResponse {
     }
 
     public Set<WallPost> getPostSet() {
+        if(response == null)
+            return ImmutableSet.of();
         return response.postSet;
     }
 }

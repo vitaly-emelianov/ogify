@@ -7,6 +7,8 @@ import net.ogify.engine.vkapi.exceptions.VkSideError;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Created by melge on 27.09.2015.
@@ -22,6 +24,11 @@ public class VkWall {
         WallGetResponse response = VkClient.call(VkClient.VK_API_URI + methodName, parametersMap,
                 WallGetResponse.class);
 
-        return response.getPostSet();
+        return response.getPostSet().stream().filter(new Predicate<WallPost>() {
+            @Override
+            public boolean test(WallPost wallPost) {
+                return wallPost.getText().isEmpty();
+            }
+        }).collect(Collectors.<WallPost>toSet());
     }
 }

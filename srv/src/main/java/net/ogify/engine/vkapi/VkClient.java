@@ -33,7 +33,7 @@ public class VkClient {
             target = target.queryParam("v", "5.37");
 
             for(int attempt = 0; attempt < 3; attempt++) {
-                try {
+                try { // TODO: Rewrite this part
                     response = target.request(MediaType.APPLICATION_JSON).get();
                     break;
                 } catch (RuntimeException e) {
