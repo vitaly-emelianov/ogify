@@ -13,7 +13,7 @@ import javax.persistence.Persistence;
  */
 @Service
 public class EntityManagerService {
-    @Value("${persistenceUnitName:LocalDB}")
+    @Value("${db.type:LocalDB}")
     String persistenceUnitName;
 
     private EntityManagerFactory entityManagerFactory;
