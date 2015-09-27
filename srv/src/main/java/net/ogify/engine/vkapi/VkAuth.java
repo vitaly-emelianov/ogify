@@ -19,7 +19,7 @@ import java.util.Map;
 @PropertySource("classpath:ogify.properties")
 public class VkAuth {
     private final static String VK_CLIENT_ACCESS_URI = "https://oauth.vk.com/authorize";
-    private final static String VK_API_VERSION = "5.27";
+    private final static String VK_API_VERSION = "5.37";
 
     @Value("${vk.app.id}")
     private long APP_ID;

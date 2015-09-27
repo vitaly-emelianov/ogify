@@ -2,12 +2,11 @@ package net.ogify.database;
 
 import net.ogify.database.entities.Feedback;
 import net.ogify.database.entities.Order;
-import net.ogify.database.entities.OrderItem;
 import net.ogify.database.entities.User;
-import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
-import javax.persistence.metamodel.Type;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,13 +14,13 @@ import java.util.Set;
 /**
  * Created by melges.morgen on 15.02.15.
  */
+@Component
 public class OrderController {
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("OgifyDataSource");
+    @Autowired
+    private EntityManagerService entityManagerService;
 
-    private final static Logger logger = Logger.getLogger(OrderController.class);
-
-    public static Order getOrderById(Long id) {
-        EntityManager em = emf.createEntityManager();
+    public Order getOrderById(Long id) {
+        EntityManager em = entityManagerService.createEntityManager();
         try {
             return em.find(Order.class, id);
         } finally {
@@ -29,8 +28,8 @@ public class OrderController {
         }
     }
 
-    public static List<Order> getNearestOrders(Double latitude, Double longitude) {
-        EntityManager em = emf.createEntityManager();
+    public List<Order> getNearestOrders(Double latitude, Double longitude) {
+        EntityManager em = entityManagerService.createEntityManager();
         try {
             TypedQuery<Order> query = em.createNamedQuery("Order.getNearestOrder", Order.class);
             query.setParameter("latitude", latitude);
@@ -51,8 +50,8 @@ public class OrderController {
      * @param maxResults maximum number of results.
      * @return users orders.
      */
-    public static List<Order> getUsersOrders(Long userId, int firstResult, int maxResults) {
-        EntityManager em = emf.createEntityManager();
+    public List<Order> getUsersOrders(Long userId, int firstResult, int maxResults) {
+        EntityManager em = entityManagerService.createEntityManager();
         try {
             User user = em.find(User.class, userId);
 
@@ -68,8 +67,8 @@ public class OrderController {
         }
     }
 
-    public static Order getUsersOrder(Long userId, Long orderId) {
-        EntityManager em = emf.createEntityManager();
+    public Order getUsersOrder(Long userId, Long orderId) {
+        EntityManager em = entityManagerService.createEntityManager();
         try {
             User user = em.find(User.class, userId);
 
@@ -89,9 +88,9 @@ public class OrderController {
         }
     }
 
-    public static List<Order> getNearestOrdersFiltered(Long userId, Set<Long> userFriends, Set<Long> extendedFriends,
+    public List<Order> getNearestOrdersFiltered(Long userId, Set<Long> userFriends, Set<Long> extendedFriends,
                                                        Double latitude, Double longitude) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = entityManagerService.createEntityManager();
         try {
             User user = em.find(User.class, userId);
 
@@ -130,8 +129,8 @@ public class OrderController {
     }
 
 
-    public static Order getOrderByIdFiltered(Long userId, Long orderId, Set<Long> friends, Set<Long> extendedFriends) {
-        EntityManager em = emf.createEntityManager();
+    public Order getOrderByIdFiltered(Long userId, Long orderId, Set<Long> friends, Set<Long> extendedFriends) {
+        EntityManager em = entityManagerService.createEntityManager();
         try {
             User user = em.find(User.class, userId);
 
@@ -172,8 +171,8 @@ public class OrderController {
         }
     }
 
-    public static void saveOrUpdate(Order order) {
-        EntityManager em = emf.createEntityManager();
+    public void saveOrUpdate(Order order) {
+        EntityManager em = entityManagerService.createEntityManager();
         try {
             em.getTransaction().begin();
             em.merge(order);
@@ -183,7 +182,7 @@ public class OrderController {
         }
     }
 
-    public static void getRelatedFeedback(Order order, User who, User whom) {
+    public void getRelatedFeedback(Order order, User who, User whom) {
 
     }
 
@@ -193,8 +192,8 @@ public class OrderController {
      * @param user user who should rate.
      * @return true if rated.
      */
-    public static boolean isOrderRatedBy(Order order, User user) {
-        EntityManager em =emf.createEntityManager();
+    public boolean isOrderRatedBy(Order order, User user) {
+        EntityManager em = entityManagerService.createEntityManager();
         try {
             TypedQuery<Feedback> query = em.createNamedQuery("Feedback.getFeedback", Feedback.class);
             query.setParameter("whichOrder", order);

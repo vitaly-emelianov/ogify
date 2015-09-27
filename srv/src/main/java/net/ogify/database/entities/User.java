@@ -1,15 +1,10 @@
 package net.ogify.database.entities;
 
-import net.ogify.database.UserController;
-
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by melges.morgen on 14.02.15.
@@ -18,6 +13,7 @@ import java.util.Map;
 @Table(name = "users")
 @XmlRootElement
 @NamedQueries({
+        @NamedQuery(name = "User.getAllIds", query = "select user.id from User user"),
         @NamedQuery(name = "User.getById", query = "select user from User user where user.id = :id"),
         @NamedQuery(name = "User.getByIdAndSession", query = "select user from User user, UserSession session " +
                 "where user.id = :userId " +
@@ -25,7 +21,8 @@ import java.util.Map;
                 "and session.sessionSecret = :sessionSecret"),
         @NamedQuery(name = "User.getUserByVkId", query = "select user from User user where user.vkId = :vkId"),
         @NamedQuery(name = "User.getUsersByVkIds", query = "select user from User user where user.vkId IN :vkIds"),
-        @NamedQuery(name = "User.getUserByFbId", query = "select user from User user where user.facebookId = :fbId")
+        @NamedQuery(name = "User.getUserByFbId", query = "select user from User user where user.facebookId = :fbId"),
+        @NamedQuery(name = "User.getUsersByIds", query = "select user from User user where user.id IN :ids")
 })
 public class User {
     @Id
@@ -126,7 +123,14 @@ public class User {
 
     @XmlTransient
     public SocialToken getVkToken() {
-        return UserController.getUserAuthToken(this, SocialNetwork.Vk);
+        tokens.sort(new Comparator<SocialToken>() {
+            @Override
+            public int compare(SocialToken o1, SocialToken o2) {
+                return o1.getExpireIn().compareTo(o2.getExpireIn());
+            }
+        });
+
+        return tokens.get(0);
     }
 
     public void addSession(String sessionSecret, Long expireIn) {
@@ -144,5 +148,22 @@ public class User {
     public void addOrder(Order order) {
         orders.add(order);
         order.setOwner(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        User user = (User) o;
+
+        return !(id != null ? !id.equals(user.id) : user.id != null);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }
