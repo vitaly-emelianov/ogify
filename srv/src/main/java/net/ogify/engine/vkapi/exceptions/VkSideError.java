@@ -28,6 +28,10 @@ public class VkSideError extends RemoteException {
         super(s);
     }
 
+    public VkSideError(String s, Throwable cause) {
+        super(s, cause);
+    }
+
     /**
      * Construct error with description and returned http code from vk.
      * @param s error description.

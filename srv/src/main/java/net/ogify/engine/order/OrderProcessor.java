@@ -8,7 +8,7 @@ import net.ogify.database.entities.Order;
 import net.ogify.database.entities.Order.OrderStatus;
 import net.ogify.database.entities.OrderItem;
 import net.ogify.database.entities.User;
-import net.ogify.engine.friends.FriendProcessor;
+import net.ogify.engine.friends.FriendService;
 import net.ogify.engine.secure.exceptions.ForbiddenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class OrderProcessor {
     FeedbackController feedbackController;
 
     @Autowired
-    FriendProcessor friendProcessor;
+    FriendService friendService;
 
     /**
      * Method creates order on behalf  of the specified user.
@@ -65,8 +65,8 @@ public class OrderProcessor {
      * @throws ExecutionException on any exception thrown while attempting to get results.
      */
     public Order getOrderById(Long userId, Long orderId) throws ExecutionException {
-        Set<Long> friends = friendProcessor.getUserFriendsIds(userId);
-        Set<Long> friendsOfFriends = friendProcessor.getUserExtendedFriendsIds(userId);
+        Set<Long> friends = friendService.getUserFriendsIds(userId);
+        Set<Long> friendsOfFriends = friendService.getUserExtendedFriendsIds(userId);
         return orderController.getOrderByIdFiltered(userId, orderId, friends, friendsOfFriends);
     }
 
@@ -80,8 +80,8 @@ public class OrderProcessor {
      */
     public Set<Order> getNearestOrders(Double latitude, Double longitude, Long userId)
             throws ExecutionException {
-        Set<Long> friends = friendProcessor.getUserFriendsIds(userId);
-        Set<Long> friendsOfFriends = friendProcessor.getUserExtendedFriendsIds(userId);
+        Set<Long> friends = friendService.getUserFriendsIds(userId);
+        Set<Long> friendsOfFriends = friendService.getUserExtendedFriendsIds(userId);
         return new HashSet<>(
                 orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends, latitude, longitude));
     }

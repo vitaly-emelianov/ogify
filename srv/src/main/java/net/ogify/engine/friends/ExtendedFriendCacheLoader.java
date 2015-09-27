@@ -10,14 +10,14 @@ import java.util.concurrent.ExecutionException;
  * Created by melges on 09.03.2015.
  */
 public class ExtendedFriendCacheLoader extends CacheLoader<Long, Set<Long>> {
-    private FriendProcessor friendProcessor;
+    private FriendService friendService;
 
-    public ExtendedFriendCacheLoader(FriendProcessor friendProcessor) {
-        this.friendProcessor = friendProcessor;
+    public ExtendedFriendCacheLoader(FriendService friendService) {
+        this.friendService = friendService;
     }
 
     @Override
     public Set<Long> load(Long userId) throws VkSideError, ExecutionException {
-        return friendProcessor.loadExtendedFriendList(userId);
+        return friendService.loadExtendedFriendList(userId);
     }
 }

@@ -2,14 +2,12 @@ package net.ogify.rest.resources;
 
 import net.ogify.database.UserController;
 import net.ogify.database.entities.User;
-import net.ogify.engine.friends.FriendProcessor;
+import net.ogify.engine.friends.FriendService;
 import net.ogify.engine.secure.AuthController;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.ext.Provider;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
@@ -24,7 +22,7 @@ public class UserResource {
     UserController userController;
 
     @Autowired
-    FriendProcessor friendProcessor;
+    FriendService friendService;
 
     @GET
     @Path("{id}")
@@ -40,12 +38,12 @@ public class UserResource {
     @GET
     @Path("{id}/friends")
     public Set<Long> getUserFriends(@PathParam("id") Long userId) throws ExecutionException {
-        return friendProcessor.getUserFriendsIds(userId);
+        return friendService.getUserFriendsIds(userId);
     }
 
     @GET
     @Path("{id}/extendedFriends")
     public Set<Long> getUserExtendedFriends(@PathParam("id") Long userId) throws ExecutionException {
-        return friendProcessor.getUserExtendedFriendsIds(userId);
+        return friendService.getUserExtendedFriendsIds(userId);
     }
 }

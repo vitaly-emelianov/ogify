@@ -13,6 +13,7 @@ import java.util.*;
 @Table(name = "users")
 @XmlRootElement
 @NamedQueries({
+        @NamedQuery(name = "User.getAllIds", query = "select user.id from User user"),
         @NamedQuery(name = "User.getById", query = "select user from User user where user.id = :id"),
         @NamedQuery(name = "User.getByIdAndSession", query = "select user from User user, UserSession session " +
                 "where user.id = :userId " +
@@ -20,7 +21,8 @@ import java.util.*;
                 "and session.sessionSecret = :sessionSecret"),
         @NamedQuery(name = "User.getUserByVkId", query = "select user from User user where user.vkId = :vkId"),
         @NamedQuery(name = "User.getUsersByVkIds", query = "select user from User user where user.vkId IN :vkIds"),
-        @NamedQuery(name = "User.getUserByFbId", query = "select user from User user where user.facebookId = :fbId")
+        @NamedQuery(name = "User.getUserByFbId", query = "select user from User user where user.facebookId = :fbId"),
+        @NamedQuery(name = "User.getUsersByIds", query = "select user from User user where user.id IN :ids")
 })
 public class User {
     @Id

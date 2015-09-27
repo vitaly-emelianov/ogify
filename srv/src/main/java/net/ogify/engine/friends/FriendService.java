@@ -9,7 +9,6 @@ import net.ogify.engine.vkapi.VkFriends;
 import net.ogify.engine.vkapi.exceptions.VkSideError;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -22,8 +21,8 @@ import java.util.concurrent.TimeUnit;
  * Created by melges on 24.02.2015.
  */
 @Service
-public class FriendProcessor {
-    private final static Logger logger = Logger.getLogger(FriendProcessor.class);
+public class FriendService {
+    private final static Logger logger = Logger.getLogger(FriendService.class);
 
     private final static long cacheSize = 10000;
 
@@ -34,7 +33,7 @@ public class FriendProcessor {
     @Autowired
     UserController userController;
 
-    public FriendProcessor() {
+    public FriendService() {
         friendsCache = CacheBuilder.newBuilder()
                 .maximumSize(cacheSize)
                 .expireAfterWrite(2, TimeUnit.HOURS)

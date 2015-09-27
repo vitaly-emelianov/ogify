@@ -6,7 +6,9 @@ import net.ogify.database.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +22,19 @@ import java.util.Set;
 public class UserController {
     @Autowired
     private EntityManagerService entityManagerService;
+
+    public List<Long> getAllUsersIds(int maxCount, int pageNumber) {
+        EntityManager em = entityManagerService.createEntityManager();
+        try {
+            TypedQuery<Long> query = em.createNamedQuery("User.getAllIds", Long.class);
+            query.setFirstResult(maxCount * pageNumber);
+            query.setMaxResults(maxCount);
+
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
 
     public User getUserById(Long userId) {
         EntityManager em = entityManagerService.createEntityManager();
@@ -39,9 +54,25 @@ public class UserController {
         }
     }
 
+    public List<User> getUsersWithIds(Set<Long> ids) {
+        if(ids.isEmpty())
+            return new ArrayList<>();
+
+        EntityManager em = entityManagerService.createEntityManager();
+        try {
+            TypedQuery<User> query = em.createNamedQuery("User.getUsersByIds", User.class);
+            query.setParameter("ids", ids);
+
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
     public List<User> getUserWithVkIds(Set<Long> userIds) {
         if(userIds.isEmpty())
             return new ArrayList<>();
+
         EntityManager em = entityManagerService.createEntityManager();
         try {
             TypedQuery<User> query = em.createNamedQuery("User.getUsersByVkIds", User.class);
