@@ -27,7 +27,7 @@ public class VkWall {
         return response.getPostSet().stream().filter(new Predicate<WallPost>() {
             @Override
             public boolean test(WallPost wallPost) {
-                return wallPost.getText().isEmpty();
+                return !wallPost.getText().isEmpty();
             }
         }).collect(Collectors.<WallPost>toSet());
     }
