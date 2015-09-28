@@ -4,6 +4,20 @@
 
 var ogifyApp = angular.module('ogifyApp', ['ogifyServices', 'ngRoute', 'ngCookies', 'uiGmapgoogle-maps']);
 
+ogifyApp.service('my_address', function () {
+    var address = {
+        plain_address: ''
+    }
+    return {
+        getAddress: function () {
+            return address
+        },
+        setAddress: function(value) {
+            address.plain_address = value;
+        }
+    };
+});
+    
 ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
     $routeProvider
         .when('/current', {
@@ -37,7 +51,7 @@ ogifyApp.run(function ($rootScope, $http) {
     });
 });
 
-ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, AuthResource, UserProfile) {
+ogifyApp.controller('NavBarController', function ($rootScope, $scope, $window, $cookies, AuthResource, UserProfile, my_address) {
 
     $scope.modalWindowTemplateUri = 'templates/navbar/auth-modal.html';
 
@@ -64,14 +78,18 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
         };
         Order.create(neworder);
     };
-
+    
+    $scope.updateOrderData = function() {
+        my_address.setAddress($rootScope.map.center_address);
+    };
+    
     $scope.user = UserProfile.getCurrentUser();
 });
 
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi, Order) {
     $scope.currentUserOrders = Order.getMyOrders();
     $scope.showingOrders = $scope.currentUserOrders;
-
+    
     $scope.current_active = "my";
 
     $scope.orderGroups = [{
@@ -146,21 +164,21 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
     });
 });
 
-ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order) {
+ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order, my_address) {
     $scope.order = {
         expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
         expireTime: $filter('date')(new Date(), 'hh:mm'),
         reward: '',
-        address: $rootScope.map.center_address,
-        namespace: 'Friends'
-
+        address: my_address.getAddress(),
+        namespace: 'Friends',
+        description:''
     };
-
+    
     $scope.chooseTime = function() {
         var input = angular.element('#expire_in_time').clockpicker();
         input.clockpicker('show');
     };
-
+    
     $scope.createOrder = function() {
         Order.create({
             items: [],
@@ -171,7 +189,7 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             status: 'New',
             owner: null,
             executor: null,
-            address: $scope.order.address,
+            address: $scope.order.address.plain_address,
             doneAt: null,
             id: null,
             createdAt: null,
