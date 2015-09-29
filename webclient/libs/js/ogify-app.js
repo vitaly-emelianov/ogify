@@ -66,7 +66,7 @@ ogifyApp.controller('NavBarController', function ($rootScope, $scope, $window, $
     $scope.logoutSN = function () {
         $cookies.remove("JSESSIONID");
         $cookies.remove("ogifySessionSecret");
-        $cookies.remove("sID");
+        $cookies.remove("sId");
 
         $window.location.reload();
     };
