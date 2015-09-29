@@ -4,16 +4,16 @@
 
 var ogifyApp = angular.module('ogifyApp', ['ogifyServices', 'ngRoute', 'ngCookies', 'uiGmapgoogle-maps']);
 
-ogifyApp.service('my_address', function () {
+ogifyApp.service('myAddress', function () {
     var address = {
-        plain_address: ''
+        plainAddress: ''
     }
     return {
         getAddress: function () {
             return address
         },
         setAddress: function(value) {
-            address.plain_address = value;
+            address.plainAddress = value;
         }
     };
 });
@@ -51,7 +51,7 @@ ogifyApp.run(function ($rootScope, $http) {
     });
 });
 
-ogifyApp.controller('NavBarController', function ($rootScope, $scope, $window, $cookies, AuthResource, UserProfile, my_address) {
+ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, AuthResource, UserProfile) {
 
     $scope.modalWindowTemplateUri = 'templates/navbar/auth-modal.html';
 
@@ -80,13 +80,12 @@ ogifyApp.controller('NavBarController', function ($rootScope, $scope, $window, $
     };
     
     $scope.updateOrderData = function() {
-        my_address.setAddress($rootScope.map.center_address);
     };
     
     $scope.user = UserProfile.getCurrentUser();
 });
 
-ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi, Order) {
+ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi, Order, myAddress) {
     $scope.currentUserOrders = Order.getMyOrders();
     $scope.showingOrders = $scope.currentUserOrders;
     
@@ -126,8 +125,10 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
                 var geocoder = new google.maps.Geocoder();
                 var myposition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 geocoder.geocode({'latLng': myposition},function(data,status) {
-                    if(status == google.maps.GeocoderStatus.OK)
+                    if(status == google.maps.GeocoderStatus.OK) {
                         $scope.map.center_address = data[0].formatted_address; //this is the full address
+                        myAddress.setAddress($rootScope.map.center_address);
+                    }
                 });
 
                 $scope.map.control.refresh($scope.map.center);
@@ -152,8 +153,10 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
                             var geocoder = new google.maps.Geocoder();
                             var myposition = new google.maps.LatLng(lat, lon);
                             geocoder.geocode({'latLng': myposition},function(data,status) {
-                                if(status == google.maps.GeocoderStatus.OK)
+                                if(status == google.maps.GeocoderStatus.OK) {
                                     $scope.map.center_address = data[0].formatted_address;
+                                    myAddress.setAddress($rootScope.map.center_address);
+                                }
                             });
                         }
                     },
@@ -164,12 +167,12 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
     });
 });
 
-ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order, my_address) {
+ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order, myAddress) {
     $scope.order = {
         expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
         expireTime: $filter('date')(new Date(), 'hh:mm'),
         reward: '',
-        address: my_address.getAddress(),
+        address: myAddress.getAddress(),
         namespace: 'Friends',
         description:''
     };
@@ -189,7 +192,7 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             status: 'New',
             owner: null,
             executor: null,
-            address: $scope.order.address.plain_address,
+            address: $scope.order.address.plainAddress,
             doneAt: null,
             id: null,
             createdAt: null,
