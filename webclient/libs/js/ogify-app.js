@@ -64,9 +64,10 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
     };
 
     $scope.logoutSN = function () {
-        $cookies.remove("JSESSIONID");
-        $cookies.remove("ogifySessionSecret");
-        $cookies.remove("sId");
+        cookiesPath = {path : "/"};
+        $cookies.remove("JSESSIONID", cookiesPath);
+        $cookies.remove("ogifySessionSecret", cookiesPath);
+        $cookies.remove("sId", cookiesPath);
 
         $window.location.reload();
     };
