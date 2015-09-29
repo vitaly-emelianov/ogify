@@ -51,7 +51,7 @@ ogifyApp.run(function ($rootScope, $http) {
     });
 });
 
-ogifyApp.controller('NavBarController', function ($rootScope, $scope, $window, $cookies, AuthResource, UserProfile) {
+ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, AuthResource, UserProfile) {
 
     $scope.modalWindowTemplateUri = 'templates/navbar/auth-modal.html';
 
