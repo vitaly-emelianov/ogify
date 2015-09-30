@@ -34,6 +34,10 @@
     height: -moz-calc(100vh - 120px);
 }
 
+.new-order-fileds { 
+    resize:vertical;
+}
+
 /*.order-list-content {
     overflow-y: scroll;
 }*/
