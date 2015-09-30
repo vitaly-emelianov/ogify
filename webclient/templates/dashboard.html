@@ -39,11 +39,16 @@
             </div>
         </div>
 
-        <div class="panel-body">
+        <div class="panel-body" ng-controller="GetSelectedOrderController">
             <div class="list-group">
-                <a id="{{order.id}}" href="#" class="order-list list-group-item" ng-repeat="order in showingOrders">
-                    <h4 class="list-group-item-heading">Заказ №{{order.id}} от {{order.owner.fullName}}</h4>
-                    <p class="list-group-item-text">{{order.description}}</p>
+                <a id="{{order.id}}" 
+                   data-toggle="modal" 
+                   data-target="#showOrderModal"
+                   class="order-list list-group-item"
+                   ng-click="setSelectedOrder(showingOrders[$index])"
+                   ng-repeat="order in showingOrders">
+                   <h4 class="list-group-item-heading">Заказ №{{order.id}} от {{order.owner.fullName}}</h4>
+                   <p class="list-group-item-text">{{order.description}}</p>
                 </a>
             </div>
         </div>
