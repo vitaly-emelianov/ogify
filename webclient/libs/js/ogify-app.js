@@ -21,7 +21,7 @@ ogifyApp.service('myAddress', function () {
 ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
     $routeProvider
         .when('/current', {
-            templateUrl: 'templtes/current.html'
+            templateUrl: 'templates/current.html'
         }).when('/dashboard', {
             templateUrl: 'templates/dashboard.html',
             controller: 'DashboardController'
@@ -38,7 +38,8 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
 
 ogifyApp.run(function ($rootScope, $http) {
     $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
-    $rootScope.createOrderTemplateUri = 'templates/new-order.html'
+    $rootScope.createOrderTemplateUri = 'templates/new-order.html';
+    $rootScope.showOrderTemplateUri = 'templates/order-details.html'
 
     $rootScope.$watch(function () {
         return $http.pendingRequests.length > 0;
@@ -71,10 +72,10 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
 
         $window.location.reload();
     };
-    
+
     $scope.updateOrderData = function() {
     };
-    
+
     $scope.user = UserProfile.getCurrentUser();
 });
 
@@ -198,4 +199,47 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         });
     };
 
+});
+
+ogifyApp.factory('selectedOrder', function(){
+    var selectedOrder = {};
+    selectedOrder.order = null;
+    selectedOrder.set = function(order){
+        selectedOrder.order = order;
+    };
+    return selectedOrder;
+});
+
+ogifyApp.controller('GetSelectedOrderController', function ($scope, selectedOrder){
+    $scope.setSelectedOrder = function(order){
+        selectedOrder.set(order);
+    };
+});
+
+ogifyApp.controller('ShowOrderModalController', function ($scope, selectedOrder, Order) {
+    $scope.getDescription = function(){
+        return selectedOrder.order.description;
+    };
+    $scope.getAddress = function(){
+        return selectedOrder.order.address;
+    };
+    $scope.getReward = function(){
+        return selectedOrder.order.reward;
+    };
+    $scope.getExpireDate = function(){
+        var date = new Date(selectedOrder.order.expireIn);
+        var months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", 
+                      "сентября", "октября", "ноября", "декабря"];
+        return [date.getDate(), months[date.getMonth()], date.getFullYear()].join(' ');
+    };
+    $scope.getExpireTime = function(){
+        function toTwoDigital(number) {
+            if (number < 10) {
+                number = "0" + number;
+            }
+            return number;
+        }
+        var date = new Date(selectedOrder.order.expireIn);
+        return [toTwoDigital(date.getHours()), toTwoDigital(date.getMinutes())].join(':');
+    };
 });
