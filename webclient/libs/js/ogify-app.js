@@ -7,7 +7,7 @@ var ogifyApp = angular.module('ogifyApp', ['ogifyServices', 'ngRoute', 'ngCookie
 ogifyApp.service('myAddress', function () {
     var address = {
         plainAddress: ''
-    }
+    };
     return {
         getAddress: function () {
             return address
@@ -70,14 +70,6 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
         $cookies.remove("sId", cookiesPath);
 
         $window.location.reload();
-    };
-
-    $scope.createOrder = function() {
-        var neworder = {
-            svekla : 'heyhey',
-            morkov : 'nounou'
-        };
-        Order.create(neworder);
     };
     
     $scope.updateOrderData = function() {
