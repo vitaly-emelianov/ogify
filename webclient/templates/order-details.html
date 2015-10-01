@@ -1,0 +1,52 @@
+<div class="modal fade" id="showOrderModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" ng-controller="ShowOrderModalController">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="createOrderLabel">
+                    Детали заказа
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="comment">Описание:</label>
+                    <div class="row">
+                        <div class="col-md-12">{{getDescription()}}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="order_cost">Вознаграждение:</label>
+                    <div class="row">
+                        <div class="col-md-12">{{getReward()}}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address">Адрес:</label>
+                    <div class="row">
+                        <div class="col-md-12">{{getAddress()}}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="expire_in_container">Актуально до:</label>
+                    <div class="row">
+                        <div class="col-md-12" id="expire_in_container">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="text-justify" rows="3"id="expire_in_time">
+                                        {{getExpireDate()}}
+                                    </p>
+                                </div>
+                                <div class="col-md-1">
+                                    <p class="text-justify" rows="3"id="expire_in_time">
+                                        {{getExpireTime()}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -17,11 +17,11 @@ ogifyApp.service('myAddress', function () {
         }
     };
 });
-    
+
 ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
     $routeProvider
         .when('/current', {
-            templateUrl: 'templtes/current.html'
+            templateUrl: 'templates/current.html'
         }).when('/dashboard', {
             templateUrl: 'templates/dashboard.html',
             controller: 'DashboardController'
@@ -38,7 +38,8 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
 
 ogifyApp.run(function ($rootScope, $http) {
     $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
-    $rootScope.createOrderTemplateUri = 'templates/new-order.html'
+    $rootScope.createOrderTemplateUri = 'templates/new-order.html';
+    $rootScope.showOrderTemplateUri = 'templates/order-details.html'
 
     $rootScope.$watch(function () {
         return $http.pendingRequests.length > 0;
@@ -71,18 +72,23 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
 
         $window.location.reload();
     };
-    
+
     $scope.updateOrderData = function() {
     };
-    
+
     $scope.user = UserProfile.getCurrentUser();
 });
 
-ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi, Order, myAddress) {
+ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi,
+                                                     Order, myAddress, ClickedOrder) {
     $scope.currentUserOrders = Order.getMyOrders();
     $scope.showingOrders = $scope.currentUserOrders;
-    
+
     $scope.current_active = "my";
+
+    $scope.setClickedOrder = function(order){
+        ClickedOrder.set(order);
+    };
 
     $scope.orderGroups = [{
         name: 'near',
@@ -169,12 +175,12 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         namespace: 'Friends',
         description:''
     };
-    
+
     $scope.chooseTime = function() {
         var input = angular.element('#expire_in_time').clockpicker();
         input.clockpicker('show');
     };
-    
+
     $scope.createOrder = function() {
         Order.create({
             items: [],
@@ -198,4 +204,41 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         });
     };
 
+});
+
+ogifyApp.factory('ClickedOrder', function(){
+    var ClickedOrder = {};
+    ClickedOrder.order = {description: null, reward: null, address: null, expireIn: null};
+    ClickedOrder.set = function(order){
+        ClickedOrder.order = order;
+    };
+    return ClickedOrder;
+});
+
+ogifyApp.controller('ShowOrderModalController', function ($scope, ClickedOrder, Order) {
+    $scope.getDescription = function(){
+        return ClickedOrder.order.description;
+    };
+    $scope.getAddress = function(){
+        return ClickedOrder.order.address;
+    };
+    $scope.getReward = function(){
+        return ClickedOrder.order.reward;
+    };
+    $scope.getExpireDate = function(){
+        var date = new Date(ClickedOrder.order.expireIn);
+        var months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", 
+                      "сентября", "октября", "ноября", "декабря"];
+        return [date.getDate(), months[date.getMonth()], date.getFullYear()].join(' ');
+    };
+    $scope.getExpireTime = function(){
+        function toTwoDigital(number) {
+            if (number < 10) {
+                number = "0" + number;
+            }
+            return number;
+        }
+        var date = new Date(ClickedOrder.order.expireIn);
+        return [toTwoDigital(date.getHours()), toTwoDigital(date.getMinutes())].join(':');
+    };
 });
