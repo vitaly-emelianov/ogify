@@ -201,33 +201,33 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
 
 });
 
-ogifyApp.factory('selectedOrder', function(){
-    var selectedOrder = {};
-    selectedOrder.order = null;
-    selectedOrder.set = function(order){
-        selectedOrder.order = order;
+ogifyApp.factory('SelectedOrder', function(){
+    var SelectedOrder = {};
+    SelectedOrder.order = {description: null, reward: null, address: null, expireIn: null};
+    SelectedOrder.set = function(order){
+        SelectedOrder.order = order;
     };
-    return selectedOrder;
+    return SelectedOrder;
 });
 
-ogifyApp.controller('GetSelectedOrderController', function ($scope, selectedOrder){
+ogifyApp.controller('SelectedOrderController', function ($scope, SelectedOrder){
     $scope.setSelectedOrder = function(order){
-        selectedOrder.set(order);
+        SelectedOrder.set(order);
     };
 });
 
-ogifyApp.controller('ShowOrderModalController', function ($scope, selectedOrder, Order) {
+ogifyApp.controller('ShowOrderModalController', function ($scope, SelectedOrder, Order) {
     $scope.getDescription = function(){
-        return selectedOrder.order.description;
+        return SelectedOrder.order.description;
     };
     $scope.getAddress = function(){
-        return selectedOrder.order.address;
+        return SelectedOrder.order.address;
     };
     $scope.getReward = function(){
-        return selectedOrder.order.reward;
+        return SelectedOrder.order.reward;
     };
     $scope.getExpireDate = function(){
-        var date = new Date(selectedOrder.order.expireIn);
+        var date = new Date(SelectedOrder.order.expireIn);
         var months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", 
                       "сентября", "октября", "ноября", "декабря"];
         return [date.getDate(), months[date.getMonth()], date.getFullYear()].join(' ');
@@ -239,7 +239,7 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, selectedOrder,
             }
             return number;
         }
-        var date = new Date(selectedOrder.order.expireIn);
+        var date = new Date(SelectedOrder.order.expireIn);
         return [toTwoDigital(date.getHours()), toTwoDigital(date.getMinutes())].join(':');
     };
 });
