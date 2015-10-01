@@ -2,6 +2,7 @@ import json
 import bz2
 import pymorphy2
 import nltk
+import sys
 
 
 class SuperTokenizer(object):
@@ -39,25 +40,39 @@ class SuperTokenizer(object):
         text = BeautifulSoup.BeautifulSoup(html).getText(' ')
         return self.tokenize_text(text)
 
+		
+class TextProcessor:
+	def __init__(self, input_path, output_path):
+		self.input_path = input_path
+		self.output_path = output_path
+		
+	def read(self):
+		with open(self.input_path) as f:
+			for line in f:
+				text = line[:(line.rindex(']')+1)]
+			self.posts = json.loads(text)
+			
+	def make_tokens(self):
+		#build tokenizer
+		tokenizer = SuperTokenizer()
 
-#reading jsons
-with open('vk_posts') as f:
-    for line in f:
-        text = line[:(line.rindex(']')+1)]
-    posts = json.loads(text)
+		#open file for writing tokens
+		with open(self.output_path, 'w') as post_output:
+			for post_index, post in enumerate(self.posts):
+				#tokenizing current post
+				tokens = tokenizer.tokenize_text(post['text'])
 
-#build tokenizer
-tokenizer = SuperTokenizer()
-
-#open file for writing tokens
-with open('vk_tokens.txt', 'w') as post_output:
-    for post_index, post in enumerate(posts):
-        #tokenizing current post
-        tokens = tokenizer.tokenize_text(post['text'])
-
-        #writing tokens frim current post to file
-        print >> post_output, post_index, ','.join(tokens).encode('utf-8') 
-        
-        if post_index % 1000 == 0:
-            print '{0} post processed'.format(post_index)
+				#writing tokens frim current post to file
+				print >> post_output, post_index, ','.join(tokens).encode('utf-8') 
+				
+				if post_index % 1000 == 0:
+					print '{0} post processed'.format(post_index)
+		
+		
+if __name__ == "__main__":
+    input_path = sys.argv[1]
+	output_path = sys.argv[2]
+	processor = TextProcessor(input_path, output_path)
+	processor.read()
+	processor.make_tokens()
     
