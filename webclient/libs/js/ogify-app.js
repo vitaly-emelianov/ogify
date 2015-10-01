@@ -17,7 +17,7 @@ ogifyApp.service('myAddress', function () {
         }
     };
 });
-    
+
 ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
     $routeProvider
         .when('/current', {
@@ -79,11 +79,16 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
     $scope.user = UserProfile.getCurrentUser();
 });
 
-ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi, Order, myAddress) {
+ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi,
+                                                     Order, myAddress, ClickedOrder) {
     $scope.currentUserOrders = Order.getMyOrders();
     $scope.showingOrders = $scope.currentUserOrders;
-    
+
     $scope.current_active = "my";
+
+    $scope.setClickedOrder = function(order){
+        ClickedOrder.set(order);
+    };
 
     $scope.orderGroups = [{
         name: 'near',
@@ -170,12 +175,12 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         namespace: 'Friends',
         description:''
     };
-    
+
     $scope.chooseTime = function() {
         var input = angular.element('#expire_in_time').clockpicker();
         input.clockpicker('show');
     };
-    
+
     $scope.createOrder = function() {
         Order.create({
             items: [],
@@ -201,33 +206,27 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
 
 });
 
-ogifyApp.factory('SelectedOrder', function(){
-    var SelectedOrder = {};
-    SelectedOrder.order = {description: null, reward: null, address: null, expireIn: null};
-    SelectedOrder.set = function(order){
-        SelectedOrder.order = order;
+ogifyApp.factory('ClickedOrder', function(){
+    var ClickedOrder = {};
+    ClickedOrder.order = {description: null, reward: null, address: null, expireIn: null};
+    ClickedOrder.set = function(order){
+        ClickedOrder.order = order;
     };
-    return SelectedOrder;
+    return ClickedOrder;
 });
 
-ogifyApp.controller('SelectedOrderController', function ($scope, SelectedOrder){
-    $scope.setSelectedOrder = function(order){
-        SelectedOrder.set(order);
-    };
-});
-
-ogifyApp.controller('ShowOrderModalController', function ($scope, SelectedOrder, Order) {
+ogifyApp.controller('ShowOrderModalController', function ($scope, ClickedOrder, Order) {
     $scope.getDescription = function(){
-        return SelectedOrder.order.description;
+        return ClickedOrder.order.description;
     };
     $scope.getAddress = function(){
-        return SelectedOrder.order.address;
+        return ClickedOrder.order.address;
     };
     $scope.getReward = function(){
-        return SelectedOrder.order.reward;
+        return ClickedOrder.order.reward;
     };
     $scope.getExpireDate = function(){
-        var date = new Date(SelectedOrder.order.expireIn);
+        var date = new Date(ClickedOrder.order.expireIn);
         var months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", 
                       "сентября", "октября", "ноября", "декабря"];
         return [date.getDate(), months[date.getMonth()], date.getFullYear()].join(' ');
@@ -239,7 +238,7 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, SelectedOrder,
             }
             return number;
         }
-        var date = new Date(SelectedOrder.order.expireIn);
+        var date = new Date(ClickedOrder.order.expireIn);
         return [toTwoDigital(date.getHours()), toTwoDigital(date.getMinutes())].join(':');
     };
 });

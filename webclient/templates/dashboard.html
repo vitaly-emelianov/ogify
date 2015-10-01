@@ -38,13 +38,13 @@
                 </div>
             </div>
         </div>
-        <div class="panel-body" ng-controller="SelectedOrderController">
+        <div class="panel-body">
             <div class="list-group">
                 <a id="{{order.id}}" 
                     data-toggle="modal" 
                     data-target="#showOrderModal"
                     class="order-list list-group-item"
-                    ng-click="setSelectedOrder(showingOrders[$index])"
+                    ng-click="setClickedOrder(showingOrders[$index])"
                     ng-repeat="order in showingOrders">
                     <h4 class="list-group-item-heading">
                         Заказ №{{order.id}} от {{order.owner.fullName}}
