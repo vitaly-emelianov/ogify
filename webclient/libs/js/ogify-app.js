@@ -6,14 +6,18 @@ var ogifyApp = angular.module('ogifyApp', ['ogifyServices', 'ngRoute', 'ngCookie
 
 ogifyApp.service('myAddress', function () {
     var address = {
+        latitude: 0.0,
+        longitude: 0.0,
         plainAddress: ''
     };
     return {
         getAddress: function () {
-            return address
+            return address;
         },
-        setAddress: function(value) {
-            address.plainAddress = value;
+        setAddress: function(textAddress, latitude, longitude) {
+            address.plainAddress = textAddress;
+            address.latitude = latitude;
+            address.longitude = longitude;
         }
     };
 });
@@ -111,8 +115,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
     $rootScope.map = {
         center: { latitude: 55.7, longitude: 37.6 },
         zoom: 10,
-        control: {},
-        center_address: ""
+        control: {}
     };
 
     uiGmapGoogleMapApi.then(function(maps) {
@@ -123,10 +126,13 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
 
                 var geocoder = new google.maps.Geocoder();
                 var myposition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                geocoder.geocode({'latLng': myposition},function(data,status) {
+                geocoder.geocode({'latLng': myposition},function(data, status) {
                     if(status == google.maps.GeocoderStatus.OK) {
-                        $scope.map.center_address = data[0].formatted_address; //this is the full address
-                        myAddress.setAddress($rootScope.map.center_address);
+                        myAddress.setAddress(
+                            data[0].formatted_address,
+                            position.coords.latitude,
+                            position.coords.longitude
+                        );
                     }
                 });
 
@@ -146,15 +152,18 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
                     },
                     events: {
                         dragend: function (marker, eventName, args) {
-                            var lat = marker.getPosition().lat();
-                            var lon = marker.getPosition().lng();
+                            var latitude = marker.getPosition().lat();
+                            var longitude = marker.getPosition().lng();
 
                             var geocoder = new google.maps.Geocoder();
-                            var myposition = new google.maps.LatLng(lat, lon);
+                            var myposition = new google.maps.LatLng(latitude, longitude);
                             geocoder.geocode({'latLng': myposition},function(data,status) {
                                 if(status == google.maps.GeocoderStatus.OK) {
-                                    $scope.map.center_address = data[0].formatted_address;
-                                    myAddress.setAddress($rootScope.map.center_address);
+                                    myAddress.setAddress(
+                                        data[0].formatted_address,
+                                        latitude,
+                                        longitude
+                                    );
                                 }
                             });
                         }
@@ -172,7 +181,7 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         expireTime: $filter('date')(new Date(), 'hh:mm'),
         reward: '',
         address: myAddress.getAddress(),
-        namespace: 'Friends',
+        namespace: 'FriendsOfFriends',
         description:''
     };
 
@@ -185,8 +194,8 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         Order.create({
             items: [],
             expireIn: parseDate($scope.order.expireDate, $scope.order.expireTime).getTime(),
-            latitude: $rootScope.map.center.latitude,
-            longitude: $rootScope.map.center.longitude,
+            latitude: myAddress.getAddress().latitude,
+            longitude: myAddress.getAddress().longitude,
             reward: $scope.order.reward,
             status: 'New',
             owner: null,
