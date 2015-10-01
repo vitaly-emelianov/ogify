@@ -47,9 +47,9 @@ class TextProcessor:
 		self.output_path = output_path
 		
 	def read(self):
-		with open(self.input_path) as f:
-			for line in f:
-				text = line[:(line.rindex(']')+1)]
+	    with open(self.input_path) as f:
+	        for line in f:
+			    text = line[:(line.rindex(']') + 1)]
 			self.posts = json.loads(text)
 			
 	def make_tokens(self):
@@ -76,3 +76,4 @@ if __name__ == "__main__":
 	processor.read()
 	processor.make_tokens()
     
+	
