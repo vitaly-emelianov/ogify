@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Created by melge on 12.07.2015.
  */
 
@@ -182,7 +182,8 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         reward: '',
         address: myAddress.getAddress(),
         namespace: 'FriendsOfFriends',
-        description:''
+        description:'',
+        items: [{}]
     };
 
     $scope.chooseTime = function() {
@@ -190,9 +191,13 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         input.clockpicker('show');
     };
 
+    $scope.addToList = function() {
+        $scope.order.items.push({});
+    };
+
     $scope.createOrder = function() {
         Order.create({
-            items: [],
+            items: $scope.order.items,
             expireIn: parseDate($scope.order.expireDate, $scope.order.expireTime).getTime(),
             latitude: myAddress.getAddress().latitude,
             longitude: myAddress.getAddress().longitude,
