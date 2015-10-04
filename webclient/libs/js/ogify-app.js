@@ -85,12 +85,14 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
 
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi,
                                                      Order, myAddress, ClickedOrder) {
-    $scope.currentUserOrders = Order.getMyOrders();
-    $scope.showingOrders = $scope.currentUserOrders;
-
+    $scope.showingOrders = Order.getMyOrders();
     $scope.current_active = "my";
 
-    $scope.setClickedOrder = function(order){
+    $scope.$on('createdNewOrder', function(event, updated_orders) {
+        $scope.showingOrders = updated_orders;
+    });
+
+    $scope.setClickedOrder = function(order) {
         ClickedOrder.set(order);
     };
 
@@ -109,8 +111,6 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
             $scope.showingOrders = Order.getMyOrders();
         }
     }];
-
-    // $scope.orderGroups
 
     $rootScope.map = {
         center: { latitude: 55.7, longitude: 37.6 },
@@ -154,7 +154,6 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
                         dragend: function (marker, eventName, args) {
                             var latitude = marker.getPosition().lat();
                             var longitude = marker.getPosition().lng();
-
                             var geocoder = new google.maps.Geocoder();
                             var myposition = new google.maps.LatLng(latitude, longitude);
                             geocoder.geocode({'latLng': myposition},function(data,status) {
@@ -175,7 +174,8 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
     });
 });
 
-ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order, myAddress) {
+ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order,
+                                                            myAddress) {
     $scope.order = {
         expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
         expireTime: $filter('date')(new Date(), 'hh:mm'),
@@ -191,7 +191,7 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
     };
 
     $scope.createOrder = function() {
-        Order.create({
+        var new_order = {
             items: [],
             expireIn: parseDate($scope.order.expireDate, $scope.order.expireTime).getTime(),
             latitude: myAddress.getAddress().latitude,
@@ -206,10 +206,15 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             createdAt: null,
             namespace: $scope.order.namespace,
             description: $scope.order.description
-        }, function(successResponse) { // success
+        }
+        Order.create(new_order,
+        function(successResponse) { // success
             angular.element('#createOrderModal').modal('hide');
-        }, function(errorResponse) { // error
-            // TODO: Add error handler
+            var updated_orders = Order.getMyOrders();
+            $rootScope.$broadcast('createdNewOrder', updated_orders);
+        },
+        function(errorResponse) { // error
+            console.log("Cannot create this order.");
         });
     };
 

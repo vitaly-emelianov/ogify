@@ -30,7 +30,7 @@
                                 ng-class="{'active':group.name == current_active}" 
                                 ng-click="group.orderViewModeChanged()" 
                                 class="btn btn-default">
-                               {{group.value}}
+                            {{group.value}}
                         </button>
                         <!-- <button type="button" ng-click="orderViewModeChanged('near')" class="btn btn-default">Все заказы</button>
                         <button type="button" ng-click="orderViewModeChanged('my')" class="btn btn-default">Мои заказы</button> -->
@@ -40,12 +40,12 @@
         </div>
         <div class="panel-body">
             <div class="list-group">
-                <a id="{{order.id}}" 
+                <a href="#/dashboard" id="{{order.id}}" 
                     data-toggle="modal" 
                     data-target="#showOrderModal"
-                    class="order-list list-group-item"
-                    ng-click="setClickedOrder(showingOrders[$index])"
-                    ng-repeat="order in showingOrders">
+                    class="list-group-item"
+                    ng-click="setClickedOrder(order)"
+                    ng-repeat="order in showingOrders | orderBy : '-id'">
                     <h4 class="list-group-item-heading">
                         Заказ №{{order.id}} от {{order.owner.fullName}}
                     </h4>
