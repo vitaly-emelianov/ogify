@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Created by melge on 12.07.2015.
  */
 
@@ -183,7 +183,8 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         reward: '',
         address: myAddress.getAddress(),
         namespace: 'FriendsOfFriends',
-        description:''
+        description:'',
+        items: [{}]
     };
 
     $scope.alerts = [];
@@ -193,9 +194,14 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         input.clockpicker('show');
     };
 
+    $scope.addToList = function() {
+        $scope.order.items.push({});
+    };
+
     $scope.createOrder = function() {
-        var new_order = {
-            items: [],
+        Order.create({
+            items: $scope.order.items,
+
             expireIn: parseDate($scope.order.expireDate, $scope.order.expireTime).getTime(),
             latitude: myAddress.getAddress().latitude,
             longitude: myAddress.getAddress().longitude,
@@ -209,8 +215,7 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             createdAt: null,
             namespace: $scope.order.namespace,
             description: $scope.order.description
-        }
-        Order.create(new_order,
+        },
         function(successResponse) {
             angular.element('#createOrderModal').modal('hide');
             $rootScope.$broadcast('createdNewOrderEvent');
