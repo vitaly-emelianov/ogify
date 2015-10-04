@@ -43,7 +43,7 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
 ogifyApp.run(function ($rootScope, $http) {
     $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
     $rootScope.createOrderTemplateUri = 'templates/new-order.html';
-    $rootScope.showOrderTemplateUri = 'templates/order-details.html'
+    $rootScope.showOrderTemplateUri = 'templates/order-details.html';
 
     $rootScope.$watch(function () {
         return $http.pendingRequests.length > 0;
@@ -86,11 +86,12 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi,
                                                      Order, myAddress, ClickedOrder) {
     $scope.showingOrders = Order.getMyOrders();
-    $scope.current_active = "my";
 
-    $scope.$on('createdNewOrder', function(event) {
+    $scope.$on('createdNewOrderEvent', function(event) {
         $scope.showingOrders = Order.getMyOrders();
     });
+
+    $scope.current_active = "my";
 
     $scope.setClickedOrder = function(order) {
         ClickedOrder.set(order);
@@ -185,6 +186,8 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         description:''
     };
 
+    $scope.alerts = [];
+
     $scope.chooseTime = function() {
         var input = angular.element('#expire_in_time').clockpicker();
         input.clockpicker('show');
@@ -208,12 +211,13 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             description: $scope.order.description
         }
         Order.create(new_order,
-        function(successResponse) { // success
+        function(successResponse) {
             angular.element('#createOrderModal').modal('hide');
-            $rootScope.$broadcast('createdNewOrder');
+            $rootScope.$broadcast('createdNewOrderEvent');
         },
-        function(errorResponse) { // error
-            //error message
+        function(errorResponse) {
+            var alert = {message: "Слишком длинное описание. Покороче?"};
+            $scope.alerts = [alert];
         });
     };
 
@@ -240,7 +244,7 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, ClickedOrder, 
     };
     $scope.getExpireDate = function(){
         var date = new Date(ClickedOrder.order.expireIn);
-        var months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", 
+        var months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
                       "сентября", "октября", "ноября", "декабря"];
         return [date.getDate(), months[date.getMonth()], date.getFullYear()].join(' ');
     };
