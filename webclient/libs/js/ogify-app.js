@@ -214,10 +214,10 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             createdAt: null,
             namespace: $scope.order.namespace,
             description: $scope.order.description
-        }, function(successResponse) {
+        }, function(successResponse) { // success
             angular.element('#createOrderModal').modal('hide');
             $rootScope.$broadcast('createdNewOrderEvent');
-        }, function(errorResponse) {
+        }, function(errorResponse) { // error
             var alert = {message: "Слишком длинное описание. Покороче?"};
             $scope.alerts = [alert];
         });
