@@ -29,6 +29,9 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
         }).when('/dashboard', {
             templateUrl: 'templates/dashboard.html',
             controller: 'DashboardController'
+        }).when('/profile', {
+            templateUrl: 'templates/user-profile.html',
+            controller: 'ProfilePageController'
         }).otherwise({
             redirectTo: '/dashboard'
         });
