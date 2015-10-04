@@ -88,8 +88,8 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
     $scope.showingOrders = Order.getMyOrders();
     $scope.current_active = "my";
 
-    $scope.$on('createdNewOrder', function(event, updated_orders) {
-        $scope.showingOrders = updated_orders;
+    $scope.$on('createdNewOrder', function(event) {
+        $scope.showingOrders = Order.getMyOrders();
     });
 
     $scope.setClickedOrder = function(order) {
@@ -210,11 +210,10 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         Order.create(new_order,
         function(successResponse) { // success
             angular.element('#createOrderModal').modal('hide');
-            var updated_orders = Order.getMyOrders();
-            $rootScope.$broadcast('createdNewOrder', updated_orders);
+            $rootScope.$broadcast('createdNewOrder');
         },
         function(errorResponse) { // error
-            console.log("Cannot create this order.");
+            //error message
         });
     };
 
