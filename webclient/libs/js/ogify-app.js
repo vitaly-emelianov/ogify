@@ -216,6 +216,16 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             description: $scope.order.description
         }, function(successResponse) { // success
             angular.element('#createOrderModal').modal('hide');
+            
+            $scope.order = {
+                expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
+                expireTime: $filter('date')(new Date(), 'hh:mm'),
+                reward: '',
+                address: myAddress.getAddress(),
+                namespace: 'FriendsOfFriends',
+                description:'',
+                items: [{}]
+            };
         }, function(errorResponse) { // error
             // TODO: Add error handler
         });
