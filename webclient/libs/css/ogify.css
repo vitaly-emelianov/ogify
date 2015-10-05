@@ -38,6 +38,9 @@
     resize:vertical;
 }
 
+.profile-avatar {
+    text-align: center;
+}
 /*.order-list-content {
     overflow-y: scroll;
 }*/
