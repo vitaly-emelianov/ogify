@@ -234,7 +234,7 @@ ogifyApp.factory('ClickedOrder', function(){
     return ClickedOrder;
 });
 
-ogifyApp.controller('ShowOrderModalController', function ($scope, ClickedOrder, Order) {
+ogifyApp.controller('ShowOrderModalController', function ($scope, $filter, ClickedOrder, Order) {
     $scope.getDescription = function(){
         return ClickedOrder.order.description;
     };
@@ -245,19 +245,9 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, ClickedOrder, 
         return ClickedOrder.order.reward;
     };
     $scope.getExpireDate = function(){
-        var date = new Date(ClickedOrder.order.expireIn);
-        var months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
-                      "сентября", "октября", "ноября", "декабря"];
-        return [date.getDate(), months[date.getMonth()], date.getFullYear()].join(' ');
+        return $filter('date')(ClickedOrder.order.expireIn, 'd MMMM yyyy');
     };
     $scope.getExpireTime = function(){
-        function toTwoDigital(number) {
-            if (number < 10) {
-                number = "0" + number;
-            }
-            return number;
-        }
-        var date = new Date(ClickedOrder.order.expireIn);
-        return [toTwoDigital(date.getHours()), toTwoDigital(date.getMinutes())].join(':');
+        return $filter('date')(ClickedOrder.order.expireIn, 'HH:mm');
     };
 });
