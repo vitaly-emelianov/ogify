@@ -157,15 +157,11 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
     $scope.orderGroups = [{
         name: 'near',
         value: 'Все заказы',
-        orderViewModeChanged: function() {
-            goToNearOrders();
-        }
+        orderViewModeChanged: goToNearOrders
     }, {
         name: 'my',
         value: 'Мои заказы',
-        orderViewModeChanged: function() {
-            goToMyOrders();
-        }
+        orderViewModeChanged:goToMyOrders
     }];
 
     $rootScope.map = {
