@@ -89,21 +89,46 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
 
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi,
                                                      Order, myAddress, ClickedOrder) {
+    $scope.pageSize = 6;
+    $scope.page = 1;
+    
     $scope.currentUserOrders = Order.getMyOrders();
     $scope.showingOrders = $scope.currentUserOrders;
-
     $scope.current_active = "my";
+
+    $scope.totalPages = 9;
+    
+    $scope.pages = _.range($scope.totalPages);
 
     $scope.setClickedOrder = function(order){
         ClickedOrder.set(order);
     };
 
+    $scope.previousPage = function(){
+        if ($scope.page > 1) {
+            $scope.page -= 1;
+        };
+    };
+    
+    $scope.nextPage = function(){
+        if ($scope.page < $scope.totalPages) {
+            $scope.page += 1;
+        };
+    };
+    
+    $scope.setPage = function(i){
+        $scope.page = i;
+    };
+    
     $scope.orderGroups = [{
         name: 'near',
         value: 'Все заказы',
         orderViewModeChanged: function() {
             $scope.current_active = "near";
             $scope.showingOrders = Order.getNearMe($scope.map.center);
+            $scope.totalPages = window.Math.ceil($scope.showingOrders.length/$scope.pageSize);
+            $scope.pages = _.range($scope.totalPages);
+            $scope.page = 1;
         }
     }, {
         name: 'my',
@@ -111,10 +136,11 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
         orderViewModeChanged: function() {
             $scope.current_active = "my";
             $scope.showingOrders = Order.getMyOrders();
+            $scope.totalPages = window.Math.ceil($scope.showingOrders.length/$scope.pageSize);
+            $scope.pages = _.range($scope.totalPages);
+            $scope.page = 1;
         }
     }];
-
-    // $scope.orderGroups
 
     $rootScope.map = {
         center: { latitude: 55.7, longitude: 37.6 },
