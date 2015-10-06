@@ -47,6 +47,7 @@
         <build.unknown>UNKNOWN</build.unknown>
         <build.number>${build.unknown}</build.number>
         <build.revision>${build.unknown}</build.revision>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <build>
@@ -64,6 +65,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
+                <version>1.4.0</version>
                 <executions>
                     <execution>
                         <id>exec-npm-install</id>
@@ -159,6 +161,13 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <output>
+                        <title>OGIFY REST API Reference ${project.version}</title>
+                        <html>
+                            <baseUrl>http://dev.ogify.net/rest</baseUrl>
+                            <location>${project.build.directory}/${project.version}/docs</location>
+                        </html>
+                    </output>
                     <license>
                         UHJvamVjdHxuZXQub2dpZnkud3d3fDIwMTYtMTAtMDV8dHJ1ZSNNQ3dDRkVBYVVBcEJaaHZUSUZPTmFmSFBBK3dLU2JHU0F
                         oUlg4alFGdEZqeVc4UWs1TlRSNFlJVU9JbUhadz09
@@ -176,11 +185,27 @@
                                     explicit: net.ogify.engine.secure.exceptions.NotAuthenticatedException
                                 </document>
                                 <defaultMessage>The user is not authorized to use this service.</defaultMessage>
+                                <sticky>true</sticky>
                             </httpStatusCode>
                             <httpStatusCode>
-                                <httpCode>412</httpCode>
+                                <httpCode>502</httpCode>
+                                <document>
+                                    explicit: java.rmi.RemoteException
+                                </document>
+                                <defaultMessage>
+                                    The remote system (e.g. vk) has failed to provide request.
+                                </defaultMessage>
+                                <sticky>true</sticky>
+                            </httpStatusCode>
+                            <httpStatusCode>
+                                <httpCode>400</httpCode>
                                 <document>put,post</document>
-                                <defaultMessage>Invalid JSON/XML input.</defaultMessage>
+                                <defaultMessage>Invalid JSON input.</defaultMessage>
+                            </httpStatusCode>
+                            <httpStatusCode>
+                                <httpCode>415</httpCode>
+                                <document>always</document>
+                                <defaultMessage>Content-Type is invalid (probably, not JSON).</defaultMessage>
                             </httpStatusCode>
                             <httpStatusCode>
                                 <httpCode>500</httpCode>
