@@ -39,7 +39,8 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
     uiGmapGoogleMapApiProvider.configure({
         key: 'AIzaSyB3JGdwrXd_unNoKWm8wLWzWO2NTjMZuHA',
         v: '3.17',
-        libraries: 'weather,geometry,visualization'
+        libraries: 'weather,geometry,visualization',
+        language: 'ru'
     });
 });
 
