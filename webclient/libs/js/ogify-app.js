@@ -89,32 +89,80 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
 
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi,
                                                      Order, myAddress, ClickedOrder) {
-    $scope.currentUserOrders = Order.getMyOrders();
-    $scope.showingOrders = $scope.currentUserOrders;
-
-    $scope.current_active = "my";
-
+    $scope.pageSize = 7;
+    $scope.pagesInBar = 9;
+    
+    goToMyOrders = function() {
+        Order.getMyOrders().$promise.then(function(data){
+            $scope.currentUserOrders = data;
+            $scope.showingOrders = data;
+            $scope.totalPages = window.Math.ceil(data.length / $scope.pageSize);
+            $scope.currentActive = "my";
+            $scope.page = 0;
+            if ($scope.totalPages < $scope.pagesInBar){
+                $scope.pages = _.range($scope.totalPages);
+            } else {
+                $scope.pages = _.range($scope.pagesInBar);
+            }
+        });
+    }
+    
+    goToNearOrders = function(){
+        Order.getNearMe($scope.map.center).$promise.then(function(data){
+            $scope.currentUserOrders = data;
+            $scope.showingOrders = data;
+            $scope.totalPages = window.Math.ceil(data.length / $scope.pageSize);
+            $scope.currentActive = "near";
+            $scope.page = 0;
+            if ($scope.totalPages < $scope.pagesInBar){
+                $scope.pages = _.range($scope.totalPages);
+            } else {
+                $scope.pages = _.range($scope.pagesInBar);
+            }
+        });
+    }
+    
+    goToMyOrders();
+    
     $scope.setClickedOrder = function(order){
         ClickedOrder.set(order);
     };
-
+    
+    $scope.previousPage = function(){
+        if ($scope.page > 0) {
+            $scope.page -= 1;
+            if ($scope.page + 1 == $scope.pages[0]) {
+                Math = window.Math;
+                $scope.pages = _.range(Math.floor($scope.page / $scope.pagesInBar), 
+                                       Math.min(Math.floor($scope.page / $scope.pagesInBar)+$scope.pagesInBar,
+                                           $scope.totalPages));
+            }
+        }
+    };
+    
+    $scope.nextPage = function(){
+        if ($scope.page < $scope.totalPages - 1) {
+            $scope.page += 1;
+            if ($scope.page - 1 == $scope.pages[$scope.pages.length-1]) {
+                $scope.pages = _.range($scope.page,
+                                       window.Math.min($scope.page + $scope.pagesInBar, $scope.totalPages));
+            }
+        };
+    };
+    
+    $scope.setPage = function(i){
+        $scope.page = i;
+    };
+    
     $scope.orderGroups = [{
         name: 'near',
         value: 'Все заказы',
-        orderViewModeChanged: function() {
-            $scope.current_active = "near";
-            $scope.showingOrders = Order.getNearMe($scope.map.center);
-        }
+        orderViewModeChanged: goToNearOrders
     }, {
         name: 'my',
         value: 'Мои заказы',
-        orderViewModeChanged: function() {
-            $scope.current_active = "my";
-            $scope.showingOrders = Order.getMyOrders();
-        }
+        orderViewModeChanged:goToMyOrders
     }];
-
-    // $scope.orderGroups
 
     $rootScope.map = {
         center: { latitude: 55.7, longitude: 37.6 },
