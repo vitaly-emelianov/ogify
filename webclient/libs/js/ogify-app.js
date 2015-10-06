@@ -97,7 +97,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
             $scope.currentUserOrders = data;
             $scope.showingOrders = data;
             $scope.totalPages = window.Math.ceil(data.length / $scope.pageSize);
-            $scope.current_active = "my";
+            $scope.currentActive = "my";
             $scope.page = 0;
             if ($scope.totalPages < $scope.pagesInBar){
                 $scope.pages = _.range($scope.totalPages);
@@ -112,7 +112,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
             $scope.currentUserOrders = data;
             $scope.showingOrders = data;
             $scope.totalPages = window.Math.ceil(data.length / $scope.pageSize);
-            $scope.current_active = "near";
+            $scope.currentActive = "near";
             $scope.page = 0;
             if ($scope.totalPages < $scope.pagesInBar){
                 $scope.pages = _.range($scope.totalPages);
@@ -127,25 +127,25 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
     $scope.setClickedOrder = function(order){
         ClickedOrder.set(order);
     };
-
+    
     $scope.previousPage = function(){
         if ($scope.page > 0) {
-            if ($scope.page != $scope.pages[0]) {
-                $scope.page -= 1;
-            } else {
-                $scope.page -= 1;
-                $scope.pages = _.range($scope.page - $scope.page % $scope.pagesInBar, $scope.page - $scope.page % $scope.pagesInBar + $scope.pagesInBar);
+            $scope.page -= 1;
+            if ($scope.page + 1 == $scope.pages[0]) {
+                Math = window.Math;
+                $scope.pages = _.range(Math.floor($scope.page / $scope.pagesInBar), 
+                                       Math.min(Math.floor($scope.page / $scope.pagesInBar)+$scope.pagesInBar,
+                                           $scope.totalPages));
             }
         }
     };
     
     $scope.nextPage = function(){
         if ($scope.page < $scope.totalPages - 1) {
-            if ($scope.page != $scope.pages[$scope.pages.length-1]) {
-                $scope.page += 1;
-            } else {
-                $scope.page += 1;
-                $scope.pages = _.range($scope.page, window.Math.min($scope.page + $scope.pagesInBar, $scope.totalPages));
+            $scope.page += 1;
+            if ($scope.page - 1 == $scope.pages[$scope.pages.length-1]) {
+                $scope.pages = _.range($scope.page,
+                                       window.Math.min($scope.page + $scope.pagesInBar, $scope.totalPages));
             }
         };
     };

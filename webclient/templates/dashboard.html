@@ -27,7 +27,7 @@
                 <div class="col-md-8 col-sm-8" style="text-align:center">
                     <div class="btn-group" role="group">
                         <button ng-repeat="group in orderGroups" 
-                                ng-class="{'active':group.name == current_active}" 
+                                ng-class="{'active':group.name == currentActive}" 
                                 ng-click="group.orderViewModeChanged()" 
                                 class="btn btn-default">
                                {{group.value}}
@@ -60,7 +60,12 @@
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <li ng-repeat="i in pages" ng-class="{true:'active', false:''}[i == page]"><a ng-click="setPage(i)">{{i+1}}</a></li>
+            <li ng-repeat="i in pages" ng-class="{true:'active', false:''}[i == page]">
+                <a ng-click="setPage(i)">
+                    {{i+1}}
+                </a>
+            </li>
+            </li>
             <li>
                 <a aria-label="Next" ng-click="nextPage()">
                     <span aria-hidden="true">&raquo;</span>
