@@ -16,12 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
- * Created by melges.morgen on 15.02.15.
+ * Main authenticate interface
+ *
+ * @author Morgen Matvey
  */
 @Path("/auth")
 @Produces(MediaType.APPLICATION_JSON)
@@ -53,7 +54,9 @@ public class AuthResource {
     /**
      * Method for simplify checking auth status from client side, return 200 OK if user authenticated,
      * or 401 Unauthorized (Error will raised by AuthFilter).
-
+     *
+     * @summary Check authentication status of client.
+     *
      * @return always return empty OK Response.
      */
     @Path("/isAuthenticated")
@@ -62,6 +65,15 @@ public class AuthResource {
         return Response.ok().build();
     }
 
+    /**
+     * Method return url which must be used for authentication.
+     *
+     * @summary Generate authenticate url.
+     *
+     * @param uriInfo context parameter with uri.
+     * @param socialNetwork social network which will be used for authentication.
+     * @return authentication url.
+     */
     @GET
     @Path("/getRequestUri")
     @PermitAll
@@ -87,11 +99,10 @@ public class AuthResource {
     }
 
     /**
-     * @title Authenticate client
-     *
      * Authenticate client redirected from social network. This is endpoint (redirect url should point to this method)
      * for OAuth2 protocol.
      *
+     * @summary Authenticate client
      * @param code secret code returned by social network.
      * @param socialNetwork should show which social network used for authentication.
      * @param request request from context.

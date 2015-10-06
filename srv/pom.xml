@@ -176,6 +176,7 @@
                             <location>
                                 ${project.build.directory}/${project.artifactId}-${project.version}/docs
                             </location>
+                            <initialCollapseLevel>2</initialCollapseLevel>
                         </html>
                     </output>
                     <license>
