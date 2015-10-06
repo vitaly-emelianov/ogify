@@ -1,5 +1,6 @@
 package net.ogify.rest.resources;
 
+import com.qmino.miredot.annotations.ReturnType;
 import net.ogify.database.entities.SocialNetwork;
 import net.ogify.engine.secure.AuthController;
 import net.ogify.engine.vkapi.VkAuth;
@@ -50,8 +51,20 @@ public class AuthResource {
     @CookieParam(value = AuthController.USER_ID_COOKIE_NAME)
     private Long userId;
 
-    @Path("/getRequestUri")
+    /**
+     * Method for simplify checking auth status from client side, return 200 OK if user authenticated,
+     * or 401 Unauthorized (Error will raised by AuthFilter).
+
+     * @return always return empty OK Response.
+     */
+    @Path("/isAuthenticated")
     @GET
+    public Response isAuthenticated() {
+        return Response.ok().build();
+    }
+
+    @GET
+    @Path("/getRequestUri")
     @PermitAll
     public SNRequestUri getRequestUri(@Context UriInfo uriInfo,
                                       @NotNull @QueryParam("sn") SocialNetworkParam socialNetwork) {
@@ -75,24 +88,26 @@ public class AuthResource {
     }
 
     /**
-     * Method for simplify checking auth status from client side, return 200 OK if user authenticated,
-     * or 401 Unauthorized (Error will raised by AuthFilter).
-
-     * @return always return empty OK Response.
+     * @title Authenticate client
+     *
+     * Authenticate client redirected from social network. This is endpoint (redirect url should point to this method)
+     * for OAuth2 protocol.
+     *
+     * @param code secret code returned by social network.
+     * @param socialNetwork should show which social network used for authentication.
+     * @param request request from context.
+     * @return response which sets cookie and redirect client to client application.
+     * @throws VkSideError if there error returned from vk on authentication process.
+     * @throws URISyntaxException on error in producing redirect URI
      */
-    @Path("/isAuthenticated")
-    @GET
-    public Response isAuthenticated() {
-        return Response.ok().build();
-    }
-
     @GET
     @PermitAll
     @Consumes(MediaType.WILDCARD)
+    @ReturnType("java.lang.Void")
     public Response auth(
             @NotEmpty @QueryParam("code") String code,
             @NotNull @QueryParam("state") SocialNetworkParam socialNetwork,
-            @Context HttpServletRequest request) throws MalformedURLException, VkSideError, URISyntaxException {
+            @Context HttpServletRequest request) throws VkSideError, URISyntaxException {
         if(socialNetwork.getValue() == SocialNetwork.Other)
             throw new WebApplicationException("sn must be vk or facebook", Response.Status.BAD_REQUEST);
         String uri = request.getRequestURL().toString();
@@ -105,7 +120,7 @@ public class AuthResource {
         NewCookie sessionIdCookie = new NewCookie(AuthController.SESSION_COOKIE_NAME, sessionSecret, "/", null,
                 null, 2629744, false); // Valid for a month
 
-        return Response.temporaryRedirect(new URI("/client"))
+        return Response.seeOther(new URI("/client"))
                 .cookie(snIdCookie)
                 .cookie(sessionIdCookie)
                 .build();
