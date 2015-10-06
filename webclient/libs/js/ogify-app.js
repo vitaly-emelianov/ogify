@@ -90,29 +90,44 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi,
                                                      Order, myAddress, ClickedOrder) {
     $scope.pageSize = 6;
-    $scope.page = 1;
+    $scope.page = 0;
     
     $scope.currentUserOrders = Order.getMyOrders();
     $scope.showingOrders = $scope.currentUserOrders;
     $scope.current_active = "my";
 
-    $scope.totalPages = 9;
+    $scope.totalPages = 5;
+    $scope.pagesInBar = 3;
     
-    $scope.pages = _.range($scope.totalPages);
+    if ($scope.totalPages < $scope.pagesInBar){
+        $scope.pages = _.range($scope.totalPages);
+    } else {
+        $scope.pages = _.range($scope.pagesInBar);
+    }
 
     $scope.setClickedOrder = function(order){
         ClickedOrder.set(order);
     };
 
     $scope.previousPage = function(){
-        if ($scope.page > 1) {
-            $scope.page -= 1;
-        };
+        if ($scope.page > 0) {
+            if ($scope.page != $scope.pages[0]) {
+                $scope.page -= 1;
+            } else {
+                $scope.page -= 1;
+                $scope.pages = _.range($scope.page - $scope.page % $scope.pagesInBar, $scope.page - $scope.page % $scope.pagesInBar + $scope.pagesInBar);
+            }
+        }
     };
     
     $scope.nextPage = function(){
-        if ($scope.page < $scope.totalPages) {
-            $scope.page += 1;
+        if ($scope.page < $scope.totalPages - 1) {
+            if ($scope.page != $scope.pages[$scope.pages.length-1]) {
+                $scope.page += 1;
+            } else {
+                $scope.page += 1;
+                $scope.pages = _.range($scope.page, window.Math.min($scope.page + $scope.pagesInBar, $scope.totalPages));
+            }
         };
     };
     

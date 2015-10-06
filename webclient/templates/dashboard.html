@@ -43,7 +43,7 @@
                 data-target="#showOrderModal"
                 class="order-list list-group-item"
                 ng-click="setClickedOrder(showingOrders[$index])"
-                ng-repeat="order in showingOrders.slice(pageSize*(page-1), pageSize*page)">
+                ng-repeat="order in showingOrders.slice(pageSize*page, pageSize*(page+1))">
                 <h4 class="list-group-item-heading">
                     Заказ №{{order.id}} от {{order.owner.fullName}}
                 </h4>
@@ -60,7 +60,7 @@
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <li ng-repeat="i in pages" ng-class="{true:'active', false:''}[i+1 == page]"><a ng-click="setPage(i+1)">{{i+1}}</a></li>
+            <li ng-repeat="i in pages" ng-class="{true:'active', false:''}[i == page]"><a ng-click="setPage(i)">{{i+1}}</a></li>
             <li>
                 <a aria-label="Next" ng-click="nextPage()">
                     <span aria-hidden="true">&raquo;</span>
