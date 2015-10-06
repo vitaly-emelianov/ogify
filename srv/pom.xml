@@ -115,6 +115,14 @@
                                 client
                             </targetPath>
                         </resource>
+                        <resource>
+                            <directory>
+                                ${project.build.directory}/miredot
+                            </directory>
+                            <targetPath>
+                                doc
+                            </targetPath>
+                        </resource>
                     </webResources>
                     <archive>
                         <manifest>
@@ -165,7 +173,9 @@
                         <title>OGIFY REST API Reference ${project.version}</title>
                         <html>
                             <baseUrl>http://dev.ogify.net/rest</baseUrl>
-                            <location>${project.build.directory}/${project.version}/docs</location>
+                            <location>
+                                ${project.build.directory}/${project.artifactId}-${project.version}/docs
+                            </location>
                         </html>
                     </output>
                     <license>
@@ -308,7 +318,6 @@
             <artifactId>miredot-annotations</artifactId>
             <version>1.4.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
