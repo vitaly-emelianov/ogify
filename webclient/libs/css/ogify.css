@@ -34,6 +34,13 @@
     height: -moz-calc(100vh - 120px);
 }
 
+.new-order-fileds { 
+    resize:vertical;
+}
+
+.profile-avatar {
+    text-align: center;
+}
 /*.order-list-content {
     overflow-y: scroll;
 }*/

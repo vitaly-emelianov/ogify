@@ -8,8 +8,10 @@ import net.ogify.database.entities.Order;
 import net.ogify.database.entities.Order.OrderStatus;
 import net.ogify.database.entities.OrderItem;
 import net.ogify.database.entities.User;
-import net.ogify.engine.friends.FriendProcessor;
+import net.ogify.engine.friends.FriendService;
 import net.ogify.engine.secure.exceptions.ForbiddenException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
@@ -23,13 +25,26 @@ import java.util.concurrent.ExecutionException;
 /**
  * Created by melges on 24.02.2015.
  */
+@Service
 public class OrderProcessor {
+    @Autowired
+    OrderController orderController;
+
+    @Autowired
+    UserController userController;
+
+    @Autowired
+    FeedbackController feedbackController;
+
+    @Autowired
+    FriendService friendService;
+
     /**
      * Method creates order on behalf  of the specified user.
      * @param userId users id on behalf order should be created
      * @param order order which should be created.
      */
-    public static void createOrder(Long userId, Order order) {
+    public void createOrder(Long userId, Order order) {
         order.setId(null); // It is a new order, id must be null
         order.makeCreatedNow(); // It was created just now
         for(OrderItem item: order.getItems()) {
@@ -38,8 +53,8 @@ public class OrderProcessor {
         }
 
         // Set correct owner
-        order.setOwner(UserController.getUserById(userId));
-        OrderController.saveOrUpdate(order);
+        order.setOwner(userController.getUserById(userId));
+        orderController.saveOrUpdate(order);
     }
 
     /**
@@ -49,10 +64,10 @@ public class OrderProcessor {
      * @return requested order or null if there are no order with specified id, or user haven't access to them.
      * @throws ExecutionException on any exception thrown while attempting to get results.
      */
-    public static Order getOrderById(Long userId, Long orderId) throws ExecutionException {
-        Set<Long> friends = FriendProcessor.getUserFriendsIds(userId);
-        Set<Long> friendsOfFriends = FriendProcessor.getUserExtendedFriendsIds(userId);
-        return OrderController.getOrderByIdFiltered(userId, orderId, friends, friendsOfFriends);
+    public Order getOrderById(Long userId, Long orderId) throws ExecutionException {
+        Set<Long> friends = friendService.getUserFriendsIds(userId);
+        Set<Long> friendsOfFriends = friendService.getUserExtendedFriendsIds(userId);
+        return orderController.getOrderByIdFiltered(userId, orderId, friends, friendsOfFriends);
     }
 
     /**
@@ -63,12 +78,12 @@ public class OrderProcessor {
      * @return visible for specified user orders.
      * @throws ExecutionException on any exception thrown while attempting to get results.
      */
-    public static Set<Order> getNearestOrders(Double latitude, Double longitude, Long userId)
+    public Set<Order> getNearestOrders(Double latitude, Double longitude, Long userId)
             throws ExecutionException {
-        Set<Long> friends = FriendProcessor.getUserFriendsIds(userId);
-        Set<Long> friendsOfFriends = FriendProcessor.getUserExtendedFriendsIds(userId);
-        return new HashSet<Order>(
-                OrderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends, latitude, longitude));
+        Set<Long> friends = friendService.getUserFriendsIds(userId);
+        Set<Long> friendsOfFriends = friendService.getUserExtendedFriendsIds(userId);
+        return new HashSet<>(
+                orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends, latitude, longitude));
     }
 
     /**
@@ -77,10 +92,10 @@ public class OrderProcessor {
      * @param orderId id of changed order
      * @param status status which order should have after change
      */
-    public static void changeOrderStatus(Long changerUserId, Long orderId, OrderStatus status) {
-        User changer = UserController.getUserById(changerUserId);
+    public void changeOrderStatus(Long changerUserId, Long orderId, OrderStatus status) {
+        User changer = userController.getUserById(changerUserId);
         assert changer != null;
-        Order order = OrderController.getOrderById(orderId);
+        Order order = orderController.getOrderById(orderId);
 
 
         if(order == null) // We can't work if order not founded
@@ -115,7 +130,7 @@ public class OrderProcessor {
         }
 
         // And finally, if we don't have errors save order
-        OrderController.saveOrUpdate(order);
+        orderController.saveOrUpdate(order);
     }
 
     /**
@@ -125,8 +140,8 @@ public class OrderProcessor {
      * @param maxResults the maximum number of results to retrieve.
      * @return users orders.
      */
-    public static List<Order> getUsersOrders(Long userId, int firstResult, int maxResults) {
-        return OrderController.getUsersOrders(userId, firstResult, maxResults);
+    public List<Order> getUsersOrders(Long userId, int firstResult, int maxResults) {
+        return orderController.getUsersOrders(userId, firstResult, maxResults);
     }
 
     /**
@@ -136,12 +151,12 @@ public class OrderProcessor {
      * @param rate how he's rates.
      * @param comment additional comment for rate.
      */
-    public static void rateOrderParty(Long userId, Long orderId, double rate, String comment) {
+    public void rateOrderParty(Long userId, Long orderId, double rate, String comment) {
         if(rate > 5 || rate < 0)
             throw new BadRequestException("Rate must be in [0, 5] range");
 
-        User userWho = UserController.getUserById(userId);
-        Order relatedOrder = OrderController.getUsersOrder(userId, orderId);
+        User userWho = userController.getUserById(userId);
+        Order relatedOrder = orderController.getUsersOrder(userId, orderId);
 
         // Check all conditions for rate order execution
         if(relatedOrder == null) // Check that order with specified id is presented
@@ -149,7 +164,7 @@ public class OrderProcessor {
         if(relatedOrder.getStatus() != OrderStatus.Completed) // Check that order is completed
             throw new WebApplicationException("You can't rate user while order isn't completed",
                     Response.Status.FORBIDDEN);
-        if(OrderController.isOrderRatedBy(relatedOrder, userWho)) // Check that user didn't rate order already
+        if(orderController.isOrderRatedBy(relatedOrder, userWho)) // Check that user didn't rate order already
             throw new WebApplicationException("You can't rate order again", Response.Status.GONE);
 
 
@@ -164,6 +179,6 @@ public class OrderProcessor {
             feedback = new Feedback(comment, userWho, userWhom, relatedOrder, rate);
         }
 
-        FeedbackController.save(feedback);
+        feedbackController.save(feedback);
     }
 }

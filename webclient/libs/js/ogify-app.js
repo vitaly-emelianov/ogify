@@ -1,16 +1,37 @@
-/**
+﻿/**
  * Created by melge on 12.07.2015.
  */
 
 var ogifyApp = angular.module('ogifyApp', ['ogifyServices', 'ngRoute', 'ngCookies', 'uiGmapgoogle-maps']);
 
+ogifyApp.service('myAddress', function () {
+    var address = {
+        latitude: 0.0,
+        longitude: 0.0,
+        plainAddress: ''
+    };
+    return {
+        getAddress: function () {
+            return address;
+        },
+        setAddress: function(textAddress, latitude, longitude) {
+            address.plainAddress = textAddress;
+            address.latitude = latitude;
+            address.longitude = longitude;
+        }
+    };
+});
+
 ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
     $routeProvider
         .when('/current', {
-            templateUrl: 'templtes/current.html'
+            templateUrl: 'templates/current.html'
         }).when('/dashboard', {
             templateUrl: 'templates/dashboard.html',
             controller: 'DashboardController'
+        }).when('/profile', {
+            templateUrl: 'templates/user-profile.html',
+            controller: 'ProfilePageController'
         }).otherwise({
             redirectTo: '/dashboard'
         });
@@ -18,13 +39,15 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
     uiGmapGoogleMapApiProvider.configure({
         key: 'AIzaSyB3JGdwrXd_unNoKWm8wLWzWO2NTjMZuHA',
         v: '3.17',
-        libraries: 'weather,geometry,visualization'
+        libraries: 'weather,geometry,visualization',
+        language: 'ru'
     });
 });
 
 ogifyApp.run(function ($rootScope, $http) {
     $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
-    $rootScope.createOrderTemplateUri = 'templates/new-order.html'
+    $rootScope.createOrderTemplateUri = 'templates/new-order.html';
+    $rootScope.showOrderTemplateUri = 'templates/order-details.html'
 
     $rootScope.$watch(function () {
         return $http.pendingRequests.length > 0;
@@ -50,29 +73,30 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
     };
 
     $scope.logoutSN = function () {
-        $cookies.remove("JSESSIONID");
-        $cookies.remove("ogifySessionSecret");
-        $cookies.remove("sID");
+        cookiesPath = {path : "/"};
+        $cookies.remove("JSESSIONID", cookiesPath);
+        $cookies.remove("ogifySessionSecret", cookiesPath);
+        $cookies.remove("sId", cookiesPath);
 
         $window.location.reload();
     };
 
-    $scope.createOrder = function() {
-        var neworder = {
-            svekla : 'heyhey',
-            morkov : 'nounou'
-        };
-        Order.create(neworder);
+    $scope.updateOrderData = function() {
     };
 
     $scope.user = UserProfile.getCurrentUser();
 });
 
-ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi, Order) {
+ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi,
+                                                     Order, myAddress, ClickedOrder) {
     $scope.currentUserOrders = Order.getMyOrders();
     $scope.showingOrders = $scope.currentUserOrders;
 
     $scope.current_active = "my";
+
+    $scope.setClickedOrder = function(order){
+        ClickedOrder.set(order);
+    };
 
     $scope.orderGroups = [{
         name: 'near',
@@ -95,8 +119,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
     $rootScope.map = {
         center: { latitude: 55.7, longitude: 37.6 },
         zoom: 10,
-        control: {},
-        center_address: ""
+        control: {}
     };
 
     uiGmapGoogleMapApi.then(function(maps) {
@@ -107,9 +130,14 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
 
                 var geocoder = new google.maps.Geocoder();
                 var myposition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                geocoder.geocode({'latLng': myposition},function(data,status) {
-                    if(status == google.maps.GeocoderStatus.OK)
-                        $scope.map.center_address = data[0].formatted_address; //this is the full address
+                geocoder.geocode({'latLng': myposition},function(data, status) {
+                    if(status == google.maps.GeocoderStatus.OK) {
+                        myAddress.setAddress(
+                            data[0].formatted_address,
+                            position.coords.latitude,
+                            position.coords.longitude
+                        );
+                    }
                 });
 
                 $scope.map.control.refresh($scope.map.center);
@@ -128,14 +156,19 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
                     },
                     events: {
                         dragend: function (marker, eventName, args) {
-                            var lat = marker.getPosition().lat();
-                            var lon = marker.getPosition().lng();
+                            var latitude = marker.getPosition().lat();
+                            var longitude = marker.getPosition().lng();
 
                             var geocoder = new google.maps.Geocoder();
-                            var myposition = new google.maps.LatLng(lat, lon);
+                            var myposition = new google.maps.LatLng(latitude, longitude);
                             geocoder.geocode({'latLng': myposition},function(data,status) {
-                                if(status == google.maps.GeocoderStatus.OK)
-                                    $scope.map.center_address = data[0].formatted_address;
+                                if(status == google.maps.GeocoderStatus.OK) {
+                                    myAddress.setAddress(
+                                        data[0].formatted_address,
+                                        latitude,
+                                        longitude
+                                    );
+                                }
                             });
                         }
                     },
@@ -146,14 +179,15 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
     });
 });
 
-ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order) {
+ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order, myAddress) {
     $scope.order = {
         expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
         expireTime: $filter('date')(new Date(), 'hh:mm'),
         reward: '',
-        address: $rootScope.map.center_address,
-        namespace: 'Friends'
-
+        address: myAddress.getAddress(),
+        namespace: 'FriendsOfFriends',
+        description:'',
+        items: [{}]
     };
 
     $scope.chooseTime = function() {
@@ -161,17 +195,21 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         input.clockpicker('show');
     };
 
+    $scope.addToList = function() {
+        $scope.order.items.push({});
+    };
+
     $scope.createOrder = function() {
         Order.create({
-            items: [],
+            items: $scope.order.items,
             expireIn: parseDate($scope.order.expireDate, $scope.order.expireTime).getTime(),
-            latitude: $rootScope.map.center.latitude,
-            longitude: $rootScope.map.center.longitude,
+            latitude: myAddress.getAddress().latitude,
+            longitude: myAddress.getAddress().longitude,
             reward: $scope.order.reward,
             status: 'New',
             owner: null,
             executor: null,
-            address: $scope.order.address,
+            address: $scope.order.address.plainAddress,
             doneAt: null,
             id: null,
             createdAt: null,
@@ -179,9 +217,56 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             description: $scope.order.description
         }, function(successResponse) { // success
             angular.element('#createOrderModal').modal('hide');
+            
+            $scope.order = {
+                expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
+                expireTime: $filter('date')(new Date(), 'hh:mm'),
+                reward: '',
+                address: myAddress.getAddress(),
+                namespace: 'FriendsOfFriends',
+                description:'',
+                items: [{}]
+            };
         }, function(errorResponse) { // error
             // TODO: Add error handler
         });
     };
 
+});
+
+ogifyApp.factory('ClickedOrder', function(){
+    var ClickedOrder = {};
+    ClickedOrder.order = {description: null, reward: null, address: null, expireIn: null};
+    ClickedOrder.set = function(order){
+        ClickedOrder.order = order;
+    };
+    return ClickedOrder;
+});
+
+ogifyApp.controller('ShowOrderModalController', function ($scope, ClickedOrder, Order) {
+    $scope.getDescription = function(){
+        return ClickedOrder.order.description;
+    };
+    $scope.getAddress = function(){
+        return ClickedOrder.order.address;
+    };
+    $scope.getReward = function(){
+        return ClickedOrder.order.reward;
+    };
+    $scope.getExpireDate = function(){
+        var date = new Date(ClickedOrder.order.expireIn);
+        var months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", 
+                      "сентября", "октября", "ноября", "декабря"];
+        return [date.getDate(), months[date.getMonth()], date.getFullYear()].join(' ');
+    };
+    $scope.getExpireTime = function(){
+        function toTwoDigital(number) {
+            if (number < 10) {
+                number = "0" + number;
+            }
+            return number;
+        }
+        var date = new Date(ClickedOrder.order.expireIn);
+        return [toTwoDigital(date.getHours()), toTwoDigital(date.getMinutes())].join(':');
+    };
 });

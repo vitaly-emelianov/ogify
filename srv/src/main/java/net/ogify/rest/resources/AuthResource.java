@@ -28,7 +28,6 @@ import java.net.URISyntaxException;
 @Consumes(MediaType.APPLICATION_JSON)
 @Component
 public class AuthResource {
-
     @Autowired
     VkAuth vkAuth;
 

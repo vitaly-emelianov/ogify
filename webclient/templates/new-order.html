@@ -1,4 +1,4 @@
-<div class="modal fade" id="createOrderModal" tabindex="-1" role="dialog" aria-labelledby="createOrderLabel">
+﻿<div class="modal fade" id="createOrderModal" tabindex="-1" role="dialog" aria-labelledby="createOrderLabel">
     <div class="modal-dialog" role="document" ng-controller="CreateOrderModalController">
         <div class="modal-content">
             <div class="modal-header">
@@ -11,14 +11,14 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="comment">Описание заказа:</label>
-                    <textarea class="form-control" rows="3" id="comment" ng-model="order.description"></textarea>
+                    <textarea class="form-control new-order-fileds" rows="3" id="comment" ng-model="order.description"></textarea>
                 </div>
 
                 <div class="form-group">
                     <div class="row">
                         <div class="col-md-12">
                             <label for="order_cost">Вознаграждение:</label>
-                            <textarea class="form-control" rows="3" id="order_cost" ng-model="order.reward"></textarea>
+                            <textarea class="form-control new-order-fileds" rows="3" id="order_cost" ng-model="order.reward"></textarea>
                         </div>
                     </div>
                 </div>
@@ -56,34 +56,35 @@
                 </div>
                 <div class="form-group">
                     <label for="additemlistel">Добавить товар:</label>
-
                     <div class="row input-group double-input">
-                        <div class="col-md-8 col-md-offset-0" id='additemlistel'>
-                            <input type="text" class="form-control" placeholder="Товар">
-                        </div>
-                        <div class="col-md-offset-0 col-md-4">
-                            <div class='input-group' id="itemPrice">
-                                <input type="text" class="form-control" placeholder="Цена">
-                                <span onclick="addToList();" class="input-group-addon">
-                                    <span class="glyphicon glyphicon-plus"></span>
-                                </span>
+			<div ng-repeat="item in order.items">
+                	    <div class="col-md-7">
+                                <input type="text" class="form-control" placeholder="Товар" ng-model="item.comment">
                             </div>
-                        </div>
+                            <div class="col-md-4">
+                                <div class='input-group'>
+                                    <input type="text" class="form-control" placeholder="Цена" ng-model="item.expectedCost">
+                                </div>
+			    </div>
+            		</div>
+			<div class="col-md-1">
+			    <span ng-click="addToList()" class="btn btn-default">
+                            	<span class="glyphicon glyphicon-plus"></span>
+                            </span>
+			</div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <ul class="todo-list" id="itemlist">
-
-                    </ul>
+                    <ul class="todo-list" id="itemlist"></ul>
                 </div>
                 <div class="form-group">
                     <label for="address">Адрес:</label>
                     <input class="form-control" type="text" id="address"
-                            ng-model="order.address"/>
+                            ng-model="order.address.plainAddress"/>
                 </div>
                 <div class="form-group">
                     <label for="namespace">Кто может выполнить:</label>
-                    <select id="namespace" class="form-control">
+                    <select id="namespace" class="form-control" ng-model="order.namespace">
                         <option value="Private">Отдать другу</option>
                         <option value="Friends">Все друзья</option>
                         <option value="FriendsOfFriends" selected>Все друзья и друзья друзей</option>

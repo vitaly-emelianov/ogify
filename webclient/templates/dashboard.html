@@ -38,11 +38,17 @@
                 </div>
             </div>
         </div>
-
         <div class="panel-body">
             <div class="list-group">
-                <a id="{{order.id}}" href="#" class="order-list list-group-item" ng-repeat="order in showingOrders">
-                    <h4 class="list-group-item-heading">Заказ №{{order.id}} от {{order.owner.fullName}}</h4>
+                <a id="{{order.id}}" 
+                    data-toggle="modal" 
+                    data-target="#showOrderModal"
+                    class="order-list list-group-item"
+                    ng-click="setClickedOrder(showingOrders[$index])"
+                    ng-repeat="order in showingOrders">
+                    <h4 class="list-group-item-heading">
+                        Заказ №{{order.id}} от {{order.owner.fullName}}
+                    </h4>
                     <p class="list-group-item-text">{{order.description}}</p>
                 </a>
             </div>
