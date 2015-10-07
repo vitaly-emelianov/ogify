@@ -66,6 +66,12 @@ public class OrderResource {
         return orderController.getOrderById(orderId).getItems();
     }
 
+    /**
+     * Create new order.
+     *
+     * @param order order body.
+     * @return id of created order.
+     */
     @POST
     public Long createNewOrder(Order order) {
         return orderProcessor.createOrder(userId, order);
