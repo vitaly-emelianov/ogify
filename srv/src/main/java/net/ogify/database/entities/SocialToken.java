@@ -1,5 +1,7 @@
 package net.ogify.database.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -19,6 +21,7 @@ import java.util.Date;
                 "and token.expireIn > CURRENT_TIMESTAMP order by token.tokenId desc")
 })
 @XmlAccessorType(XmlAccessType.NONE)
+@JsonIgnoreProperties
 public class SocialToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
