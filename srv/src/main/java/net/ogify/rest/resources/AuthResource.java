@@ -20,7 +20,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
- * Main authenticate interface
+ * Main authentication interface
  *
  * @author Morgen Matvey
  */
@@ -36,7 +36,7 @@ public class AuthResource {
     AuthController authController;
 
     /**
-     * Field storing the session id of the user if the user has no session it is null.
+     * Field is storing the session id of the user if the user has no session it is null.
      *
      * Can be null only in permitted for all methods.
      */
@@ -44,7 +44,7 @@ public class AuthResource {
     private String sessionSecret;
 
     /**
-     * Field storing the vk id of the user if the user not authorized it is null.
+     * Field is storing the vk id of the user if the user not authorized it is null.
      *
      * Can be null only in permitted for all methods.
      */
@@ -52,15 +52,16 @@ public class AuthResource {
     private Long userId;
 
     /**
-     * Method for simplify checking auth status from client side, return 200 OK if user authenticated,
+     * Method for simplify checking auth status from client side, return 200 OK if user is authenticated,
      * or 401 Unauthorized (Error will raised by AuthFilter).
      *
-     * @summary Check authentication status of client.
+     * @summary Check authentication status of client
      *
      * @return always return empty OK Response.
      */
     @Path("/isAuthenticated")
     @GET
+    @ReturnType("java.lang.Void")
     public Response isAuthenticated() {
         return Response.ok().build();
     }
@@ -68,7 +69,7 @@ public class AuthResource {
     /**
      * Method return url which must be used for authentication.
      *
-     * @summary Generate authenticate url.
+     * @summary Generate authenticate url
      *
      * @param uriInfo context parameter with uri.
      * @param socialNetwork social network which will be used for authentication.

@@ -1,5 +1,7 @@
 package net.ogify.database.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.*;
@@ -140,6 +142,7 @@ public class Order {
     List<OrderItem> items = new ArrayList<OrderItem>();
 
     @OneToMany
+    @JsonIgnore
     List<Feedback> relatedFeedbacks;
 
     public boolean isUserOwner(User user) {

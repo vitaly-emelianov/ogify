@@ -177,6 +177,7 @@
                                 ${project.build.directory}/${project.artifactId}-${project.version}/docs
                             </location>
                             <initialCollapseLevel>2</initialCollapseLevel>
+                            <jsonDoc>Hidden</jsonDoc>
                         </html>
                     </output>
                     <license>
@@ -184,6 +185,21 @@
                         oUlg4alFGdEZqeVc4UWs1TlRSNFlJVU9JbUhadz09
                     </license>
                     <restModel>
+                        <restFramework>
+                            <name>jax-rs</name>
+                        </restFramework>
+                        <filter>
+                            <excludes>
+                                <exclude>net.ogify.database.entities.SocialToken</exclude>
+                            </excludes>
+                        </filter>
+                        <fieldVisibility>
+                            <GETTER>NONE</GETTER>
+                            <IS_GETTER>NONE</IS_GETTER>
+                            <SETTER>NONE</SETTER>
+                            <CREATOR>PUBLIC_ONLY</CREATOR>
+                            <FIELD>NON_PRIVATE</FIELD>
+                        </fieldVisibility>
                         <httpStatusCodes>
                             <httpStatusCode>
                                 <httpCode>200</httpCode>
@@ -201,7 +217,7 @@
                             <httpStatusCode>
                                 <httpCode>502</httpCode>
                                 <document>
-                                    explicit: java.rmi.RemoteException
+                                    explicit: java.rmi.RemoteException,net.ogify.engine.vkapi.exceptions.VkSideError
                                 </document>
                                 <defaultMessage>
                                     The remote system (e.g. vk) has failed to provide request.
