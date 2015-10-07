@@ -6,7 +6,9 @@ import net.ogify.database.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.TypedQuery;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -176,6 +178,17 @@ public class OrderController {
         try {
             em.getTransaction().begin();
             em.merge(order);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
+    public void save(Order order) {
+        EntityManager em = entityManagerService.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(order);
             em.getTransaction().commit();
         } finally {
             em.close();

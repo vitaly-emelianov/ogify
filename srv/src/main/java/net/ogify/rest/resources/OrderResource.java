@@ -67,8 +67,8 @@ public class OrderResource {
     }
 
     @POST
-    public void createNewOrder(Order order) {
-        orderProcessor.createOrder(userId, order);
+    public Long createNewOrder(Order order) {
+        return orderProcessor.createOrder(userId, order);
     }
 
 
