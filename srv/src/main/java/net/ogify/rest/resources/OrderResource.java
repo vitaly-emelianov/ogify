@@ -70,10 +70,10 @@ public class OrderResource {
      * Create new order.
      *
      * @param order order body.
-     * @return id of created order.
+     * @return created order.
      */
     @POST
-    public Long createNewOrder(Order order) {
+    public Order createNewOrder(Order order) {
         return orderProcessor.createOrder(userId, order);
     }
 
