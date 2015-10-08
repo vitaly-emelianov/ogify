@@ -1,9 +1,10 @@
 package net.ogify.database.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.util.*;
 
 /**
@@ -32,9 +33,11 @@ public class User {
     Long id;
 
     @Column(name = "facebook_id", nullable = true, unique = true)
+    @JsonIgnore
     Long facebookId;
 
     @Column(name = "vk_id", nullable = true, unique = true)
+    @JsonIgnore
     Long vkId;
 
     @Column(name = "fullName", nullable = false, unique = false)
@@ -54,23 +57,25 @@ public class User {
     Double ratingAsExecutor = 3.5;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Order> orders = new ArrayList<Order>();
+
+    @OneToMany(mappedBy = "executor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Order> tasks = new ArrayList<Order>();
+
+    @OneToMany(mappedBy = "who")
+    private List<Feedback> usersFeedbacks = new ArrayList<Feedback>();
+
+    @OneToMany(mappedBy = "whom")
+    private List<Feedback> feedbackAboutUser = new ArrayList<Feedback>();
+
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @MapKeyColumn(name = "session_secret",unique = true, updatable = false, insertable = false)
+    @JsonIgnore
     private Map<String, UserSession> sessions = new HashMap<String, UserSession>();
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    List<SocialToken> tokens = new ArrayList<SocialToken>();
-
-    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    List<Order> orders = new ArrayList<Order>();
-
-    @OneToMany(mappedBy = "executor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    List<Order> tasks = new ArrayList<Order>();
-
-    @OneToMany(mappedBy = "who")
-    List<Feedback> usersFeedbacks = new ArrayList<Feedback>();
-
-    @OneToMany(mappedBy = "whom")
-    List<Feedback> feedbackAboutUser = new ArrayList<Feedback>();
+    @JsonIgnore
+    private List<SocialToken> tokens = new ArrayList<SocialToken>();
 
     public User() {
 
@@ -121,7 +126,7 @@ public class User {
         this.fullName = fullname;
     }
 
-    @XmlTransient
+    @JsonIgnore
     public SocialToken getVkToken() {
         tokens.sort(new Comparator<SocialToken>() {
             @Override

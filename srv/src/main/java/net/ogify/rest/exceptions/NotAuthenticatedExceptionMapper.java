@@ -12,7 +12,7 @@ import javax.ws.rs.ext.Provider;
  * Created by melges on 18.12.14.
  */
 @Provider
-public class NotAuthorizedExceptionMapper implements ExceptionMapper<NotAuthenticatedException> {
+public class NotAuthenticatedExceptionMapper implements ExceptionMapper<NotAuthenticatedException> {
     @Override
     public Response toResponse(NotAuthenticatedException exception) {
         ErrorResponse response =

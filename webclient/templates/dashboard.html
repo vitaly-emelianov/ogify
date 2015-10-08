@@ -19,39 +19,57 @@
         </div>
     </div>
 </div>
-<div class="col-sm-8 col-md-4 ">
-    <div id="orders" class="panel panel-default current-orders-height">
+<div class="col-sm-8 col-md-4 current-orders-height">
+    <div id="orders" class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-4 col-sm-4">Текущие заказы</div>
                 <div class="col-md-8 col-sm-8" style="text-align:center">
                     <div class="btn-group" role="group">
                         <button ng-repeat="group in orderGroups" 
-                                ng-class="{'active':group.name == current_active}" 
+                                ng-class="{'active':group.name == currentActive}" 
                                 ng-click="group.orderViewModeChanged()" 
                                 class="btn btn-default">
                             {{group.value}}
                         </button>
-                        <!-- <button type="button" ng-click="orderViewModeChanged('near')" class="btn btn-default">Все заказы</button>
-                        <button type="button" ng-click="orderViewModeChanged('my')" class="btn btn-default">Мои заказы</button> -->
                     </div>
                 </div>
             </div>
         </div>
-        <div class="panel-body">
-            <div class="list-group">
-                <a href="#/dashboard" id="{{order.id}}" 
-                    data-toggle="modal" 
-                    data-target="#showOrderModal"
-                    class="list-group-item"
-                    ng-click="setClickedOrder(order)"
-                    ng-repeat="order in showingOrders | orderBy : '-id'">
-                    <h4 class="list-group-item-heading">
-                        Заказ №{{order.id}} от {{order.owner.fullName}}
-                    </h4>
-                    <p class="list-group-item-text">{{order.description}}</p>
-                </a>
-            </div>
+        <div class="list-group">
+            <a id="{{order.id}}" 
+                data-toggle="modal" 
+                data-target="#showOrderModal"
+                class="order-list list-group-item"
+                ng-click="setClickedOrder(order)"
+                ng-repeat="order in showingOrders.slice(pageSize*page, pageSize*(page+1)) | orderBy : '-id'">
+                <h4 class="list-group-item-heading">
+                    Заказ №{{order.id}} от {{order.owner.fullName}}
+                </h4>
+                <p class="list-group-item-text">{{order.description}}</p>
+            </a>
         </div>
     </div>
+</div>
+<div class="container-fluid" position="fixed" class="col-md-4s col-sm-8">
+    <nav align="center">
+        <ul class="pagination">
+            <li>
+                <a aria-label="Previous" ng-click="previousPage()">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li ng-repeat="i in pages" ng-class="{true:'active', false:''}[i == page]">
+                <a ng-click="setPage(i)">
+                    {{i+1}}
+                </a>
+            </li>
+            </li>
+            <li>
+                <a aria-label="Next" ng-click="nextPage()">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
