@@ -157,6 +157,10 @@ public class Order {
         return status == OrderStatus.Completed || status == OrderStatus.Canceled;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }

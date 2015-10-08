@@ -43,8 +43,10 @@ public class OrderProcessor {
      * Method creates order on behalf  of the specified user.
      * @param userId users id on behalf order should be created
      * @param order order which should be created.
+     *
+     * @return id of created order.
      */
-    public void createOrder(Long userId, Order order) {
+    public Long createOrder(Long userId, Order order) {
         order.setId(null); // It is a new order, id must be null
         order.makeCreatedNow(); // It was created just now
         for(OrderItem item: order.getItems()) {
@@ -54,7 +56,9 @@ public class OrderProcessor {
 
         // Set correct owner
         order.setOwner(userController.getUserById(userId));
-        orderController.saveOrUpdate(order);
+        orderController.save(order);
+
+        return order.getId();
     }
 
     /**
