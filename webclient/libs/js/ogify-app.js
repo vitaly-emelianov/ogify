@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Created by melge on 12.07.2015.
  */
 
@@ -294,6 +294,12 @@ ogifyApp.factory('ClickedOrder', function(){
 ogifyApp.controller('ShowOrderModalController', function ($scope, ClickedOrder, Order) {
     $scope.getDescription = function(){
         return ClickedOrder.order.description;
+    };
+    $scope.getOwnerName = function(){
+        return ClickedOrder.order.owner.fullName;
+    };
+    $scope.getOwnerPhotoUrl = function(){
+        return ClickedOrder.order.owner.photoUri;
     };
     $scope.getAddress = function(){
         return ClickedOrder.order.address;

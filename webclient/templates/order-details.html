@@ -10,39 +10,46 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="comment">Описание:</label>
                     <div class="row">
-                        <div class="col-md-12">{{getDescription()}}</div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="order_cost">Вознаграждение:</label>
-                    <div class="row">
-                        <div class="col-md-12">{{getReward()}}</div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="address">Адрес:</label>
-                    <div class="row">
-                        <div class="col-md-12">{{getAddress()}}</div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="expire_in_container">Актуально до:</label>
-                    <div class="row">
-                        <div class="col-md-12" id="expire_in_container">
+                        <div class="col-md-12">                            
                             <div class="row">
-                                <div class="col-md-4">
-                                    <p class="text-justify" rows="3"id="expire_in_time">
-                                        {{getExpireDate()}}
+                                <div class="col-md-6">                                
+                                    <label for="comment">Описание:</label>
+                                    <p class="text-justify">
+                                        {{getDescription()}}
                                     </p>
-                                </div>
-                                <div class="col-md-1">
-                                    <p class="text-justify" rows="3"id="expire_in_time">
-                                        {{getExpireTime()}}
+
+                                    <label for="order_cost">Вознаграждение:</label>
+                                    <p class="text-justify">
+                                        {{getReward()}}
                                     </p>
+
+                                    <label for="address">Адрес:</label>
+                                    <p class="text-justify">
+                                        {{getAddress()}}
+                                    </p>
+        
+                                    <label for="expire_in_container">Актуально до:</label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p class="text-justify" rows="3"id="expire_in_time">
+                                                {{getExpireDate()}}
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="text-justify" rows="3"id="expire_in_time">
+                                                {{getExpireTime()}}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="comment">Автор:</label>
+                                    <a href="#/profile/{{phone.id}}">{{getOwnerName()}}</a>
+                                    <a href="#/profile/{{phone.id}}" ><img ng-src="{{getOwnerPhotoUrl()}}" class="img-thumbnail"></a>
+                                </div>
+                            </div>                            
                         </div>
                     </div>
                 </div>
