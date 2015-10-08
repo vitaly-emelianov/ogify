@@ -272,13 +272,23 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             namespace: $scope.order.namespace,
             description: $scope.order.description
         };
-        var id = Order.create(new_order,
-           function(successResponse) { // success
-            angular.element('#createOrderModal').modal('hide');
-            $rootScope.$broadcast('createdNewOrderEvent');
-        }, function(errorResponse) { // error
-            var alert = {message: "Слишком длинное описание. Покороче?"};
-            $scope.alerts = [alert];
+        Order.create(new_order,
+            function(successResponse) {
+                angular.element('#createOrderModal').modal('hide');
+                $rootScope.$broadcast('createdNewOrderEvent');
+        },  function(errorResponse) {
+                var status = errorResponse.status;
+                var status_message = "";
+                switch(status) {
+                    case 400:
+                        // 400 error code response 
+                    case 415:
+                        // 415 error code response
+                    case 500:
+                        status_message = "Слишком длинное описание. Покороче?";
+                }
+                var alert = {message: status_message};
+                $scope.alerts = [alert];
         });
     };
 
