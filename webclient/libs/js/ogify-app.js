@@ -44,10 +44,15 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
     });
 });
 
-ogifyApp.run(function ($rootScope, $http) {
+ogifyApp.run(function ($rootScope, $http, $cookies, $window) {
     $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
     $rootScope.createOrderTemplateUri = 'templates/new-order.html';
-    $rootScope.showOrderTemplateUri = 'templates/order-details.html';
+    $rootScope.showOrderTemplateUri = 'templates/order-details.html'
+    $rootScope.landingUri = '/landing';
+
+    if($cookies.get('sId') == undefined || $cookies.get('ogifySessionSecret') == undefined) {
+        $window.location.replace($rootScope.landingUri);
+    }
 
     $rootScope.$watch(function () {
         return $http.pendingRequests.length > 0;
