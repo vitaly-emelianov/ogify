@@ -50,7 +50,8 @@ ogifyApp.run(function ($rootScope, $http, $cookies, $window) {
     $rootScope.showOrderTemplateUri = 'templates/order-details.html'
     $rootScope.landingUri = '/landing';
 
-    if($cookies.get('sId') == undefined || $cookies.get('ogifySessionSecret') == undefined) {
+    if(($cookies.get('sId') == undefined || $cookies.get('ogifySessionSecret') == undefined)
+        && $window.location.hostname != 'localhost') {
         $window.location.replace($rootScope.landingUri);
     }
 
