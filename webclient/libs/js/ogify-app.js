@@ -202,7 +202,7 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
     };
 
     $scope.createOrder = function() {
-        Order.create({
+        var new_order = {
             items: $scope.order.items,
             expireIn: parseDate($scope.order.expireDate, $scope.order.expireTime).getTime(),
             latitude: myAddress.getAddress().latitude,
@@ -217,13 +217,16 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             createdAt: null,
             namespace: $scope.order.namespace,
             description: $scope.order.description
-        }, function(successResponse) { // success
+        };
+        var id = Order.create(new_order,
+           function(successResponse) { // success
             angular.element('#createOrderModal').modal('hide');
             $rootScope.$broadcast('createdNewOrderEvent');
         }, function(errorResponse) { // error
             var alert = {message: "Слишком длинное описание. Покороче?"};
             $scope.alerts = [alert];
         });
+        console.log(id);
     };
 
 });
