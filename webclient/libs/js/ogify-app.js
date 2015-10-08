@@ -244,7 +244,16 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         items: [{}]
     };
 
-    $scope.alerts = [];
+    $scope.alerts = {warning: [], danger: []};
+
+    $scope.showAlert = function(message, type) {
+        var alert = {message: message};
+        $scope.alerts[type] = [alert];
+    };
+    $scope.hideAlert = function() {
+        $scope.alerts.warning = [];
+        $scope.alerts.danger = [];
+    }
 
     $scope.chooseTime = function() {
         var input = angular.element('#expire_in_time').clockpicker();
@@ -272,51 +281,58 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             namespace: $scope.order.namespace,
             description: $scope.order.description
         };
-        Order.create(new_order,
-            function(successResponse) {
-                angular.element('#createOrderModal').modal('hide');
-                $rootScope.$broadcast('createdNewOrderEvent');
-        },  function(errorResponse) {
-                var status = errorResponse.status;
-                var status_message = "";
-                switch(status) {
-                    case 400:
-                        // 400 error code response 
-                    case 415:
-                        // 415 error code response
-                    case 500:
-                        status_message = "Слишком длинное описание. Покороче?";
-                }
-                var alert = {message: status_message};
-                $scope.alerts = [alert];
-        });
-    };
 
+        MAX_TEXT_SIZE = 200;
+
+        if (new_order.description.length > MAX_TEXT_SIZE) {
+            $scope.showAlert("Слишком длинное описание заказа", 'warning');
+        } else if (new_order.reward.length > MAX_TEXT_SIZE) {
+            $scope.showAlert("Слишком длинное описание вознаграждения", 'warning');
+        } else {
+            $scope.hideAlert();
+            Order.create(new_order,
+                function(successResponse) {
+                    angular.element('#createOrderModal').modal('hide');
+                    $rootScope.$broadcast('createdNewOrderEvent');
+            },  function(errorResponse) {
+                    var status = errorResponse.status;
+                    var status_message = "";
+                    switch(status) {
+                        case 400:
+                            $scope.showAlert("Ошибка 400: Попробуйте позже", 'danger');
+                        case 415:
+                            $scope.showAlert("Ошибка 415: Попробуйте позже", 'danger');
+                        case 500:
+                            $scope.showAlert("Ошибка 500: Попробуйте позже", 'danger');
+                    }
+            });
+        }
+    };
 });
 
-ogifyApp.factory('ClickedOrder', function(){
+ogifyApp.factory('ClickedOrder', function() {
     var ClickedOrder = {};
     ClickedOrder.order = {description: null, reward: null, address: null, expireIn: null};
-    ClickedOrder.set = function(order){
+    ClickedOrder.set = function(order) {
         ClickedOrder.order = order;
     };
     return ClickedOrder;
 });
 
 ogifyApp.controller('ShowOrderModalController', function ($scope, $filter, ClickedOrder, Order) {
-    $scope.getDescription = function(){
+    $scope.getDescription = function() {
         return ClickedOrder.order.description;
     };
-    $scope.getAddress = function(){
+    $scope.getAddress = function() {
         return ClickedOrder.order.address;
     };
-    $scope.getReward = function(){
+    $scope.getReward = function() {
         return ClickedOrder.order.reward;
     };
-    $scope.getExpireDate = function(){
+    $scope.getExpireDate = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'd MMMM yyyy');
     };
-    $scope.getExpireTime = function(){
+    $scope.getExpireTime = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'HH:mm');
     };
 });

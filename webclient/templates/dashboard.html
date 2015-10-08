@@ -42,7 +42,7 @@
                 data-target="#showOrderModal"
                 class="order-list list-group-item"
                 ng-click="setClickedOrder(order)"
-                ng-repeat="order in showingOrders | orderBy : '-id'">
+                ng-repeat="order in showingOrders.slice(pageSize*page, pageSize*(page+1))">
                 <h4 class="list-group-item-heading">
                     Заказ №{{order.id}} от {{order.owner.fullName}}
                 </h4>
