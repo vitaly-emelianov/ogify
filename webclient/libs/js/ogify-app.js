@@ -96,6 +96,10 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi,
                                                      Order, myAddress, ClickedOrder) {
     $scope.showingOrders = Order.getMyOrders();
+    $scope.selfMarker = {
+        coords  : { latitude: 55.7, longitude: 37.6 },
+        id: "currentPosition"
+    };
     $scope.current_active = "my";
     $scope.pageSize = 7;
     $scope.pagesInBar = 9;
@@ -184,7 +188,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
 
     uiGmapGoogleMapApi.then(function(maps) {
         $scope.maps = maps;
-        if(navigator.geolocation) {
+        if(!!navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 $scope.map.center = { latitude: position.coords.latitude, longitude: position.coords.longitude };
 
@@ -208,7 +212,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
                     options: {
                         draggable: true,
                         animation: google.maps.Animation.DROP,
-                        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                        icon: 'libs/images/man_marker.png'
                     },
                     coords: {
                         latitude: position.coords.latitude,
