@@ -50,7 +50,8 @@ ogifyApp.run(function ($rootScope, $http, $cookies, $window) {
     $rootScope.showOrderTemplateUri = 'templates/order-details.html'
     $rootScope.landingUri = '/landing';
 
-    if($cookies.get('sId') == undefined || $cookies.get('ogifySessionSecret') == undefined) {
+    if(($cookies.get('sId') == undefined || $cookies.get('ogifySessionSecret') == undefined)
+        && $window.location.hostname != 'localhost') {
         $window.location.replace($rootScope.landingUri);
     }
 
@@ -99,8 +100,8 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
     $scope.pageSize = 7;
     $scope.pagesInBar = 9;
 
-    $scope.$on('createdNewOrderEvent', function(event) {
-        $scope.showingOrders = Order.getMyOrders();
+    $scope.$on('createdNewOrderEvent', function(event, order) {
+        $scope.showingOrders.push(order);
     });
 
     goToMyOrders = function() {
@@ -293,15 +294,17 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             $scope.showAlert("Слишком длинное описание заказа", 'warning');
         } else if (new_order.reward.length > MAX_TEXT_SIZE) {
             $scope.showAlert("Слишком длинное описание вознаграждения", 'warning');
+        } else if (new_order.address.length > MAX_TEXT_SIZE) {
+            $scope.showAlert("Слишком длинный адрес", 'warning');
         } else {
             $scope.hideAlert();
-            Order.create(new_order,
+            var order = Order.create(new_order,
                 function(successResponse) {
                     angular.element('#createOrderModal').modal('hide');
-                    $rootScope.$broadcast('createdNewOrderEvent');
-            },  function(errorResponse) {
+                    $rootScope.$broadcast('createdNewOrderEvent', order);
+                },
+                function(errorResponse) {
                     var status = errorResponse.status;
-                    var status_message = "";
                     switch(status) {
                         case 400:
                             $scope.showAlert("Ошибка 400: Попробуйте позже", 'danger');
@@ -310,7 +313,8 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
                         case 500:
                             $scope.showAlert("Ошибка 500: Попробуйте позже", 'danger');
                     }
-            });
+                }
+            );
         }
     };
 });
