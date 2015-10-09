@@ -204,7 +204,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
                 $scope.map.zoom = 11;
 
                 //personal marker init
-                $scope.selfMarker = {
+                selfMarker = {
                     options: {
                         draggable: true,
                         animation: google.maps.Animation.DROP,
@@ -233,6 +233,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
                     },
                     id: "currentPosition"
                 };
+                $scope.selfMarker = selfMarker;
             });
         }
     });
