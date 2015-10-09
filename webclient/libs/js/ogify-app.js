@@ -50,8 +50,7 @@ ogifyApp.run(function ($rootScope, $http, $cookies, $window) {
     $rootScope.showOrderTemplateUri = 'templates/order-details.html'
     $rootScope.landingUri = '/landing';
 
-    if(($cookies.get('sId') == undefined || $cookies.get('ogifySessionSecret') == undefined)
-        && $window.location.hostname != 'localhost') {
+    if ($cookies.get('sId') == undefined || $cookies.get('ogifySessionSecret') == undefined) {
         $window.location.replace($rootScope.landingUri);
     }
 
@@ -250,15 +249,16 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         items: [{}]
     };
 
-    $scope.alerts = {warning: [], danger: []};
+    $scope.alerts = {warning: [], error: []};
 
     $scope.showAlert = function(message, type) {
         var alert = {message: message};
         $scope.alerts[type] = [alert];
     };
+
     $scope.hideAlert = function() {
         $scope.alerts.warning = [];
-        $scope.alerts.danger = [];
+        $scope.alerts.error = [];
     }
 
     $scope.chooseTime = function() {
@@ -271,7 +271,7 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
     };
 
     $scope.createOrder = function() {
-        var new_order = {
+        var newOrder = {
             items: $scope.order.items,
             expireIn: parseDate($scope.order.expireDate, $scope.order.expireTime).getTime(),
             latitude: myAddress.getAddress().latitude,
@@ -290,32 +290,47 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
 
         MAX_TEXT_SIZE = 200;
 
-        if (new_order.description.length > MAX_TEXT_SIZE) {
-            $scope.showAlert("Слишком длинное описание заказа", 'warning');
-        } else if (new_order.reward.length > MAX_TEXT_SIZE) {
-            $scope.showAlert("Слишком длинное описание вознаграждения", 'warning');
-        } else if (new_order.address.length > MAX_TEXT_SIZE) {
-            $scope.showAlert("Слишком длинный адрес", 'warning');
-        } else {
-            $scope.hideAlert();
-            var order = Order.create(new_order,
-                function(successResponse) {
-                    angular.element('#createOrderModal').modal('hide');
-                    $rootScope.$broadcast('createdNewOrderEvent', order);
-                },
-                function(errorResponse) {
-                    var status = errorResponse.status;
-                    switch(status) {
-                        case 400:
-                            $scope.showAlert("Ошибка 400: Попробуйте позже", 'danger');
-                        case 415:
-                            $scope.showAlert("Ошибка 415: Попробуйте позже", 'danger');
-                        case 500:
-                            $scope.showAlert("Ошибка 500: Попробуйте позже", 'danger');
-                    }
-                }
-            );
+        var restrictions = [
+            {
+                isAppearing: newOrder.description.length > MAX_TEXT_SIZE,
+                message: "Слишком длинное описание заказа"
+            },
+            {
+                isAppearing: newOrder.reward.length > MAX_TEXT_SIZE,
+                message: "Слишком длинное описание вознаграждения"
+            },
+            {
+                isAppearing: newOrder.address.length > MAX_TEXT_SIZE,
+                message: "Слишком длинный адрес"
+            }
+        ];
+
+        for (i in restrictions) {
+            if (restrictions[i].isAppearing) {
+                $scope.showAlert(restrictions[i].message, 'warning');
+                return;
+            }
         }
+
+        newOrder = Order.create(newOrder,
+            function(successResponse) {
+                angular.element('#createOrderModal').modal('hide');
+                $scope.hideAlert();
+                $scope.order = {
+                    expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
+                    expireTime: $filter('date')(new Date(), 'hh:mm'),
+                    reward: '',
+                    address: myAddress.getAddress(),
+                    namespace: 'FriendsOfFriends',
+                    description:'',
+                    items: [{}]
+                };
+                $rootScope.$broadcast('createdNewOrderEvent', newOrder);
+            },
+            function(errorResponse) {
+                $scope.showAlert("Неизвестная техническая ошибка: попробуйте позже", 'error');
+            }
+        );
     };
 });
 
