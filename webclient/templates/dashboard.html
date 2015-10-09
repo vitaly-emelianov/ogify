@@ -30,19 +30,18 @@
                                 ng-class="{'active':group.name == currentActive}" 
                                 ng-click="group.orderViewModeChanged()" 
                                 class="btn btn-default">
-                               {{group.value}}
+                            {{group.value}}
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-    
         <div class="list-group">
             <a id="{{order.id}}" 
                 data-toggle="modal" 
                 data-target="#showOrderModal"
                 class="order-list list-group-item"
-                ng-click="setClickedOrder(showingOrders[$index])"
+                ng-click="setClickedOrder(order)"
                 ng-repeat="order in showingOrders.slice(pageSize*page, pageSize*(page+1))">
                 <h4 class="list-group-item-heading">
                     Заказ №{{order.id}} от {{order.owner.fullName}}
