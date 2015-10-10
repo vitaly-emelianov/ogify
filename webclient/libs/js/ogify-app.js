@@ -353,6 +353,12 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $filter, Click
     $scope.getDescription = function() {
         return ClickedOrder.order.description;
     };
+    $scope.getOwnerName = function() {
+        return ClickedOrder.order.owner.fullName;
+    };
+    $scope.getOwnerPhotoUrl = function() {
+        return ClickedOrder.order.owner.photoUri;
+    };
     $scope.getAddress = function() {
         return ClickedOrder.order.address;
     };
