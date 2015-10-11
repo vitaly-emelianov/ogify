@@ -17,10 +17,13 @@
             <div ng-include="showOrderTemplateUri"></div>
             <ul class="nav navbar-nav" ng-if="user.$resolved == true && authenticated == true">
                 <li ng-class="getClass('dashboard')">
-                    <a href="#/dashboard">Все заказы</a>
+                    <a href="#/dashboard">Заказы рядом</a>
                 </li>
                 <li ng-class="getClass('my-orders')">
-                    <a href="#/my-orders">Мои заказы</a>
+                    <a href="#/my-orders">Созданные мной</a>
+                </li>
+                <li ng-class="getClass('in-progress')">
+                    <a href="#/in-progress">Исполняемые мной</a>
                 </li>
             </ul>
             <div class="navbar-right">

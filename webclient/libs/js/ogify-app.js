@@ -35,6 +35,9 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
         }).when('/my-orders', {
             templateUrl: 'templates/my-orders.html',
             controller: 'MyOrdersController'
+        }).when('/in-progress', {
+            templateUrl: 'templates/in-progress.html',
+            controller: 'InProgressController'
         }).otherwise({
             redirectTo: '/dashboard'
         });
