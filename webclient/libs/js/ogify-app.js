@@ -32,6 +32,9 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
         }).when('/profile', {
             templateUrl: 'templates/user-profile.html',
             controller: 'ProfilePageController'
+        }).when('/my-orders', {
+            templateUrl: 'templates/my-orders.html',
+            controller: 'MyOrdersController'
         }).otherwise({
             redirectTo: '/dashboard'
         });
@@ -66,7 +69,7 @@ ogifyApp.run(function ($rootScope, $http, $cookies, $window) {
     });
 });
 
-ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, AuthResource, UserProfile) {
+ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, $location, AuthResource, UserProfile) {
 
     $scope.modalWindowTemplateUri = 'templates/navbar/auth-modal.html';
 
@@ -91,6 +94,14 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
     };
 
     $scope.user = UserProfile.getCurrentUser();
+    
+    $scope.getClass = function (partOfPath) {
+        if ($location.path().indexOf(partOfPath) > -1) {
+            return 'active';
+        } else {
+            return '';
+        }
+    }
 });
 
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi,
