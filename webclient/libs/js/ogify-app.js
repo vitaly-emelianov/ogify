@@ -109,7 +109,6 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, $lo
 
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter, uiGmapGoogleMapApi,
                                                      Order, myAddress, ClickedOrder) {
-    $scope.showingOrders = Order.getMyOrders();
     $scope.selfMarker = {
         coords  : { latitude: 55.7, longitude: 37.6 },
         id: "currentPosition"
@@ -123,85 +122,88 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         return 50;
     }
     
-    $scope.current_active = "my";
-    $scope.pageSize = getMaxOrdersInPage();
-    $scope.pagesInBar = 9;
-    $scope.maxDescription = getMaxDescription();
+    getMaxPagesInBar = function() {
+        return 9;
+    }
+    
+    $scope.pageParameters = {
+        pageSize: getMaxOrdersInPage(),
+        pagesInBar: getMaxPagesInBar(),
+        descriptionLength: getMaxDescription()
+    }
 
     $scope.$on('createdNewOrderEvent', function(event, order) {
         $scope.showingOrders.push(order);
+        $scope.totalPages = window.Math.ceil($scope.showingOrders.length / $scope.pageParameters.pageSize);
     });
-    
-    goToMyOrders = function() {
+
+    switchToMyOrders = function() {
         Order.getMyOrders().$promise.then(function(data){
             $scope.currentUserOrders = data;
             $scope.showingOrders = data;
-            $scope.totalPages = window.Math.ceil(data.length / $scope.pageSize);
+            $scope.totalPages = window.Math.ceil(data.length / $scope.pageParameters.pageSize);
             $scope.currentActive = "my";
-            $scope.page = 0;
-            if ($scope.totalPages < $scope.pagesInBar){
-                $scope.pages = _.range($scope.totalPages);
-            } else {
-                $scope.pages = _.range($scope.pagesInBar);
+            $scope.currentPage = {
+                page: 0,
+                pages: _.range(window.Math.min($scope.totalPages, $scope.pageParameters.pagesInBar))
             }
         });
     }
     
-    goToNearOrders = function(){
+    switchToNearOrders = function(){
         Order.getNearMe($scope.map.center).$promise.then(function(data){
             $scope.currentUserOrders = data;
             $scope.showingOrders = data;
-            $scope.totalPages = window.Math.ceil(data.length / $scope.pageSize);
+            $scope.totalPages = window.Math.ceil(data.length / $scope.pageParameters.pageSize);
             $scope.currentActive = "near";
-            $scope.page = 0;
-            if ($scope.totalPages < $scope.pagesInBar){
-                $scope.pages = _.range($scope.totalPages);
-            } else {
-                $scope.pages = _.range($scope.pagesInBar);
+            $scope.currentPage = {
+                page: 0,
+                pages: _.range(window.Math.min($scope.totalPages, $scope.pageParameters.pagesInBar))
             }
         });
     }
 
-    goToMyOrders();
+    switchToMyOrders();
 
     $scope.setClickedOrder = function(order){
         ClickedOrder.set(order);
     };
 
-    $scope.previousPage = function(){
-        if ($scope.page > 0) {
-            $scope.page -= 1;
-            if ($scope.page + 1 == $scope.pages[0]) {
+    $scope.previousPage = function(currentPage){
+        if (currentPage.page > 0) {
+            currentPage.page -= 1;
+            if (currentPage.page + 1 == currentPage.pages[0]) {
                 Math = window.Math;
-                $scope.pages = _.range(Math.floor($scope.page / $scope.pagesInBar), 
-                                       Math.min(Math.floor($scope.page / $scope.pagesInBar)+$scope.pagesInBar,
-                                           $scope.totalPages));
+                currentPage.pages = _.range(Math.floor(currentPage.page / $scope.pageParameters.pagesInBar), 
+                                       Math.min(Math.floor(currentPage.page / $scope.pageParameters.pagesInBar)
+                                                           +$scope.pageParameters.pagesInBar,
+                                                $scope.totalPages));
             }
         }
     };
 
-    $scope.nextPage = function(){
-        if ($scope.page < $scope.totalPages - 1) {
-            $scope.page += 1;
-            if ($scope.page - 1 == $scope.pages[$scope.pages.length-1]) {
-                $scope.pages = _.range($scope.page,
-                                       window.Math.min($scope.page + $scope.pagesInBar, $scope.totalPages));
+    $scope.nextPage = function(currentPage){
+        if (currentPage.page < $scope.totalPages - 1) {
+            currentPage.page += 1;
+            if (currentPage.page - 1 == currentPage.pages[currentPage.pages.length-1]) {
+                currentPage.pages = _.range(currentPage.page,
+                                       window.Math.min(currentPage.page + $scope.pageParameters.pagesInBar, $scope.totalPages));
             }
         };
     };
 
-    $scope.setPage = function(i){
-        $scope.page = i;
+    $scope.setPage = function(currentPage, i){
+        currentPage.page = i;
     };
 
     $scope.orderGroups = [{
         name: 'near',
         value: 'Все заказы',
-        orderViewModeChanged: goToNearOrders
+        orderViewModeChanged: switchToNearOrders
     }, {
         name: 'my',
         value: 'Мои заказы',
-        orderViewModeChanged:goToMyOrders
+        orderViewModeChanged: switchToMyOrders
     }];
 
     $rootScope.map = {
