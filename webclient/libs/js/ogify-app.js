@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Created by melge on 12.07.2015.
  */
 
@@ -359,6 +359,12 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $filter, Click
     };
     $scope.getReward = function() {
         return ClickedOrder.order.reward;
+    };
+    $scope.getStatus = function() {
+        return ClickedOrder.order.status;
+    };
+    $scope.userTakesTask = function() {
+        Order.getToExecution({orderId:ClickedOrder.order.id});
     };
     $scope.getExpireDate = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'd MMMM yyyy');

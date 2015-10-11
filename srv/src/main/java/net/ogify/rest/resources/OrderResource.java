@@ -61,29 +61,32 @@ public class OrderResource {
     }
 
     @GET
-    @Path("/{orderId}/items}")
+    @Path("/{orderId}/items")
     public List<OrderItem> getOrderItems(@NotNull @PathParam("orderId") Long orderId) {
         return orderController.getOrderById(orderId).getItems();
+    }
+
+    @PUT
+    @Path("/{orderId}/getToExecution")
+    public void getToExecution(@PathParam("orderId") Long orderId) {
+        orderProcessor.changeOrderExecutor(userId, orderId);
+        orderProcessor.changeOrderStatus(userId, orderId, Order.OrderStatus.Running);
+    }  
+    
+    public void completeOrder(@PathParam("orderId") Long orderId,
+                              @NotNull @FormParam("status") Order.OrderStatus status) {
+        orderProcessor.changeOrderStatus(userId, orderId, status);
     }
 
     /**
      * Create new order.
      *
      * @param order order body.
-     * @return created order.
+     * @return id of created order.
      */
     @POST
-    public Order createNewOrder(Order order) {
+    public Long createNewOrder(Order order) {
         return orderProcessor.createOrder(userId, order);
-    }
-
-
-    @POST
-    @Path("/{orderId}/status")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void completeOrder(@PathParam("orderId") Long orderId,
-                              @NotNull @FormParam("status") Order.OrderStatus status) {
-        orderProcessor.changeOrderStatus(userId, orderId, status);
     }
 
     @POST

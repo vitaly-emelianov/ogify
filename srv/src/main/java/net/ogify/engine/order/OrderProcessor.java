@@ -41,15 +41,15 @@ public class OrderProcessor {
 
     /**
      * Method creates order on behalf  of the specified user.
-     * @param userId users id on behalf order should be created
-     * @param order order which should be created.
      *
-     * @return created order.
+     * @param userId users id on behalf order should be created
+     * @param order  order which should be created.
+     * @return id of created order.
      */
-    public Order createOrder(Long userId, Order order) {
+    public Long createOrder(Long userId, Order order) {
         order.setId(null); // It is a new order, id must be null
         order.makeCreatedNow(); // It was created just now
-        for(OrderItem item: order.getItems()) {
+        for (OrderItem item : order.getItems()) {
             item.setId(null); // It is a new item, id must be null
             item.setOrder(order); // Create relation between item and orders
         }
@@ -58,12 +58,13 @@ public class OrderProcessor {
         order.setOwner(userController.getUserById(userId));
         orderController.save(order);
 
-        return order;
+        return order.getId();
     }
 
     /**
      * Get order by id for specified user.
-     * @param userId id of user who requests order
+     *
+     * @param userId  id of user who requests order
      * @param orderId id of requested order
      * @return requested order or null if there are no order with specified id, or user haven't access to them.
      * @throws ExecutionException on any exception thrown while attempting to get results.
@@ -76,9 +77,10 @@ public class OrderProcessor {
 
     /**
      * Search for orders near (in square with) specified point.
-     * @param latitude latitude of point.
+     *
+     * @param latitude  latitude of point.
      * @param longitude longitude of point.
-     * @param userId id of user who make request.
+     * @param userId    id of user who make request.
      * @return visible for specified user orders.
      * @throws ExecutionException on any exception thrown while attempting to get results.
      */
@@ -91,26 +93,51 @@ public class OrderProcessor {
     }
 
     /**
+     * Method change current executor of order.
+     *
+     * @param executorId who is the executor
+     * @param orderId    id of changed order
+     */
+    public void changeOrderExecutor(Long executorId, Long orderId) {
+        User executor = userController.getUserById(executorId);
+        assert executor != null;
+        Order order = orderController.getOrderById(orderId);
+
+        if (order == null) // We can't work if order not founded
+            throw new NotFoundException(String.format("Order with id %d is not presented on server", orderId));
+        if (order.isInFinalState()) // Check that order not in Completed or Canceled state
+            throw new ForbiddenException("You can't execute completed or canceled orders");
+        if (order.getExecutor() != null)
+            throw new ForbiddenException("This order already has executor");
+        if (order.isUserOwner(executor)) // Check that we have access to order
+            throw new ForbiddenException("You haven't get to execution your own order");
+        order.setExecutor(executor);
+
+        // And finally, if we don't have errors save order
+        orderController.saveOrUpdate(order);
+    }
+
+    /**
      * Method change workflow status of order.
+     *
      * @param changerUserId who is changing status
-     * @param orderId id of changed order
-     * @param status status which order should have after change
+     * @param orderId       id of changed order
+     * @param status        status which order should have after change
      */
     public void changeOrderStatus(Long changerUserId, Long orderId, OrderStatus status) {
         User changer = userController.getUserById(changerUserId);
         assert changer != null;
         Order order = orderController.getOrderById(orderId);
 
-
-        if(order == null) // We can't work if order not founded
+        if (order == null) // We can't work if order not founded
             throw new NotFoundException(String.format("Order with id %d is not presented on server", orderId));
-        if(order.isUserOwner(changer) && order.isUserExecutor(changer)) // Check that we have access to order
+        if (order.isUserOwner(changer) && order.isUserExecutor(changer)) // Check that we have access to order
             throw new ForbiddenException("You haven't right for change status of the order");
-        if(order.isInFinalState()) // Check that order not in Completed or Canceled state
+        if (order.isInFinalState()) // Check that order not in Completed or Canceled state
             throw new ForbiddenException("You can't change status of completed or canceled orders");
 
-        if(order.isUserExecutor(changer)) { // Orders executor try to change status
-            switch(status) { // Executor can complete, start execution or take order back
+        if (order.isUserExecutor(changer)) { // Orders executor try to change status
+            switch (status) { // Executor can complete, start execution or take order back
                 case Running:
                 case Completed:
                 case New:
@@ -121,8 +148,8 @@ public class OrderProcessor {
                             String.format("Executor can't change order status from %s to %s state",
                                     order.getStatus().toString(), status.toString()));
             }
-        } else if(order.getStatus() != OrderStatus.Running) { // Owner mustn't change status of running order
-            switch(status) {
+        } else if (order.getStatus() != OrderStatus.Running) { // Owner mustn't change status of running order
+            switch (status) {
                 case Canceled:
                     order.setStatus(status);
                     break;
@@ -138,10 +165,9 @@ public class OrderProcessor {
     }
 
     /**
-     *
-     * @param userId id of user which orders should be retrieved.
+     * @param userId      id of user which orders should be retrieved.
      * @param firstResult the position of the first result to retrieve.
-     * @param maxResults the maximum number of results to retrieve.
+     * @param maxResults  the maximum number of results to retrieve.
      * @return users orders.
      */
     public List<Order> getUsersOrders(Long userId, int firstResult, int maxResults) {
@@ -150,30 +176,31 @@ public class OrderProcessor {
 
     /**
      * Methods rate second member of order execution.
-     * @param userId who rate.
+     *
+     * @param userId  who rate.
      * @param orderId related order.
-     * @param rate how he's rates.
+     * @param rate    how he's rates.
      * @param comment additional comment for rate.
      */
     public void rateOrderParty(Long userId, Long orderId, double rate, String comment) {
-        if(rate > 5 || rate < 0)
+        if (rate > 5 || rate < 0)
             throw new BadRequestException("Rate must be in [0, 5] range");
 
         User userWho = userController.getUserById(userId);
         Order relatedOrder = orderController.getUsersOrder(userId, orderId);
 
         // Check all conditions for rate order execution
-        if(relatedOrder == null) // Check that order with specified id is presented
+        if (relatedOrder == null) // Check that order with specified id is presented
             throw new NotFoundException(String.format("Order with id %d not found", orderId));
-        if(relatedOrder.getStatus() != OrderStatus.Completed) // Check that order is completed
+        if (relatedOrder.getStatus() != OrderStatus.Completed) // Check that order is completed
             throw new WebApplicationException("You can't rate user while order isn't completed",
                     Response.Status.FORBIDDEN);
-        if(orderController.isOrderRatedBy(relatedOrder, userWho)) // Check that user didn't rate order already
+        if (orderController.isOrderRatedBy(relatedOrder, userWho)) // Check that user didn't rate order already
             throw new WebApplicationException("You can't rate order again", Response.Status.GONE);
 
 
         Feedback feedback;
-        if(userWho.equals(relatedOrder.getExecutor())) {
+        if (userWho.equals(relatedOrder.getExecutor())) {
             // Executor rates owner
             User userWhom = relatedOrder.getOwner();
             feedback = new Feedback(comment, userWho, userWhom, relatedOrder, rate);

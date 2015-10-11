@@ -169,6 +169,10 @@ public class Order {
         return items;
     }
 
+    public void setExecutor(User executor) {
+        this.executor = executor;
+    }
+
     public void setOwner(User owner) {
         this.owner = owner;
     }
