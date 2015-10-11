@@ -353,7 +353,13 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
 
 ogifyApp.factory('ClickedOrder', function() {
     var ClickedOrder = {};
-    ClickedOrder.order = {description: null, reward: null, address: null, expireIn: null};
+    ClickedOrder.order = {
+        description: null,
+        reward: null,
+        address: null,
+        expireIn: null,
+        owner: {photoUri: null, fullName: null}
+    };
     ClickedOrder.set = function(order) {
         ClickedOrder.order = order;
     };
