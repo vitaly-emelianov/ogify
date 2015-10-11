@@ -107,21 +107,31 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, $lo
     }
 });
 
-ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi,
+ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter, uiGmapGoogleMapApi,
                                                      Order, myAddress, ClickedOrder) {
     $scope.showingOrders = Order.getMyOrders();
     $scope.selfMarker = {
         coords  : { latitude: 55.7, longitude: 37.6 },
         id: "currentPosition"
     };
+    
+    getMaxOrdersInPage = function() {
+        return 5;
+    }
+    
+    getMaxDescription = function() {
+        return 50;
+    }
+    
     $scope.current_active = "my";
-    $scope.pageSize = 7;
+    $scope.pageSize = getMaxOrdersInPage();
     $scope.pagesInBar = 9;
+    $scope.maxDescription = getMaxDescription();
 
     $scope.$on('createdNewOrderEvent', function(event, order) {
         $scope.showingOrders.push(order);
     });
-
+    
     goToMyOrders = function() {
         Order.getMyOrders().$promise.then(function(data){
             $scope.currentUserOrders = data;
@@ -255,6 +265,10 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
             });
         }
     });
+    
+    $scope.getExpireDate = function(order) {
+        return $filter('date')(order.expireIn, 'd MMMM yyyy HH:mm');
+    };
 });
 
 ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order,
