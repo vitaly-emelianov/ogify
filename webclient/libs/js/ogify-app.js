@@ -100,14 +100,24 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         coords  : { latitude: 55.7, longitude: 37.6 },
         id: "currentPosition"
     };
+    
+    getMaxOrdersInPage = function() {
+        return 5;
+    }
+    
+    getMaxDescription = function() {
+        return 50;
+    }
+    
     $scope.current_active = "my";
-    $scope.pageSize = 5;
+    $scope.pageSize = getMaxOrdersInPage();
     $scope.pagesInBar = 9;
+    $scope.maxDescription = getMaxDescription();
 
     $scope.$on('createdNewOrderEvent', function(event, order) {
         $scope.showingOrders.push(order);
     });
-
+    
     goToMyOrders = function() {
         Order.getMyOrders().$promise.then(function(data){
             $scope.currentUserOrders = data;

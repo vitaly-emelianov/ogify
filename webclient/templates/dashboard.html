@@ -43,7 +43,7 @@
                 class="order-list list-group-item"
                 ng-click="setClickedOrder(order)"
                 ng-repeat="order in showingOrders.slice(pageSize*page, pageSize*(page+1))">
-                <p class="list-group-item-text">{{order.description.slice(0, 100)}}</p>
+                <p class="list-group-item-text">{{order.description.slice(0, maxDescription)}}</p>
                 <p class="list-group-item-text"><b>Адрес: </b>{{order.address}}</p>
                 <p class="list-group-item-text"><b>Актуально до: </b>{{getExpireDate(order)}}</p>
             </a>
