@@ -152,7 +152,6 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     
     switchToNearOrders = function(){
         Order.getNearMe($scope.map.center).$promise.then(function(data){
-            $scope.currentUserOrders = data;
             $scope.showingOrders = data;
             $scope.totalPages = window.Math.ceil(data.length / $scope.pageParameters.pageSize);
             $scope.currentActive = "near";
