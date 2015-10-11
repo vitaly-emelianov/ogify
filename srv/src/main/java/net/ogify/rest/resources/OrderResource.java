@@ -5,12 +5,14 @@ import net.ogify.database.entities.Order;
 import net.ogify.database.entities.OrderItem;
 import net.ogify.engine.order.OrderProcessor;
 import net.ogify.engine.secure.AuthController;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
@@ -64,6 +66,19 @@ public class OrderResource {
     @Path("/{orderId}/items}")
     public List<OrderItem> getOrderItems(@NotNull @PathParam("orderId") Long orderId) {
         return orderController.getOrderById(orderId).getItems();
+    }
+
+    @GET
+    @Path("/{orderId}/socialLink")
+    public Order.OrderNamespace getSocialLink(@NotNull @PathParam("orderId") Long orderId) throws ExecutionException {
+        return orderProcessor.getOrderConnectionWithUser(orderId, userId);
+    }
+
+    @GET
+    @Path("/socialLinks")
+    public Map<Long, Order.OrderNamespace> getSocialLinks(@NotEmpty @QueryParam("ordersIds") Set<Long> ordersIds)
+            throws ExecutionException {
+        return orderProcessor.getOrdersConnectionsWithUser(ordersIds, userId);
     }
 
     /**
