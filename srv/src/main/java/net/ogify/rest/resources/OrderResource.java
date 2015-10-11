@@ -5,12 +5,14 @@ import net.ogify.database.entities.Order;
 import net.ogify.database.entities.OrderItem;
 import net.ogify.engine.order.OrderProcessor;
 import net.ogify.engine.secure.AuthController;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
@@ -74,9 +76,17 @@ public class OrderResource {
         orderProcessor.changeOrderStatus(userId, orderId, Order.OrderStatus.Running);
     }
 
-    public void completeOrder(@PathParam("orderId") Long orderId,
-                              @NotNull @FormParam("status") Order.OrderStatus status) {
-        orderProcessor.changeOrderStatus(userId, orderId, status);
+    @GET
+    @Path("/{orderId}/socialLink")
+    public Order.OrderNamespace getSocialLink(@NotNull @PathParam("orderId") Long orderId) throws ExecutionException {
+        return orderProcessor.getOrderConnectionWithUser(orderId, userId);
+    }
+
+    @GET
+    @Path("/socialLinks")
+    public Map<Long, Order.OrderNamespace> getSocialLinks(@NotEmpty @QueryParam("ordersIds") Set<Long> ordersIds)
+            throws ExecutionException {
+        return orderProcessor.getOrdersConnectionsWithUser(ordersIds, userId);
     }
 
     /**
@@ -88,6 +98,14 @@ public class OrderResource {
     @POST
     public Long createNewOrder(Order order) {
         return orderProcessor.createOrder(userId, order);
+    }
+
+    @POST
+    @Path("/{orderId}/status")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void completeOrder(@PathParam("orderId") Long orderId,
+                              @NotNull @FormParam("status") Order.OrderStatus status) {
+        orderProcessor.changeOrderStatus(userId, orderId, status);
     }
 
     @POST

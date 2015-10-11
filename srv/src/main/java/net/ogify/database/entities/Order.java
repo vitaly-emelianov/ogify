@@ -26,15 +26,17 @@ import java.util.List;
                 "orders.id = :orderId and (orders.owner = :user or orders.executor = :user)"),
         @NamedQuery(name = "Order.getNearestOrdersFiltered", query = "select distinct orders from Order orders " +
                 "where orders.id in (" +
-                    "select orders.id from Order orders where orders.latitude > (:latitude - 0.07) " +
-                    "and orders.latitude < (:latitude + 0.07) " +
+                    "select orders.id from Order orders where " +
+                    "orders.latitude > (:latitude - 0.07) and orders.latitude < (:latitude + 0.07) " +
                     "and orders.longitude > (:longitude - 0.07) and orders.longitude < (:longitude + 0.07)" +
                     "and (orders.expireIn > CURRENT_TIMESTAMP or orders.expireIn is null) " +
                     "and orders.status = :enumOrderNew) " +
                 "and (" +
                     "orders.namespace = :enumOrderAll " +
-                    "or (orders.namespace = :enumOrderFriendsOfFriends and orders.owner in :userExtendedFriends)" +
-                    "or (orders.namespace = :enumOrderFriends and orders.owner in :userFriends)" +
+                    "or (" +
+                        "orders.namespace = :enumOrderFriendsOfFriends and " +
+                        "(orders.owner.id in :userExtendedFriendsIds) or (orders.owner.id in :userFriendsIds))" +
+                    "or (orders.namespace = :enumOrderFriends and orders.owner.id in :userFriendsIds)" +
                     "or (orders.namespace = :enumOrderPrivate and orders.executor = :user)" +
                     "or orders.owner = :user" +
                 ")"),
@@ -47,8 +49,20 @@ import java.util.List;
                 "UNION SELECT orders FROM Order orders WHERE " +
                     "orders.namespace = :enumOrderFriendsOfFriends and orders.owner in :extendedFriends " +
                     "and orders.id = :orderId " +
-                "UNION SELECT orders FROM Order orders WHERE orders.namespace = :enumOrderAll and orders.id = :orderId " +
-                "UNION SELECT orders FROM Order orders WHERE orders.executor = :user")
+                "UNION SELECT orders FROM Order orders WHERE orders.namespace = :enumOrderAll " +
+                    "and orders.id = :orderId " +
+                "UNION SELECT orders FROM Order orders WHERE orders.executor = :user"),
+        @NamedQuery(name = "Order.getOrdersByIdsForLinkWithOwner", query =
+                "SELECT orders FROM Order orders, User owners WHERE " +
+                    "orders.owner.id in :friendsIds and " +
+                    "orders.id in :ordersIds " +
+                "UNION SELECT orders FROM Order orders WHERE " +
+                    "orders.owner.id in :extendedFriendsIds and " +
+                    "orders.id in :ordersIds " +
+                "UNION SELECT orders FROM Order orders WHERE " +
+                    "orders.id in :ordersIds and " +
+                    "orders.owner.id not in :friendsIds and " +
+                    "orders.owner.id not in :extendedFriendsIds")
 })
 @XmlRootElement
 public class Order {

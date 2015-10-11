@@ -17,9 +17,7 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -211,5 +209,34 @@ public class OrderProcessor {
         }
 
         feedbackController.save(feedback);
+    }
+
+    public Map<Long, Order.OrderNamespace> getOrdersConnectionsWithUser(Set<Long> ordersIds, Long userId)
+            throws ExecutionException {
+        List<Order> orders = orderController.getOrdersForSocialLinkWithOwner(userId, ordersIds,
+                friendService.getUserFriendsIds(userId), friendService.getUserExtendedFriendsIds(userId));
+        Map<Long, Order.OrderNamespace> resultMap = new HashMap<>();
+        for(Order order : orders) {
+            if(friendService.getUserFriendsIds(userId).contains(order.getOwner().getId()))
+                resultMap.put(order.getId(), Order.OrderNamespace.Friends);
+            else if(friendService.getUserExtendedFriendsIds(userId).contains(order.getId()))
+                resultMap.put(order.getId(), Order.OrderNamespace.FriendsOfFriends);
+            else
+                resultMap.put(order.getId(), Order.OrderNamespace.All);
+        }
+
+        return resultMap;
+    }
+
+    public Order.OrderNamespace getOrderConnectionWithUser(Long orderId, Long userId) throws ExecutionException {
+        Order processedOrder = orderController.getOrderById(orderId);
+        if(processedOrder == null)
+            throw new NotFoundException(String.format("Order with id %s not found", orderId));
+
+        if(friendService.getUserFriendsIds(userId).contains(processedOrder.getExecutor().getId()))
+            return Order.OrderNamespace.Friends;
+        if(friendService.getUserExtendedFriendsIds(userId).contains(userId))
+            return Order.OrderNamespace.FriendsOfFriends;
+        return Order.OrderNamespace.All;
     }
 }

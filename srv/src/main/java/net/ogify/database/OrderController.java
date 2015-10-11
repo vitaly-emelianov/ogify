@@ -97,26 +97,26 @@ public class OrderController {
         try {
             User user = em.find(User.class, userId);
 
-            // If friends or extended friends set is empty add dummy id for correct syntax in query
-            Set<Long> searchFriendsSet;
+            // If friendsIds or extended friendsIds set is empty add dummy id for correct syntax in query
+            Set<Long> searchFriendsIdsSet;
             if(userFriends.isEmpty()) {
-                searchFriendsSet = new HashSet<>();
-                searchFriendsSet.add(-1L);
+                searchFriendsIdsSet = new HashSet<>();
+                searchFriendsIdsSet.add(-1L);
             } else
-                searchFriendsSet = userFriends;
+                searchFriendsIdsSet = userFriends;
 
-            Set<Long> searchExtendedFriendsSet;
+            Set<Long> searchExtendedFriendsIdsSet;
             if(extendedFriends.isEmpty()) {
-                searchExtendedFriendsSet = new HashSet<>();
-                searchExtendedFriendsSet.add(-1L);
+                searchExtendedFriendsIdsSet = new HashSet<>();
+                searchExtendedFriendsIdsSet.add(-1L);
             } else
-                searchExtendedFriendsSet = extendedFriends;
+                searchExtendedFriendsIdsSet = extendedFriends;
 
             TypedQuery<Order> query = em.createNamedQuery("Order.getNearestOrdersFiltered", Order.class);
             query.setParameter("latitude", latitude);
             query.setParameter("longitude", longitude);
-            query.setParameter("userExtendedFriends", searchExtendedFriendsSet);
-            query.setParameter("userFriends", searchFriendsSet);
+            query.setParameter("userExtendedFriendsIds", searchExtendedFriendsIdsSet);
+            query.setParameter("userFriendsIds", searchFriendsIdsSet);
             query.setParameter("user", user);
 
             query.setParameter("enumOrderNew", Order.OrderStatus.New);
@@ -137,7 +137,7 @@ public class OrderController {
         try {
             User user = em.find(User.class, userId);
 
-            // If friends or extended friends set is empty add dummy id for correct syntax in query
+            // If friendsIds or extended friendsIds set is empty add dummy id for correct syntax in query
             Set<Long> searchFriendsSet;
             if(friends.isEmpty()) {
                 searchFriendsSet = new HashSet<>();
@@ -215,6 +215,21 @@ public class OrderController {
             query.setParameter("whoRate", user);
 
             return query.getResultList().size() == 1;
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Order> getOrdersForSocialLinkWithOwner(Long executorId, Set<Long> ordersIds,
+                                                       Set<Long> friendsIds, Set<Long> extendedFriendsIds) {
+        EntityManager em = entityManagerService.createEntityManager();
+        try {
+            TypedQuery<Order> query = em.createNamedQuery("Order.getOrdersByIdsForLinkWithOwner", Order.class);
+            query.setParameter("ordersIds", ordersIds);
+            query.setParameter("friendsIds", friendsIds);
+            query.setParameter("extendedFriendsIds", extendedFriendsIds);
+
+            return query.getResultList();
         } finally {
             em.close();
         }

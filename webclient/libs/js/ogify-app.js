@@ -32,6 +32,9 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
         }).when('/profile', {
             templateUrl: 'templates/user-profile.html',
             controller: 'ProfilePageController'
+        }).when('/my-orders', {
+            templateUrl: 'templates/my-orders.html',
+            controller: 'MyOrdersController'
         }).otherwise({
             redirectTo: '/dashboard'
         });
@@ -66,7 +69,7 @@ ogifyApp.run(function ($rootScope, $http, $cookies, $window) {
     });
 });
 
-ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, AuthResource, UserProfile) {
+ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, $location, AuthResource, UserProfile) {
 
     $scope.modalWindowTemplateUri = 'templates/navbar/auth-modal.html';
 
@@ -91,11 +94,23 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
     };
 
     $scope.user = UserProfile.getCurrentUser();
+    
+    $scope.getClass = function (partOfPath) {
+        if ($location.path().indexOf(partOfPath) > -1) {
+            return 'active';
+        } else {
+            return '';
+        }
+    }
 });
 
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi,
                                                      Order, myAddress, ClickedOrder) {
     $scope.showingOrders = Order.getMyOrders();
+    $scope.selfMarker = {
+        coords  : { latitude: 55.7, longitude: 37.6 },
+        id: "currentPosition"
+    };
     $scope.current_active = "my";
     $scope.pageSize = 7;
     $scope.pagesInBar = 9;
@@ -184,7 +199,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
 
     uiGmapGoogleMapApi.then(function(maps) {
         $scope.maps = maps;
-        if(navigator.geolocation) {
+        if(!!navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 $scope.map.center = { latitude: position.coords.latitude, longitude: position.coords.longitude };
 
@@ -204,11 +219,11 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
                 $scope.map.zoom = 11;
 
                 //personal marker init
-                $scope.selfMarker = {
+                selfMarker = {
                     options: {
                         draggable: true,
                         animation: google.maps.Animation.DROP,
-                        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                        icon: 'libs/images/man_marker.png'
                     },
                     coords: {
                         latitude: position.coords.latitude,
@@ -233,6 +248,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
                     },
                     id: "currentPosition"
                 };
+                $scope.selfMarker = selfMarker;
             });
         }
     });

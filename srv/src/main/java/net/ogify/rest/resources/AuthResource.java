@@ -7,7 +7,6 @@ import net.ogify.engine.vkapi.VkAuth;
 import net.ogify.engine.vkapi.exceptions.VkSideError;
 import net.ogify.rest.elements.SNRequestUri;
 import net.ogify.rest.elements.SocialNetworkParam;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -114,11 +113,15 @@ public class AuthResource {
     @GET
     @PermitAll
     @Consumes(MediaType.WILDCARD)
+    @Produces(MediaType.TEXT_HTML)
     @ReturnType("java.lang.Void")
     public Response auth(
-            @NotEmpty @QueryParam("code") String code,
-            @NotNull @QueryParam("state") SocialNetworkParam socialNetwork,
+            @QueryParam("code") String code,
+            @QueryParam("state") SocialNetworkParam socialNetwork,
             @Context HttpServletRequest request) throws VkSideError, URISyntaxException {
+        if(code == null || code.isEmpty())
+            return Response.seeOther(new URI("/landing")).build();
+
         if(socialNetwork.getValue() == SocialNetwork.Other)
             throw new WebApplicationException("sn must be vk or facebook", Response.Status.BAD_REQUEST);
         String uri = request.getRequestURL().toString();
@@ -135,6 +138,5 @@ public class AuthResource {
                 .cookie(snIdCookie)
                 .cookie(sessionIdCookie)
                 .build();
-
     }
 }
