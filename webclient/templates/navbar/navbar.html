@@ -11,109 +11,101 @@
             </button>
             <a class="navbar-brand" href="#/dashboard">Ogify</a>
         </div>
-        <span>
-
-        </span>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-controller="NavBarController">
             <div ng-include="createOrderTemplateUri"></div>
             <div ng-include="showOrderTemplateUri"></div>
-            <div ng-controller="NavBarController">
-                <div class="navbar-left">
-                    <div class="row" ng-if="user.$resolved == true && authenticated == true">
-                        <ul class="nav navbar-nav">
-                            <div class="navbar-form">
-                                <a href="#/dashboard" type="button" class="btn btn-default" ng-class="getClass('dashboard')">Все заказы</a>
+            <ul class="nav navbar-nav" ng-if="user.$resolved == true && authenticated == true">
+                <li ng-class="getClass('dashboard')">
+                    <a href="#/dashboard">Заказы рядом</a>
+                </li>
+                <li ng-class="getClass('my-orders')">
+                    <a href="#/my-orders">Созданные мной</a>
+                </li>
+                <li ng-class="getClass('in-progress')">
+                    <a href="#/in-progress">Исполняемые мной</a>
+                </li>
+            </ul>
+            <div class="navbar-right">
+                <!-- Modal -->
+                <div class="modal fade" id="authModal" tabindex="-1" role="dialog" aria-labelledby="authModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="authModalLabel">
+                                    Аутентифицируйтесь при помощи привычной вам социальной сети
+                                </h4>
                             </div>
-                        </ul>
-                        <ul class="nav navbar-nav">
-                            <div class="navbar-form">
-                                <a href="#/my-orders" type="button" class="btn btn-default" ng-class="getClass('my-orders')">Мои заказы</a>
-                            </div>
-                        </ul>
-                    </div>
-                </div>
-                <div class="navbar-right">
-                    <!-- Modal -->
-                    <div class="modal fade" id="authModal" tabindex="-1" role="dialog" aria-labelledby="authModalLabel">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                            aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="authModalLabel">
-                                        Аутентифицируйтесь при помощи привычной вам социальной сети
-                                    </h4>
-                                </div>
-                                <div class="modal-body">
-                                    <p>
-                                        Аутентифицируйтесь при помощи любой социальной сети из списка. Ах, да, мы отказались
-                                        от собственной регистрации, вам не потребуется запоминать ещё один пароль.
-                                    </p>
+                            <div class="modal-body">
+                                <p>
+                                    Аутентифицируйтесь при помощи любой социальной сети из списка. Ах, да, мы отказались
+                                    от собственной регистрации, вам не потребуется запоминать ещё один пароль.
+                                </p>
 
-                                    <p>
-                                        Для пользователей, которые впервые на нашем ресурсе, регистраиция произойдёт
-                                        автоматически, при первой аутентификации.
-                                    </p>
-                                </div>
-                                <div class="modal-footer">
-                                    <a class="btn btn-social-icon btn-vk" ng-click="authVk()">
-                                        <i class="fa fa-vk"></i>
-                                    </a>
-                                    <a class="btn btn-social-icon btn-facebook">
-                                        <i class="fa fa-facebook"></i>
-                                    </a>
-                                    <a class="btn btn-social-icon btn-google">
-                                        <i class="fa fa-google"></i>
-                                    </a>
-                                </div>
+                                <p>
+                                    Для пользователей, которые впервые на нашем ресурсе, регистраиция произойдёт
+                                    автоматически, при первой аутентификации.
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-social-icon btn-vk" ng-click="authVk()">
+                                    <i class="fa fa-vk"></i>
+                                </a>
+                                <a class="btn btn-social-icon btn-facebook">
+                                    <i class="fa fa-facebook"></i>
+                                </a>
+                                <a class="btn btn-social-icon btn-google">
+                                    <i class="fa fa-google"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
-                    <!--<div ng-include="modalWindowTemplateUri"></div>-->
-
-                    <!-- Load animation -->
-                    <div ng-if="authenticated == null" class="navbar-form">
-                        <button class="btn btn-default">
-                            <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
-                        </button>
-                    </div>
-
-                    <!-- Login button -->
-                    <div ng-if="authenticated == false" class="navbar-form">
-                        <button type="button"
-                                class="btn btn-default" data-toggle="modal" data-target="#authModal">Войти
-                        </button>
-                    </div>
-
-                    <div class="row" ng-if="user.$resolved == true && authenticated == true">
-                        <ul class="nav navbar-nav">
-                            <div class="navbar-form">
-                                <button type="button" data-toggle="modal" data-target="#createOrderModal" ng-click="updateOrderData()"
-                                        class="btn btn-primary">
-                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                    Создать заказ
-                                </button>
-                            </div>
-                        </ul>
-
-                        <!-- Profile widget -->
-                        <ul class="nav navbar-nav">
-                            <li class="dropdown">
-                                <a href="javascript:void(0)" class="avatar-dropdown-toogle" data-toggle="dropdown">
-                                    <img ng-src="{{user.photoUri}}" class="navbar-avatar profile-image img-circle">
-                                    <b>{{user.fullName}}</b><span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#/profile"><i class="fa fa-cog"></i>Профиль</a></li>
-                                    <li class="divider"></li>
-                                    <li><a ng-click="logoutSN()"><i class="fa fa-sign-out"></i>Выйти</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-
                 </div>
+                <!--<div ng-include="modalWindowTemplateUri"></div>-->
+
+                <!-- Load animation -->
+                <div ng-if="authenticated == null" class="navbar-form">
+                    <button class="btn btn-default">
+                        <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+                    </button>
+                </div>
+
+                <!-- Login button -->
+                <div ng-if="authenticated == false" class="navbar-form">
+                    <button type="button"
+                            class="btn btn-default" data-toggle="modal" data-target="#authModal">Войти
+                    </button>
+                </div>
+
+                <div class="row" ng-if="user.$resolved == true && authenticated == true">
+                    <ul class="nav navbar-nav">
+                        <div class="navbar-form">
+                            <button type="button" data-toggle="modal" data-target="#createOrderModal" ng-click="updateOrderData()"
+                                    class="btn btn-primary">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                Создать заказ
+                            </button>
+                        </div>
+                    </ul>
+
+                    <!-- Profile widget -->
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="javascript:void(0)" class="avatar-dropdown-toogle" data-toggle="dropdown">
+                                <img ng-src="{{user.photoUri}}" class="navbar-avatar profile-image img-circle">
+                                <b>{{user.fullName}}</b><span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/profile"><i class="fa fa-cog"></i>Профиль</a></li>
+                                <li class="divider"></li>
+                                <li><a ng-click="logoutSN()"><i class="fa fa-sign-out"></i>Выйти</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
             </div>
         </div>
         <!-- /.navbar-collapse -->
