@@ -93,7 +93,7 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, Aut
     $scope.user = UserProfile.getCurrentUser();
 });
 
-ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi,
+ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter, uiGmapGoogleMapApi,
                                                      Order, myAddress, ClickedOrder) {
     $scope.showingOrders = Order.getMyOrders();
     $scope.selfMarker = {
@@ -101,7 +101,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
         id: "currentPosition"
     };
     $scope.current_active = "my";
-    $scope.pageSize = 7;
+    $scope.pageSize = 5;
     $scope.pagesInBar = 9;
 
     $scope.$on('createdNewOrderEvent', function(event, order) {
@@ -241,6 +241,10 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
             });
         }
     });
+    
+    $scope.getExpireDate = function(order) {
+        return $filter('date')(order.expireIn, 'd MMMM yyyy HH:mm');
+    };
 });
 
 ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order,
