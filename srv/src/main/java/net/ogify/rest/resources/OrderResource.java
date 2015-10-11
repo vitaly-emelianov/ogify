@@ -77,7 +77,6 @@ public class OrderResource {
         return orderProcessor.createOrder(userId, order);
     }
 
-
     @POST
     @Path("/{orderId}/status")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
