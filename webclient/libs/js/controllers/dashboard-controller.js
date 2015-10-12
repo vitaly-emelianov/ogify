@@ -17,15 +17,15 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         id: "currentPosition"
     };
     
-    getMaxOrdersInPage = function() {
+    var getMaxOrdersInPage = function() {
         return 5;
     }
     
-    getMaxDescription = function() {
+    var getMaxDescription = function() {
         return 50;
     }
     
-    getMaxPagesInBar = function() {
+    var getMaxPagesInBar = function() {
         return 9;
     }
     
@@ -42,7 +42,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         }
     });
 
-    switchToMyOrders = function() {
+    var switchToMyOrders = function() {
         Order.getMyOrders().$promise.then(function(data){
             $scope.currentUserOrders = data;
             $scope.showingOrders = data;
@@ -55,7 +55,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         });
     }
     
-    switchToNearOrders = function(){
+    var switchToNearOrders = function(){
         Order.getNearMe($scope.map.center).$promise.then(function(data){
             $scope.showingOrders = data;
             $scope.getOrdersLinks();
