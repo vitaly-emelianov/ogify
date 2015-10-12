@@ -85,7 +85,7 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, $lo
     };
 
     $scope.logoutSN = function () {
-        cookiesPath = {path : "/"};
+        var cookiesPath = {path: "/"};
         $cookies.remove("JSESSIONID", cookiesPath);
         $cookies.remove("ogifySessionSecret", cookiesPath);
         $cookies.remove("sId", cookiesPath);
@@ -158,7 +158,7 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             description: $scope.order.description
         };
 
-        MAX_TEXT_SIZE = 200;
+        var MAX_TEXT_SIZE = 200;
 
         var restrictions = [
             {
@@ -175,9 +175,9 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             }
         ];
 
-        for (i in restrictions) {
-            if (restrictions[i].isAppearing) {
-                $scope.showAlert(restrictions[i].message, 'warning');
+        for (var i in restrictions) {
+            if (i.isAppearing) {
+                $scope.showAlert(i.message, 'warning');
                 return;
             }
         }
@@ -219,7 +219,7 @@ ogifyApp.factory('ClickedOrder', function() {
     return ClickedOrder;
 });
 
-ogifyApp.controller('ShowOrderModalController', function ($scope, $filter, ClickedOrder, Order) {
+ogifyApp.controller('ShowOrderModalController', function ($scope, $filter, ClickedOrder) {
     $scope.getDescription = function() {
         return ClickedOrder.order.description;
     };
