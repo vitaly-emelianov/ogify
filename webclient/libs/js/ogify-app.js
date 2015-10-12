@@ -107,8 +107,6 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, $lo
     }
 });
 
-
-
 ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order,
                                                             myAddress) {
     $scope.order = {

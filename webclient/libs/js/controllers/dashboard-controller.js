@@ -1,8 +1,4 @@
-/**
- * Created by melge on 11.10.2015.
- */
-
-ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapGoogleMapApi,
+ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter, uiGmapGoogleMapApi,
                                                      Order, myAddress, ClickedOrder) {
     $scope.getOrdersLinks = function() {
         var showingOrdersIds = [];
@@ -15,96 +11,104 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
             $scope.ordersLinks = Order.getOrdersLinks({ordersIds: showingOrdersIds});
         }
     };
-
-    $scope.ordersLinks = {};
-    $scope.showingOrders = Order.getMyOrders().$promise.then(function() {
-        $scope.getOrdersLinks();
-    });
-
+    
     $scope.selfMarker = {
         coords  : { latitude: 55.7, longitude: 37.6 },
         id: "currentPosition"
     };
-    $scope.current_active = "my";
-    $scope.pageSize = 7;
-    $scope.pagesInBar = 9;
+    
+    var getMaxOrdersInPage = function() {
+        return 5;
+    }
+    
+    var getMaxDescription = function() {
+        return 50;
+    }
+    
+    var getMaxPagesInBar = function() {
+        return 9;
+    }
+    
+    $scope.pageParameters = {
+        pageSize: getMaxOrdersInPage(),
+        pagesInBar: getMaxPagesInBar(),
+        descriptionLength: getMaxDescription()
+    }
 
     $scope.$on('createdNewOrderEvent', function(event, order) {
-        $scope.showingOrders.push(order);
+        if ($scope.currentActive == "my") {
+            $scope.showingOrders.push(order);
+            $scope.totalPages = window.Math.ceil($scope.showingOrders.length / $scope.pageParameters.pageSize);
+        }
     });
 
-    var goToMyOrders = function () {
-        Order.getMyOrders().$promise.then(function (data) {
+    var switchToMyOrders = function() {
+        Order.getMyOrders().$promise.then(function(data){
             $scope.currentUserOrders = data;
             $scope.showingOrders = data;
-            $scope.totalPages = window.Math.ceil(data.length / $scope.pageSize);
+            $scope.totalPages = window.Math.ceil(data.length / $scope.pageParameters.pageSize);
             $scope.currentActive = "my";
-            $scope.page = 0;
-            $scope.getOrdersLinks();
-            if ($scope.totalPages < $scope.pagesInBar) {
-                $scope.pages = _.range($scope.totalPages);
-            } else {
-                $scope.pages = _.range($scope.pagesInBar);
+            $scope.currentPage = {
+                page: 0,
+                pages: _.range(window.Math.min($scope.totalPages, $scope.pageParameters.pagesInBar))
             }
         });
-    };
-
-    var goToNearOrders = function () {
-        Order.getNearMe($scope.map.center).$promise.then(function (data) {
-            $scope.currentUserOrders = data;
+    }
+    
+    var switchToNearOrders = function(){
+        Order.getNearMe($scope.map.center).$promise.then(function(data){
             $scope.showingOrders = data;
-            $scope.totalPages = window.Math.ceil(data.length / $scope.pageSize);
-            $scope.currentActive = "near";
-            $scope.page = 0;
             $scope.getOrdersLinks();
-            if ($scope.totalPages < $scope.pagesInBar) {
-                $scope.pages = _.range($scope.totalPages);
-            } else {
-                $scope.pages = _.range($scope.pagesInBar);
+            $scope.totalPages = window.Math.ceil(data.length / $scope.pageParameters.pageSize);
+            $scope.currentActive = "near";
+            $scope.currentPage = {
+                page: 0,
+                pages: _.range(window.Math.min($scope.totalPages, $scope.pageParameters.pagesInBar))
             }
         });
-    };
+    }
 
-    goToMyOrders();
+    switchToMyOrders();
 
     $scope.setClickedOrder = function(order){
         ClickedOrder.set(order);
     };
 
-    $scope.previousPage = function(){
-        if ($scope.page > 0) {
-            $scope.page -= 1;
-            if ($scope.page + 1 == $scope.pages[0]) {
+    $scope.previousPage = function(currentPage){
+        if (currentPage.page > 0) {
+            currentPage.page -= 1;
+            if (currentPage.page + 1 == currentPage.pages[0]) {
                 Math = window.Math;
-                $scope.pages = _.range(Math.floor($scope.page / $scope.pagesInBar),
-                    Math.min(Math.floor($scope.page / $scope.pagesInBar)+$scope.pagesInBar,
-                        $scope.totalPages));
+                currentPage.pages = _.range(Math.floor(currentPage.page / $scope.pageParameters.pagesInBar), 
+                                       Math.min(Math.floor(currentPage.page / $scope.pageParameters.pagesInBar)
+                                                           +$scope.pageParameters.pagesInBar,
+                                                $scope.totalPages));
             }
         }
     };
 
-    $scope.nextPage = function(){
-        if ($scope.page < $scope.totalPages - 1) {
-            $scope.page += 1;
-            if ($scope.page - 1 == $scope.pages[$scope.pages.length-1]) {
-                $scope.pages = _.range($scope.page,
-                    window.Math.min($scope.page + $scope.pagesInBar, $scope.totalPages));
+    $scope.nextPage = function(currentPage){
+        if (currentPage.page < $scope.totalPages - 1) {
+            currentPage.page += 1;
+            if (currentPage.page - 1 == currentPage.pages[currentPage.pages.length-1]) {
+                currentPage.pages = _.range(currentPage.page,
+                                       window.Math.min(currentPage.page + $scope.pageParameters.pagesInBar, $scope.totalPages));
             }
-        }
+        };
     };
 
-    $scope.setPage = function(i){
-        $scope.page = i;
+    $scope.setPage = function(currentPage, i){
+        currentPage.page = i;
     };
 
     $scope.orderGroups = [{
         name: 'near',
         value: 'Все заказы',
-        orderViewModeChanged: goToNearOrders
+        orderViewModeChanged: switchToNearOrders
     }, {
         name: 'my',
         value: 'Мои заказы',
-        orderViewModeChanged:goToMyOrders
+        orderViewModeChanged: switchToMyOrders
     }];
 
     $rootScope.map = {
@@ -168,4 +172,8 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, uiGmapG
             });
         }
     });
+    
+    $scope.getExpireDate = function(order) {
+        return $filter('date')(order.expireIn, 'd MMMM yyyy HH:mm');
+    };
 });
