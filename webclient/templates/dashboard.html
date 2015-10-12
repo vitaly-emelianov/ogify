@@ -37,16 +37,19 @@
             </div>
         </div>
         <div class="list-group">
-            <a id="{{order.id}}" 
-                data-toggle="modal" 
-                data-target="#showOrderModal"
-                class="order-list list-group-item"
-                ng-click="setClickedOrder(order)"
-                ng-repeat="order in showingOrders.slice(pageSize*page, pageSize*(page+1))">
-                <h4 class="list-group-item-heading">
-                    Заказ №{{order.id}} от {{order.owner.fullName}}
-                </h4>
-                <p class="list-group-item-text">{{order.description}}</p>
+            <a id="{{order.id}}"
+               data-toggle="modal"
+               data-target="#showOrderModal"
+               class="list-group-item order-list-{{ordersLinks[order.id]}}"
+               ng-click="setClickedOrder(order)"
+               ng-repeat="order in showingOrders.slice(pageSize*page, pageSize*(page+1))">
+                <div>
+                    <h4 class="list-group-item-heading">
+                        Заказ №{{order.id}} от {{order.owner.fullName}}
+                    </h4>
+
+                    <p class="list-group-item-text">{{order.description}}</p>
+                </div>
             </a>
         </div>
     </div>

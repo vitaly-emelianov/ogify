@@ -41,6 +41,15 @@
 .profile-avatar {
     text-align: center;
 }
-/*.order-list-content {
-    overflow-y: scroll;
-}*/
+
+.panel>.list-group>.order-list-Friends {
+    border-left: 3px solid #5cb85c; !important;
+}
+
+.panel>.list-group>.order-list-FriendOfFriend {
+    border-left: 3px solid #f0ad4e; !important;
+}
+
+.panel>.list-group>.order-list-All {
+    border-left: 3px solid #f0ad4e; !important;
+}
