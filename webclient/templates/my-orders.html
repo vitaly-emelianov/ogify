@@ -1,63 +1,54 @@
 <div class="page-header">
-    <h2>Мои заказы</h2>
+    <h2>Созданные мной</h2>
 </div>
 <div class="table-container" ng-controller="MyOrdersController">
     <div class="col-md-8">
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th class="text-center">Новые</th>
-                    <th class="text-center">В исполнении</th>
-                    <th class="text-center">Завершенные</th>
+                    <th style="width: 33%" class="text-center">Новые</th>
+                    <th style="width: 33%" class="text-center">В исполнении</th>
+                    <th style="width: 33%" class="text-center">Завершенные</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>
-                        <div class="list-group сol-md-3">
+                        <div class="list-group">
                             <a class="list-group-item" 
                              ng-repeat="order in myOrders | filter:onlyNew"
                              data-toggle="modal" 
                              data-target="#showOrderModal"
                              ng-click="setClickedOrder(order)">
-                                <h4 class="list-group-item-heading">
-                                    <span class="label label-default">№{{order.id}}</span>
-                                </h4>
-                                <p class="list-group-item-text">
-                                    {{order.description.slice(0, maxDescriptionLength)}}
-                                </p>
+                                <span class="label label-default pull-right">№{{order.id}}</span>
+                                <p>{{order.description.slice(0, maxDescriptionLength)}}</p>
+                                <small>Адрес: {{order.address.slice(0, maxDescriptionLength)}}</small>
                             </a>
                         </div>
                     </td>
                     <td>
-                        <div class="list-group сol-md-3">
+                        <div class="list-group">
                             <a class="list-group-item" 
                              ng-repeat="order in myOrders | filter:onlyRunning"
                              data-toggle="modal" 
                              data-target="#showOrderModal"
                              ng-click="setClickedOrder(order)">
-                                <h4 class="list-group-item-heading">
-                                    <span class="label label-default">№{{order.id}}</span>
-                                </h4>
-                                <p class="list-group-item-text">
-                                    {{order.description.slice(0, maxDescriptionLength)}}
-                                </p>
+                                <span class="label label-warning pull-right">№{{order.id}}</span>
+                                <p>{{order.description.slice(0, maxDescriptionLength)}}</p>
+                                <small>Адрес: {{order.address.slice(0, maxDescriptionLength)}}</small>
                             </a>
                         </div>
                     </td>
                     <td>
-                        <div class="list-group сol-md-3">
+                        <div class="list-group">
                             <a class="list-group-item" 
                              ng-repeat="order in myOrders | filter:onlyDone"
                              data-toggle="modal" 
                              data-target="#showOrderModal"
                              ng-click="setClickedOrder(order)">
-                                <h4 class="list-group-item-heading">
-                                    <span class="label label-default">№{{order.id}}</span>
-                                </h4>
-                                <p class="list-group-item-text">
-                                    {{order.description.slice(0, maxDescriptionLength)}}
-                                </p>
+                                <span class="label label-success pull-right">№{{order.id}}</span>
+                                <p>{{order.description.slice(0, maxDescriptionLength)}}</p>
+                                <small>Адрес: {{order.address.slice(0, maxDescriptionLength)}}</small>
                             </a>
                         </div>
                     </td>

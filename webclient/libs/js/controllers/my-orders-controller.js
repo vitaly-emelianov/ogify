@@ -1,7 +1,7 @@
 ogifyApp.controller('MyOrdersController', function ($scope, Order, ClickedOrder) {
 
     $scope.myOrders = Order.getMyOrders();
-    $scope.maxDescriptionLength = 10;
+    $scope.maxDescriptionLength = 20;
 
     $scope.setClickedOrder = function(order) {
         ClickedOrder.set(order);
