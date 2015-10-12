@@ -40,7 +40,7 @@
             <a id="{{order.id}}" 
                 data-toggle="modal" 
                 data-target="#showOrderModal"
-                class="order-list list-group-item"
+                class="list-group-item order-list-{{ordersLinks[order.id]}}"
                 ng-click="setClickedOrder(order)"
                 ng-repeat="order in showingOrders.slice(pageParameters.pageSize*currentPage.page, pageParameters.pageSize*(currentPage.page+1))">
                 <p class="list-group-item-text">{{order.description.slice(0, pageParameters.descriptionLength)}}</p>
