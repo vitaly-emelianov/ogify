@@ -35,6 +35,9 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
         }).when('/my-orders', {
             templateUrl: 'templates/my-orders.html',
             controller: 'MyOrdersController'
+        }).when('/in-progress', {
+            templateUrl: 'templates/in-progress.html',
+            controller: 'InProgressController'
         }).otherwise({
             redirectTo: '/dashboard'
         });
@@ -205,7 +208,13 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
 
 ogifyApp.factory('ClickedOrder', function() {
     var ClickedOrder = {};
-    ClickedOrder.order = {description: null, reward: null, address: null, expireIn: null};
+    ClickedOrder.order = {
+        description: null,
+        reward: null,
+        address: null,
+        expireIn: null,
+        owner: {photoUri: null, fullName: null}
+    };
     ClickedOrder.set = function(order) {
         ClickedOrder.order = order;
     };
@@ -214,47 +223,24 @@ ogifyApp.factory('ClickedOrder', function() {
 
 ogifyApp.controller('ShowOrderModalController', function ($scope, $filter, ClickedOrder) {
     $scope.getDescription = function() {
-        if(ClickedOrder.order == null) {
-            return ''
-        }
         return ClickedOrder.order.description;
     };
     $scope.getOwnerName = function() {
-        if(ClickedOrder.order == null) {
-            return ''
-        }
-        /** @namespace ClickedOrder.order.owner.fullName */
         return ClickedOrder.order.owner.fullName;
     };
     $scope.getOwnerPhotoUrl = function() {
-        if(ClickedOrder.order == null) {
-            return ''
-        }
-        /** @namespace ClickedOrder.order.owner.photoUri */
         return ClickedOrder.order.owner.photoUri;
     };
     $scope.getAddress = function() {
-        if(ClickedOrder.order == null) {
-            return ''
-        }
         return ClickedOrder.order.address;
     };
     $scope.getReward = function() {
-        if(ClickedOrder.order == null) {
-            return ''
-        }
         return ClickedOrder.order.reward;
     };
     $scope.getExpireDate = function() {
-        if(ClickedOrder.order == null) {
-            return ''
-        }
         return $filter('date')(ClickedOrder.order.expireIn, 'd MMMM yyyy');
     };
     $scope.getExpireTime = function() {
-        if(ClickedOrder.order == null) {
-            return ''
-        }
         return $filter('date')(ClickedOrder.order.expireIn, 'HH:mm');
     };
 });
