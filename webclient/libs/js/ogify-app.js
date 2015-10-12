@@ -85,7 +85,7 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, $lo
     };
 
     $scope.logoutSN = function () {
-        cookiesPath = {path : "/"};
+        var cookiesPath = {path: "/"};
         $cookies.remove("JSESSIONID", cookiesPath);
         $cookies.remove("ogifySessionSecret", cookiesPath);
         $cookies.remove("sId", cookiesPath);
@@ -107,169 +107,7 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, $lo
     }
 });
 
-ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter, uiGmapGoogleMapApi,
-                                                     Order, myAddress, ClickedOrder) {
-    $scope.showingOrders = Order.getMyOrders();
-    $scope.selfMarker = {
-        coords  : { latitude: 55.7, longitude: 37.6 },
-        id: "currentPosition"
-    };
-    
-    getMaxOrdersInPage = function() {
-        return 5;
-    }
-    
-    getMaxDescription = function() {
-        return 50;
-    }
-    
-    $scope.current_active = "my";
-    $scope.pageSize = getMaxOrdersInPage();
-    $scope.pagesInBar = 9;
-    $scope.maxDescription = getMaxDescription();
 
-    $scope.$on('createdNewOrderEvent', function(event, order) {
-        $scope.showingOrders.push(order);
-    });
-    
-    goToMyOrders = function() {
-        Order.getMyOrders().$promise.then(function(data){
-            $scope.currentUserOrders = data;
-            $scope.showingOrders = data;
-            $scope.totalPages = window.Math.ceil(data.length / $scope.pageSize);
-            $scope.currentActive = "my";
-            $scope.page = 0;
-            if ($scope.totalPages < $scope.pagesInBar){
-                $scope.pages = _.range($scope.totalPages);
-            } else {
-                $scope.pages = _.range($scope.pagesInBar);
-            }
-        });
-    }
-    
-    goToNearOrders = function(){
-        Order.getNearMe($scope.map.center).$promise.then(function(data){
-            $scope.currentUserOrders = data;
-            $scope.showingOrders = data;
-            $scope.totalPages = window.Math.ceil(data.length / $scope.pageSize);
-            $scope.currentActive = "near";
-            $scope.page = 0;
-            if ($scope.totalPages < $scope.pagesInBar){
-                $scope.pages = _.range($scope.totalPages);
-            } else {
-                $scope.pages = _.range($scope.pagesInBar);
-            }
-        });
-    }
-
-    goToMyOrders();
-
-    $scope.setClickedOrder = function(order){
-        ClickedOrder.set(order);
-    };
-
-    $scope.previousPage = function(){
-        if ($scope.page > 0) {
-            $scope.page -= 1;
-            if ($scope.page + 1 == $scope.pages[0]) {
-                Math = window.Math;
-                $scope.pages = _.range(Math.floor($scope.page / $scope.pagesInBar), 
-                                       Math.min(Math.floor($scope.page / $scope.pagesInBar)+$scope.pagesInBar,
-                                           $scope.totalPages));
-            }
-        }
-    };
-
-    $scope.nextPage = function(){
-        if ($scope.page < $scope.totalPages - 1) {
-            $scope.page += 1;
-            if ($scope.page - 1 == $scope.pages[$scope.pages.length-1]) {
-                $scope.pages = _.range($scope.page,
-                                       window.Math.min($scope.page + $scope.pagesInBar, $scope.totalPages));
-            }
-        };
-    };
-
-    $scope.setPage = function(i){
-        $scope.page = i;
-    };
-
-    $scope.orderGroups = [{
-        name: 'near',
-        value: 'Все заказы',
-        orderViewModeChanged: goToNearOrders
-    }, {
-        name: 'my',
-        value: 'Мои заказы',
-        orderViewModeChanged:goToMyOrders
-    }];
-
-    $rootScope.map = {
-        center: { latitude: 55.7, longitude: 37.6 },
-        zoom: 10,
-        control: {}
-    };
-
-    uiGmapGoogleMapApi.then(function(maps) {
-        $scope.maps = maps;
-        if(!!navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                $scope.map.center = { latitude: position.coords.latitude, longitude: position.coords.longitude };
-
-                var geocoder = new google.maps.Geocoder();
-                var myposition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                geocoder.geocode({'latLng': myposition},function(data, status) {
-                    if(status == google.maps.GeocoderStatus.OK) {
-                        myAddress.setAddress(
-                            data[0].formatted_address,
-                            position.coords.latitude,
-                            position.coords.longitude
-                        );
-                    }
-                });
-
-                $scope.map.control.refresh($scope.map.center);
-                $scope.map.zoom = 11;
-
-                //personal marker init
-                selfMarker = {
-                    options: {
-                        draggable: true,
-                        animation: google.maps.Animation.DROP,
-                        icon: 'libs/images/man_marker.png'
-                    },
-                    coords: {
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude
-                    },
-                    events: {
-                        dragend: function (marker, eventName, args) {
-                            var latitude = marker.getPosition().lat();
-                            var longitude = marker.getPosition().lng();
-                            var geocoder = new google.maps.Geocoder();
-                            var myposition = new google.maps.LatLng(latitude, longitude);
-                            geocoder.geocode({'latLng': myposition},function(data,status) {
-                                if(status == google.maps.GeocoderStatus.OK) {
-                                    myAddress.setAddress(
-                                        data[0].formatted_address,
-                                        latitude,
-                                        longitude
-                                    );
-                                }
-                            });
-                        }
-                    },
-                    id: "currentPosition"
-                };
-                $scope.selfMarker = selfMarker;
-            });
-        }
-    });
-    
-    $scope.getExpireDate = function(order) {
-        return $filter('date')(order.expireIn, 'd MMMM yyyy HH:mm');
-    };
-});
 
 ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order,
                                                             myAddress) {
@@ -322,7 +160,7 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             description: $scope.order.description
         };
 
-        MAX_TEXT_SIZE = 200;
+        var MAX_TEXT_SIZE = 200;
 
         var restrictions = [
             {
@@ -339,9 +177,9 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             }
         ];
 
-        for (i in restrictions) {
-            if (restrictions[i].isAppearing) {
-                $scope.showAlert(restrictions[i].message, 'warning');
+        for (var i in restrictions) {
+            if (i.isAppearing) {
+                $scope.showAlert(i.message, 'warning');
                 return;
             }
         }
@@ -383,7 +221,7 @@ ogifyApp.factory('ClickedOrder', function() {
     return ClickedOrder;
 });
 
-ogifyApp.controller('ShowOrderModalController', function ($scope, $filter, ClickedOrder, Order) {
+ogifyApp.controller('ShowOrderModalController', function ($scope, $filter, ClickedOrder) {
     $scope.getDescription = function() {
         return ClickedOrder.order.description;
     };
