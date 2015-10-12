@@ -36,8 +36,10 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     }
 
     $scope.$on('createdNewOrderEvent', function(event, order) {
-        $scope.showingOrders.push(order);
-        $scope.totalPages = window.Math.ceil($scope.showingOrders.length / $scope.pageParameters.pageSize);
+        if ($scope.currentActive == "my") {
+            $scope.showingOrders.push(order);
+            $scope.totalPages = window.Math.ceil($scope.showingOrders.length / $scope.pageParameters.pageSize);
+        }
     });
 
     switchToMyOrders = function() {
