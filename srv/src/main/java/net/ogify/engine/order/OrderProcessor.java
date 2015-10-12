@@ -41,10 +41,10 @@ public class OrderProcessor {
      * Method creates order on behalf  of the specified user.
      *
      * @param userId users id on behalf order should be created
-     * @param order  order which should be created.
+     * @param order order which should be created.
      * @return id of created order.
      */
-    public Long createOrder(Long userId, Order order) {
+    public Order createOrder(Long userId, Order order) {
         order.setId(null); // It is a new order, id must be null
         order.makeCreatedNow(); // It was created just now
         for(OrderItem item : order.getItems()) {
@@ -56,13 +56,13 @@ public class OrderProcessor {
         order.setOwner(userController.getUserById(userId));
         orderController.save(order);
 
-        return order.getId();
+        return order;
     }
 
     /**
      * Get order by id for specified user.
      *
-     * @param userId  id of user who requests order
+     * @param userId id of user who requests order
      * @param orderId id of requested order
      * @return requested order or null if there are no order with specified id, or user haven't access to them.
      * @throws ExecutionException on any exception thrown while attempting to get results.
@@ -76,9 +76,9 @@ public class OrderProcessor {
     /**
      * Search for orders near (in square with) specified point.
      *
-     * @param latitude  latitude of point.
+     * @param latitude latitude of point.
      * @param longitude longitude of point.
-     * @param userId    id of user who make request.
+     * @param userId id of user who make request.
      * @return visible for specified user orders.
      * @throws ExecutionException on any exception thrown while attempting to get results.
      */
@@ -94,7 +94,7 @@ public class OrderProcessor {
      * Method change current executor of order.
      *
      * @param executorId who is the executor
-     * @param orderId    id of changed order
+     * @param orderId id of changed order
      */
     public void changeOrderExecutor(Long executorId, Long orderId) {
         User executor = userController.getUserById(executorId);
@@ -119,8 +119,8 @@ public class OrderProcessor {
      * Method change workflow status of order.
      *
      * @param changerUserId who is changing status
-     * @param orderId       id of changed order
-     * @param status        status which order should have after change
+     * @param orderId id of changed order
+     * @param status status which order should have after change
      */
     public void changeOrderStatus(Long changerUserId, Long orderId, OrderStatus status) {
         User changer = userController.getUserById(changerUserId);
@@ -163,9 +163,9 @@ public class OrderProcessor {
     }
 
     /**
-     * @param userId      id of user which orders should be retrieved.
+     * @param userId id of user which orders should be retrieved.
      * @param firstResult the position of the first result to retrieve.
-     * @param maxResults  the maximum number of results to retrieve.
+     * @param maxResults the maximum number of results to retrieve.
      * @return users orders.
      */
     public List<Order> getUsersOrders(Long userId, int firstResult, int maxResults) {
@@ -175,9 +175,9 @@ public class OrderProcessor {
     /**
      * Methods rate second member of order execution.
      *
-     * @param userId  who rate.
+     * @param userId who rate.
      * @param orderId related order.
-     * @param rate    how he's rates.
+     * @param rate how he's rates.
      * @param comment additional comment for rate.
      */
     public void rateOrderParty(Long userId, Long orderId, double rate, String comment) {

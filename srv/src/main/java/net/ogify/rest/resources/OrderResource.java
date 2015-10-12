@@ -25,7 +25,6 @@ import java.util.concurrent.ExecutionException;
 public class OrderResource {
     /**
      * Field storing the vk id of the user if the user not authorized it is null.
-     * <p/>
      * Can be null only in permitted for all methods.
      */
     @CookieParam(value = AuthController.USER_ID_COOKIE_NAME)
@@ -48,7 +47,7 @@ public class OrderResource {
      * Return, not more then specified, users orders, where user is owner or executor.
      *
      * @param firstResult the position of the first result to retrieve.
-     * @param maxResults  the maximum number of results to retrieve.
+     * @param maxResults the maximum number of results to retrieve.
      * @return found users orders.
      */
     @GET
@@ -93,10 +92,10 @@ public class OrderResource {
      * Create new order.
      *
      * @param order order body.
-     * @return id of created order.
+     * @return created order.
      */
     @POST
-    public Long createNewOrder(Order order) {
+    public Order createNewOrder(Order order) {
         return orderProcessor.createOrder(userId, order);
     }
 
