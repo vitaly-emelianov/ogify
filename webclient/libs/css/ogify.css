@@ -42,6 +42,14 @@
     text-align: center;
 }
 
+p {
+    word-wrap: break-word;
+}
+
+small {
+    word-wrap: break-word;
+}
+
 .panel>.list-group>.order-list-Friends {
     border-left: 3px solid #5cb85c; !important;
 }
