@@ -1,0 +1,58 @@
+<div class="page-header">
+    <h2>Созданные мной</h2>
+</div>
+<div class="container-fluid" ng-controller="MyOrdersController">
+    <div class="row">
+        <div class="col-md-8 col-xs-8">
+            <div class="row">
+                <div class="col-md-4 col-xs-4 text-center"><h4>Новые</h4></div>
+                <div class="col-md-4 col-xs-4 text-center"><h4>В исполнении</h4></div>
+                <div class="col-md-4 col-xs-4 text-center"><h4>Завершенные</h4></div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-xs-12 text-center"><hr class="divider"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 col-xs-4">
+                    <div class="list-group">
+                        <a class="list-group-item" 
+                         ng-repeat="order in myOrders | filter:onlyNew"
+                         data-toggle="modal" 
+                         data-target="#showOrderModal"
+                         ng-click="setClickedOrder(order)">
+                            <span class="label label-default pull-right">№{{order.id}}</span>
+                            <p>{{order.description.slice(0, maxDescriptionLength)}}</p>
+                            <small>Адрес: {{order.address.slice(0, maxDescriptionLength)}}</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xs-4">
+                    <div class="list-group">
+                        <a class="list-group-item" 
+                         ng-repeat="order in myOrders | filter:onlyRunning"
+                         data-toggle="modal" 
+                         data-target="#showOrderModal"
+                         ng-click="setClickedOrder(order)">
+                            <span class="label label-warning pull-right">№{{order.id}}</span>
+                            <p>{{order.description.slice(0, maxDescriptionLength)}}</p>
+                            <small>Адрес: {{order.address.slice(0, maxDescriptionLength)}}</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xs-4">
+                    <div class="list-group">
+                        <a class="list-group-item" 
+                         ng-repeat="order in myOrders | filter:onlyDone"
+                         data-toggle="modal" 
+                         data-target="#showOrderModal"
+                         ng-click="setClickedOrder(order)">
+                            <span class="label label-success pull-right">№{{order.id}}</span>
+                            <p>{{order.description.slice(0, maxDescriptionLength)}}</p>
+                            <small>Адрес: {{order.address.slice(0, maxDescriptionLength)}}</small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
