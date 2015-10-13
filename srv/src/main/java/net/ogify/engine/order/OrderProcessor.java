@@ -39,15 +39,15 @@ public class OrderProcessor {
 
     /**
      * Method creates order on behalf  of the specified user.
+     *
      * @param userId users id on behalf order should be created
      * @param order order which should be created.
-     *
-     * @return created order.
+     * @return id of created order.
      */
     public Order createOrder(Long userId, Order order) {
         order.setId(null); // It is a new order, id must be null
         order.makeCreatedNow(); // It was created just now
-        for(OrderItem item: order.getItems()) {
+        for(OrderItem item : order.getItems()) {
             item.setId(null); // It is a new item, id must be null
             item.setOrder(order); // Create relation between item and orders
         }
@@ -61,6 +61,7 @@ public class OrderProcessor {
 
     /**
      * Get order by id for specified user.
+     *
      * @param userId id of user who requests order
      * @param orderId id of requested order
      * @return requested order or null if there are no order with specified id, or user haven't access to them.
@@ -74,6 +75,7 @@ public class OrderProcessor {
 
     /**
      * Search for orders near (in square with) specified point.
+     *
      * @param latitude latitude of point.
      * @param longitude longitude of point.
      * @param userId id of user who make request.
@@ -89,7 +91,33 @@ public class OrderProcessor {
     }
 
     /**
+     * Method change current executor of order.
+     *
+     * @param executorId who is the executor
+     * @param orderId id of changed order
+     */
+    public void changeOrderExecutor(Long executorId, Long orderId) {
+        User executor = userController.getUserById(executorId);
+        assert executor != null;
+        Order order = orderController.getOrderById(orderId);
+
+        if(order == null) // We can't work if order not founded
+            throw new NotFoundException(String.format("Order with id %d is not presented on server", orderId));
+        if(order.isInFinalState()) // Check that order not in Completed or Canceled state
+            throw new ForbiddenException("You can't execute completed or canceled orders");
+        if(order.getExecutor() != null)
+            throw new ForbiddenException("This order already has executor");
+        if(order.isUserOwner(executor)) // Check that we have access to order
+            throw new ForbiddenException("You haven't get to execution your own order");
+        order.setExecutor(executor);
+
+        // And finally, if we don't have errors save order
+        orderController.saveOrUpdate(order);
+    }
+
+    /**
      * Method change workflow status of order.
+     *
      * @param changerUserId who is changing status
      * @param orderId id of changed order
      * @param status status which order should have after change
@@ -98,7 +126,6 @@ public class OrderProcessor {
         User changer = userController.getUserById(changerUserId);
         assert changer != null;
         Order order = orderController.getOrderById(orderId);
-
 
         if(order == null) // We can't work if order not founded
             throw new NotFoundException(String.format("Order with id %d is not presented on server", orderId));
@@ -136,7 +163,6 @@ public class OrderProcessor {
     }
 
     /**
-     *
      * @param userId id of user which orders should be retrieved.
      * @param firstResult the position of the first result to retrieve.
      * @param maxResults the maximum number of results to retrieve.
@@ -148,6 +174,7 @@ public class OrderProcessor {
 
     /**
      * Methods rate second member of order execution.
+     *
      * @param userId who rate.
      * @param orderId related order.
      * @param rate how he's rates.

@@ -47,6 +47,7 @@ public class OrderController {
 
     /**
      * Method return all users orders (where user is owner or executor)
+     *
      * @param userId id of user which orders should be returned.
      * @param firstResult position of the first result, numbered from 0.
      * @param maxResults maximum number of results.
@@ -91,7 +92,7 @@ public class OrderController {
     }
 
     public List<Order> getNearestOrdersFiltered(Long userId, Set<Long> userFriends, Set<Long> extendedFriends,
-                                                       Double latitude, Double longitude) {
+                                                Double latitude, Double longitude) {
         EntityManager em = entityManagerService.createEntityManager();
         try {
             User user = em.find(User.class, userId);
@@ -201,6 +202,7 @@ public class OrderController {
 
     /**
      * Function check order on is specified user already rate other member of order.
+     *
      * @param order order which should be rated.
      * @param user user who should rate.
      * @return true if rated.
