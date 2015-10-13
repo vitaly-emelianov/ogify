@@ -39,7 +39,9 @@ import java.util.List;
                     "or (orders.namespace = :enumOrderFriends and orders.owner.id in :userFriendsIds)" +
                     "or (orders.namespace = :enumOrderPrivate and orders.executor = :user)" +
                     "or orders.owner = :user" +
-                ")"),
+                ")" +
+                "ORDER BY ABS(orders.longitude - :longitude) + ABS(orders.latitude - :latitude) + " +
+                "FUNCTION('DATEDIFF', :day, CURRENT_TIMESTAMP, orders.expireIn)/100.0"),
         @NamedQuery(name = "Order.getOrderByIdFiltered", query = "SELECT orders FROM Order orders WHERE " +
                     "orders.owner = :user AND orders.id = :orderId " +
                 "UNION SELECT orders FROM Order orders, User owners WHERE " +
