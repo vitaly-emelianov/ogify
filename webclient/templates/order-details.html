@@ -1,4 +1,4 @@
-<div class="modal fade" id="showOrderModal" tabindex="-1" role="dialog">
+﻿<div class="modal fade" id="showOrderModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document" ng-controller="ShowOrderModalController">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,6 +10,18 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
+                                      
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" 
+                                    ng-click="userTakesTask()"
+                                    ng-hide="getStatus() != 'New'"
+                                    class="btn btn-default btn-s btn-block" >
+                                Выполнить заказ
+                            </button> </br>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-md-12">                            
                             <div class="row">
@@ -51,7 +63,7 @@
                                 </div>
                             </div>                            
                         </div>
-                    </div>
+                    </div>                 
                 </div>
             </div>
         </div>
