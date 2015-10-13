@@ -26,19 +26,35 @@ import java.util.List;
                 "orders.id = :orderId and (orders.owner = :user or orders.executor = :user)"),
         @NamedQuery(name = "Order.getNearestOrdersFiltered", query = "select distinct orders from Order orders " +
                 "where orders.id in (" +
-                    "select orders.id from Order orders where " +
-                    "orders.latitude > (:latitude - 0.07) and orders.latitude < (:latitude + 0.07) " +
-                    "and orders.longitude > (:longitude - 0.07) and orders.longitude < (:longitude + 0.07)" +
-                    "and (orders.expireIn > CURRENT_TIMESTAMP or orders.expireIn is null) " +
-                    "and orders.status = :enumOrderNew) " +
+                "select orders.id from Order orders where " +
+                "orders.latitude > (:latitude - 0.07) and orders.latitude < (:latitude + 0.07) " +
+                "and orders.longitude > (:longitude - 0.07) and orders.longitude < (:longitude + 0.07)" +
+                "and (orders.expireIn > CURRENT_TIMESTAMP or orders.expireIn is null) " +
+                "and orders.status = :enumOrderNew) " +
                 "and (" +
-                    "orders.namespace = :enumOrderAll " +
-                    "or (" +
-                        "orders.namespace = :enumOrderFriendsOfFriends and " +
-                        "(orders.owner.id in :userExtendedFriendsIds) or (orders.owner.id in :userFriendsIds))" +
-                    "or (orders.namespace = :enumOrderFriends and orders.owner.id in :userFriendsIds)" +
-                    "or (orders.namespace = :enumOrderPrivate and orders.executor = :user)" +
-                    "or orders.owner = :user" +
+                "orders.namespace = :enumOrderAll " +
+                "or (" +
+                "orders.namespace = :enumOrderFriendsOfFriends and " +
+                "(orders.owner.id in :userExtendedFriendsIds) or (orders.owner.id in :userFriendsIds))" +
+                "or (orders.namespace = :enumOrderFriends and orders.owner.id in :userFriendsIds)" +
+                "or (orders.namespace = :enumOrderPrivate and orders.executor = :user)" +
+                "or orders.owner = :user) " +
+                "ORDER BY ABS(orders.longitude - :longitude) + ABS(orders.latitude - :latitude) + DATEDIFF(dd, CURRENT_TIMESTAMP, orders.expireIn)/100.0" ),
+        @NamedQuery(name = "Order.getNearestOrdersFilteredOld", query = "select distinct orders from Order orders " +
+                "where orders.id in (" +
+                "select orders.id from Order orders where " +
+                "orders.latitude > (:latitude - 0.07) and orders.latitude < (:latitude + 0.07) " +
+                "and orders.longitude > (:longitude - 0.07) and orders.longitude < (:longitude + 0.07)" +
+                "and (orders.expireIn > CURRENT_TIMESTAMP or orders.expireIn is null) " +
+                "and orders.status = :enumOrderNew) " +
+                "and (" +
+                "orders.namespace = :enumOrderAll " +
+                "or (" +
+                "orders.namespace = :enumOrderFriendsOfFriends and " +
+                "(orders.owner.id in :userExtendedFriendsIds) or (orders.owner.id in :userFriendsIds))" +
+                "or (orders.namespace = :enumOrderFriends and orders.owner.id in :userFriendsIds)" +
+                "or (orders.namespace = :enumOrderPrivate and orders.executor = :user)" +
+                "or orders.owner = :user" +
                 ")"),
         @NamedQuery(name = "Order.getOrderByIdFiltered", query = "SELECT orders FROM Order orders WHERE " +
                     "orders.owner = :user AND orders.id = :orderId " +
