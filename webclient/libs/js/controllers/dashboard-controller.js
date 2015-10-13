@@ -1,5 +1,5 @@
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter, uiGmapGoogleMapApi,
-                                                     Order, myAddress, ClickedOrder) {
+                                                     $location, Order, myAddress, ClickedOrder) {
     $scope.getOrdersLinks = function() {
         var showingOrdersIds = [];
 
@@ -15,6 +15,12 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     $scope.selfMarker = {
         coords  : { latitude: 55.7, longitude: 37.6 },
         id: "currentPosition"
+    };
+
+    $rootScope.map = {
+        center: { latitude: 55.7, longitude: 37.6 },
+        zoom: 10,
+        control: {}
     };
     
     var getMaxOrdersInPage = function() {
@@ -36,10 +42,6 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     }
 
     $scope.$on('createdNewOrderEvent', function(event, order) {
-        if ($scope.currentActive == "my") {
-            $scope.showingOrders.push(order);
-            $scope.totalPages = window.Math.ceil($scope.showingOrders.length / $scope.pageParameters.pageSize);
-        }
     });
 
     var switchToMyOrders = function() {
@@ -68,7 +70,11 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         });
     }
 
-    switchToMyOrders();
+    if ($location.path().indexOf('dashboard') > -1) {
+        switchToNearOrders();
+    } else {
+        switchToMyOrders();
+    }
 
     $scope.setClickedOrder = function(order){
         ClickedOrder.set(order);
@@ -99,22 +105,6 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
 
     $scope.setPage = function(currentPage, i){
         currentPage.page = i;
-    };
-
-    $scope.orderGroups = [{
-        name: 'near',
-        value: 'Все заказы',
-        orderViewModeChanged: switchToNearOrders
-    }, {
-        name: 'my',
-        value: 'Мои заказы',
-        orderViewModeChanged: switchToMyOrders
-    }];
-
-    $rootScope.map = {
-        center: { latitude: 55.7, longitude: 37.6 },
-        zoom: 10,
-        control: {}
     };
 
     uiGmapGoogleMapApi.then(function(maps) {
