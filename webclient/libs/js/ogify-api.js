@@ -69,7 +69,7 @@ ogifyServices.factory('Order', ['$resource',
                 params: {latitude: '', longitude: ''}},
             getMyOrders: {method: 'GET', isArray: true},
             getToExecution: {url: BASE_PATH + ORDER_PATH + '/:orderId' +'/getToExecution', method: 'PUT', 
-                params: {orderId: '@orderId'}}
+                params: {orderId: '@orderId'}},
             getOrdersLinks: {url: BASE_PATH + ORDER_PATH + '/socialLinks', method: 'GET'}
         });
 }]);
