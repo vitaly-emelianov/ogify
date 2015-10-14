@@ -119,7 +119,6 @@ public class OrderController {
             query.setParameter("userFriendsIds", searchFriendsIdsSet);
             query.setParameter("user", user);
 
-            query.setParameter("datePart", "dd");
             query.setParameter("enumOrderNew", Order.OrderStatus.New);
             query.setParameter("enumOrderAll", Order.OrderNamespace.All);
             query.setParameter("enumOrderFriends", Order.OrderNamespace.Friends);
