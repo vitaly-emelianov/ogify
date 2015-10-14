@@ -41,7 +41,7 @@ import java.util.List;
                 ") " +
                 "and orders.owner != :user " +
                 "ORDER BY ABS(orders.longitude - :longitude) + ABS(orders.latitude - :latitude) + " +
-                "FUNCTION('DATEDIFF', :datePart, CURRENT_TIMESTAMP, orders.expireIn)/100.0"),
+                "FUNCTION('DATEDIFF', 'dd', sql('now()::timestamp'), orders.expireIn)/100.0"),
         @NamedQuery(name = "Order.getOrderByIdFiltered", query = "SELECT orders FROM Order orders WHERE " +
                     "orders.owner = :user AND orders.id = :orderId " +
                 "UNION SELECT orders FROM Order orders, User owners WHERE " +
