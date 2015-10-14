@@ -119,6 +119,7 @@ public class OrderController {
             query.setParameter("userFriendsIds", searchFriendsIdsSet);
             query.setParameter("user", user);
 
+            query.setParameter("datePart", "dd");
             query.setParameter("enumOrderNew", Order.OrderStatus.New);
             query.setParameter("enumOrderAll", Order.OrderNamespace.All);
             query.setParameter("enumOrderFriends", Order.OrderNamespace.Friends);
@@ -228,6 +229,36 @@ public class OrderController {
             query.setParameter("ordersIds", ordersIds);
             query.setParameter("friendsIds", friendsIds);
             query.setParameter("extendedFriendsIds", extendedFriendsIds);
+
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Order> getRunningByUser(Long userId, Set<Order.OrderNamespace> namespaces) {
+        EntityManager em = entityManagerService.createEntityManager();
+        try {
+            TypedQuery<Order> query = em.createNamedQuery("Order.getRunningByUser", Order.class);
+            query.setParameter("executorId", userId);
+            query.setParameter("namespaces", namespaces);
+            query.setParameter("runningStatus", Order.OrderStatus.Running);
+
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Order> getCreatedByUser(Long userId, Set<Order.OrderNamespace> namespaces,
+                                        int firstResult, int maxResults) {
+        EntityManager em = entityManagerService.createEntityManager();
+        try {
+            TypedQuery<Order> query = em.createNamedQuery("Order.getCreatedByUser", Order.class);
+            query.setParameter("ownerId", userId);
+            query.setParameter("namespaces", namespaces);
+            query.setFirstResult(firstResult);
+            query.setMaxResults(maxResults);
 
             return query.getResultList();
         } finally {

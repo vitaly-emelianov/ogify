@@ -38,7 +38,7 @@ public class OrderResource {
 
     @GET
     @Path("/near")
-    public Set<Order> getOrdersNear(@NotNull @QueryParam("latitude") Double latitude,
+    public List<Order> getOrdersNear(@NotNull @QueryParam("latitude") Double latitude,
                                     @NotNull @QueryParam("longitude") Double longitude) throws ExecutionException {
         return orderProcessor.getNearestOrders(latitude, longitude, userId);
     }
@@ -57,30 +57,37 @@ public class OrderResource {
     }
 
     @GET
-    @Path(("/{orderId}"))
-    public Order getOrder(@NotNull @PathParam("orderId") Long orderId) {
+    @Path(("/{id}"))
+    public Order getOrder(@NotNull @PathParam("id") Long orderId) {
         return orderController.getOrderById(orderId);
     }
 
     @GET
-    @Path("/{orderId}/items")
-    public List<OrderItem> getOrderItems(@NotNull @PathParam("orderId") Long orderId) {
+    @Path("/{id}/items")
+    public List<OrderItem> getOrderItems(@NotNull @PathParam("id") Long orderId) {
         return orderController.getOrderById(orderId).getItems();
     }
 
     @PUT
-    @Path("/{orderId}/getToExecution")
-    public void getToExecution(@PathParam("orderId") Long orderId) {
+    @Path("/{id}/getToExecution")
+    public void getToExecution(@PathParam("id") Long orderId) {
         orderProcessor.changeOrderExecutor(userId, orderId);
         orderProcessor.changeOrderStatus(userId, orderId, Order.OrderStatus.Running);
     }
 
     @GET
-    @Path("/{orderId}/socialLink")
-    public Order.OrderNamespace getSocialLink(@NotNull @PathParam("orderId") Long orderId) throws ExecutionException {
+    @Path("/{id}/socialLink")
+    public Order.OrderNamespace getSocialLink(@NotNull @PathParam("id") Long orderId) throws ExecutionException {
         return orderProcessor.getOrderConnectionWithUser(orderId, userId);
     }
 
+    /**
+     * Calculate social link with orders.
+     *
+     * @param ordersIds list of orders, for them would be provided information about social link.
+     * @return map of orders and theirs link with user.
+     * @throws ExecutionException in case of some errors on calculation.
+     */
     @GET
     @Path("/socialLinks")
     public Map<Long, Order.OrderNamespace> getSocialLinks(@NotEmpty @QueryParam("ordersIds") Set<Long> ordersIds)

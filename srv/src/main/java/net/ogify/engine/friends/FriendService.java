@@ -102,4 +102,9 @@ public class FriendService {
             return ImmutableSet.of();
         }
     }
+
+    public boolean isUsersFriends(Long userId, Long possibleFriend) {
+        Set<Long> usersFriends = friendsCache.getUnchecked(userId);
+        return usersFriends != null && usersFriends.contains(possibleFriend);
+    }
 }
