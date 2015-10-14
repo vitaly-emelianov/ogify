@@ -16,27 +16,29 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created by melges.morgen on 14.02.15.
+ * Class represent api for work with users and theirs resources.
+ *
+ * @author Morgen Matvey
  */
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserResource {
+    @Autowired
+    private UserController userController;
+
+    @Autowired
+    private FriendService friendService;
+
+    @Autowired
+    private OrderProcessor orderProcessor;
+
     /**
      * Field storing the id of the user if the user not authorized it is null.
      * Can be null only in permitted for all methods.
      */
     @CookieParam(AuthController.USER_ID_COOKIE_NAME)
     private Long currentUserId;
-
-    @Autowired
-    UserController userController;
-
-    @Autowired
-    FriendService friendService;
-
-    @Autowired
-    OrderProcessor orderProcessor;
 
     @GET
     @Path("/{id}")
@@ -61,12 +63,28 @@ public class UserResource {
         return friendService.getUserExtendedFriendsIds(userId);
     }
 
+    /**
+     * Method returns orders which user is executing, ordered by "expire in" field.
+     *
+     * @summary Returns orders which user is executing.
+     * @param userId id of user which orders will be returned.
+     * @return list of orders is executing by specified user.
+     */
     @GET
     @Path("/{id}/executing")
     public List<Order> getExecutingByUser(@PathParam("id") Long userId) {
         return orderProcessor.getRunningByUser(userId, currentUserId);
     }
 
+    /**
+     * Return orders created by user. Orders will be ordered by "expire in" field.
+     *
+     * @summary Return orders created by user.
+     * @param userId id of user which orders will be returned.
+     * @param firstResult number of first result from the first of all orders.
+     * @param maxResults number of orders in result list.
+     * @return list of orders created by specified user.
+     */
     @GET
     @Path("/{id}/created")
     public List<Order> getCreatedByUserOrders(
