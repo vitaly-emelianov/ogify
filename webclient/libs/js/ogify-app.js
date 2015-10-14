@@ -2,7 +2,8 @@
  * Created by melge on 12.07.2015.
  */
 
-var ogifyApp = angular.module('ogifyApp', ['ogifyServices', 'ngRoute', 'ngCookies', 'uiGmapgoogle-maps']);
+var ogifyApp = angular.module('ogifyApp', ['ogifyServices', 'ngRoute', 'ngCookies', 'uiGmapgoogle-maps', 'angulartics',
+    'angulartics.google.analytics']);
 
 ogifyApp.service('myAddress', function () {
     var address = {
