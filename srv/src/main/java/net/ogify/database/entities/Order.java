@@ -38,10 +38,10 @@ import java.util.List;
                         "(orders.owner.id in :userExtendedFriendsIds) or (orders.owner.id in :userFriendsIds))" +
                     "or (orders.namespace = :enumOrderFriends and orders.owner.id in :userFriendsIds)" +
                     "or (orders.namespace = :enumOrderPrivate and orders.executor = :user)" +
-                    "or orders.owner = :user" +
-                ")" +
+                ") " +
+                "and orders.owner != :user " +
                 "ORDER BY ABS(orders.longitude - :longitude) + ABS(orders.latitude - :latitude) + " +
-                "FUNCTION('DATEDIFF', :day, CURRENT_TIMESTAMP, orders.expireIn)/100.0"),
+                "FUNCTION('DATEDIFF', :datePart, CURRENT_TIMESTAMP, orders.expireIn)/100.0"),
         @NamedQuery(name = "Order.getOrderByIdFiltered", query = "SELECT orders FROM Order orders WHERE " +
                     "orders.owner = :user AND orders.id = :orderId " +
                 "UNION SELECT orders FROM Order orders, User owners WHERE " +
@@ -64,7 +64,16 @@ import java.util.List;
                 "UNION SELECT orders FROM Order orders WHERE " +
                     "orders.id in :ordersIds and " +
                     "orders.owner.id not in :friendsIds and " +
-                    "orders.owner.id not in :extendedFriendsIds")
+                    "orders.owner.id not in :extendedFriendsIds"),
+        @NamedQuery(name = "Order.getRunningByUser", query =
+                "SELECT orders FROM Order orders WHERE " +
+                    "orders.executor.id = :executorId and " +
+                    "orders.namespace in :namespaces and " +
+                    "orders.status = :runningStatus ORDER BY orders.expireIn DESC"),
+        @NamedQuery(name = "Order.getCreatedByUser", query =
+                "SELECT orders FROM Order orders WHERE " +
+                    "orders.owner.id = :ownerId and " +
+                    "orders.namespace in :namespaces ORDER BY orders.expireIn DESC")
 })
 @XmlRootElement
 public class Order {

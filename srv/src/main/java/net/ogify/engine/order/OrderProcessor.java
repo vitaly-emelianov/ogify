@@ -1,5 +1,6 @@
 package net.ogify.engine.order;
 
+import com.google.common.collect.ImmutableSet;
 import net.ogify.database.FeedbackController;
 import net.ogify.database.OrderController;
 import net.ogify.database.UserController;
@@ -17,7 +18,10 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -82,12 +86,11 @@ public class OrderProcessor {
      * @return visible for specified user orders.
      * @throws ExecutionException on any exception thrown while attempting to get results.
      */
-    public Set<Order> getNearestOrders(Double latitude, Double longitude, Long userId)
+    public List<Order> getNearestOrders(Double latitude, Double longitude, Long userId)
             throws ExecutionException {
         Set<Long> friends = friendService.getUserFriendsIds(userId);
         Set<Long> friendsOfFriends = friendService.getUserExtendedFriendsIds(userId);
-        return new HashSet<>(
-                orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends, latitude, longitude));
+        return orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends, latitude, longitude);
     }
 
     /**
@@ -172,6 +175,33 @@ public class OrderProcessor {
         return orderController.getUsersOrders(userId, firstResult, maxResults);
     }
 
+    public List<Order> getUsersOrders(Long userId, Long watcherId, int firstResult, int maxResults) {
+        if(userId.equals(watcherId))
+            return orderController.getCreatedByUser(
+                    userId,
+                    ImmutableSet.of(
+                            Order.OrderNamespace.All, Order.OrderNamespace.Friends,
+                            Order.OrderNamespace.FriendsOfFriends, Order.OrderNamespace.Private),
+                    firstResult, maxResults
+            );
+
+        User user = userController.getUserById(userId);
+        if(user == null)
+            throw new NotFoundException(String.format("There is no user with id \"%s\"", userId));
+
+        if(friendService.isUsersFriends(userId, watcherId))
+            return orderController.getCreatedByUser(
+                    userId,
+                    ImmutableSet.of(
+                            Order.OrderNamespace.All, Order.OrderNamespace.Friends,
+                            Order.OrderNamespace.FriendsOfFriends),
+                    firstResult,
+                    maxResults
+            );
+
+        throw new ForbiddenException("You are not friends, only friends can see orders of each others");
+    }
+
     /**
      * Methods rate second member of order execution.
      *
@@ -238,5 +268,26 @@ public class OrderProcessor {
         if(friendService.getUserExtendedFriendsIds(userId).contains(userId))
             return Order.OrderNamespace.FriendsOfFriends;
         return Order.OrderNamespace.All;
+    }
+
+    public List<Order> getRunningByUser(Long userId, Long watcherUserId) {
+        if(userId.equals(watcherUserId)) { // User see all his own orders
+            return orderController.getRunningByUser(userId, ImmutableSet.of(
+                    Order.OrderNamespace.All, Order.OrderNamespace.Friends,
+                    Order.OrderNamespace.FriendsOfFriends, Order.OrderNamespace.Private));
+        }
+
+        User user = userController.getUserById(userId);
+        if(user == null)
+            throw new NotFoundException(String.format("There is no user with id \"%s\"", userId));
+
+        if(friendService.isUsersFriends(userId, watcherUserId)) {
+            return orderController.getRunningByUser(userId, ImmutableSet.of(
+                    Order.OrderNamespace.All, Order.OrderNamespace.Friends,
+                    Order.OrderNamespace.FriendsOfFriends
+            ));
+        }
+
+        throw new ForbiddenException("You are not friends, only friends can see orders of each others");
     }
 }
