@@ -1,7 +1,8 @@
 ogifyApp.controller('MyOrdersController', function ($scope, Order, ClickedOrder) {
 
     $scope.myOrders = Order.getMyOrders();
-    $scope.maxDescriptionLength = 20;
+    $scope.maxDescriptionLength = 50;
+    $scope.maxAddressLength = 20;
 
     $scope.setClickedOrder = function(order) {
         ClickedOrder.set(order);
@@ -18,5 +19,9 @@ ogifyApp.controller('MyOrdersController', function ($scope, Order, ClickedOrder)
     $scope.onlyDone = function(order) {
         return order.status == 'Done';
     }
+
+    $scope.$on('createdNewOrderEvent', function(event, order) {
+        $scope.myOrders.push(order);
+    });
 
 });
