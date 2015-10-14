@@ -40,8 +40,7 @@ import java.util.List;
                     "or (orders.namespace = :enumOrderPrivate and orders.executor = :user)" +
                 ") " +
                 "and orders.owner != :user " +
-                "ORDER BY ABS(orders.longitude - :longitude) + ABS(orders.latitude - :latitude)" +
-                ""),
+                "ORDER BY orders.expireIn"),
         @NamedQuery(name = "Order.getOrderByIdFiltered", query = "SELECT orders FROM Order orders WHERE " +
                     "orders.owner = :user AND orders.id = :orderId " +
                 "UNION SELECT orders FROM Order orders, User owners WHERE " +
