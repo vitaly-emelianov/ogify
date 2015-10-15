@@ -49,7 +49,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
 
     var switchToInProgressOrders = function() {
         $scope.user.$promise.then(function(user) {
-            UserProfile.getExecutingOrders({userId: user.userId}).$promise.then(function(data){
+            UserProfile.getExecutingOrders(user).$promise.then(function(data){
                 $scope.executingOrders = data;
                 $scope.showingOrders = data;
                 $scope.totalPages = window.Math.ceil(data.length / $scope.pageParameters.pageSize);
