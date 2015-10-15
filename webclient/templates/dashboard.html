@@ -1,4 +1,3 @@
-<!-- -->
 <div class="col-sm-12 col-md-8 main ">
     <div class="panel panel-default map-container-height">
         <div class="panel-body">
@@ -23,17 +22,7 @@
     <div id="orders" class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-md-4 col-sm-4">Текущие заказы</div>
-                <div class="col-md-8 col-sm-8" style="text-align:center">
-                    <div class="btn-group" role="group">
-                        <button ng-repeat="group in orderGroups" 
-                                ng-class="{'active':group.name == currentActive}" 
-                                ng-click="group.orderViewModeChanged()" 
-                                class="btn btn-default">
-                            {{group.value}}
-                        </button>
-                    </div>
-                </div>
+                <div class="col-md-10 col-sm-10">Выберите заказ:</div>
             </div>
         </div>
         <div class="list-group">
@@ -50,7 +39,7 @@
         </div>
     </div>
 </div>
-<div class="container-fluid" position="fixed" class="col-md-4s col-sm-8">
+<div class="container-fluid" position="fixed" class="col-md-4s col-sm-8" ng-if="currentPage.pages.length > 0">
     <nav align="center">
         <ul class="pagination">
             <li>
