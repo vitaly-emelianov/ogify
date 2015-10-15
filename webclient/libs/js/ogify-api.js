@@ -73,7 +73,5 @@ ogifyServices.factory('Order', ['$resource',
             getToExecution: {url: BASE_PATH + ORDER_PATH + '/:orderId' +'/getToExecution', method: 'PUT', 
                 params: {orderId: '@orderId'}},
             getOrdersLinks: {url: BASE_PATH + ORDER_PATH + '/socialLinks', method: 'GET'},
-            changeStatus: {url: BASE_PATH + ORDER_PATH + '/:orderId/status', method: "POST", params: {
-                orderId: '@orderId', status: '@newStatus'}}
         });
 }]);

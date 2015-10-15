@@ -243,7 +243,7 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $filter, Click
         Order.getToExecution({orderId: ClickedOrder.order.id});
     };
     $scope.orderToDone = function() {
-        Order.changeStatus({orderId: ClickedOrder.order.id, newStatus: !!!!!!!!!!});
+        
     };
     $scope.getExpireDate = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'd MMMM yyyy');
