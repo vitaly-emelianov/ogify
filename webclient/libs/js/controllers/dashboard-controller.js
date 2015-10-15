@@ -1,5 +1,8 @@
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter, uiGmapGoogleMapApi,
-                                                     $location, Order, myAddress, ClickedOrder) {
+                                                     $location, Order, myAddress, ClickedOrder,
+                                                     UserProfile) {
+    $scope.user = UserProfile.get();
+
     $scope.getOrdersLinks = function() {
         var showingOrdersIds = [];
 
@@ -44,16 +47,17 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     $scope.$on('createdNewOrderEvent', function(event, order) {
     });
 
-    var switchToMyOrders = function() {
-        Order.getMyOrders().$promise.then(function(data){
-            $scope.currentUserOrders = data;
-            $scope.showingOrders = data;
-            $scope.totalPages = window.Math.ceil(data.length / $scope.pageParameters.pageSize);
-            $scope.currentActive = "my";
-            $scope.currentPage = {
-                page: 0,
-                pages: _.range(window.Math.min($scope.totalPages, $scope.pageParameters.pagesInBar))
-            }
+    var switchToInProgressOrders = function() {
+        $scope.user.$promise.then(function(user) {
+            UserProfile.getExecutingOrders({userId: user.userId}).$promise.then(function(data){
+                $scope.executingOrders = data;
+                $scope.showingOrders = data;
+                $scope.totalPages = window.Math.ceil(data.length / $scope.pageParameters.pageSize);
+                $scope.currentPage = {
+                    page: 0,
+                    pages: _.range(window.Math.min($scope.totalPages, $scope.pageParameters.pagesInBar))
+                }
+            });
         });
     }
     
@@ -62,7 +66,6 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
             $scope.showingOrders = data;
             $scope.getOrdersLinks();
             $scope.totalPages = window.Math.ceil(data.length / $scope.pageParameters.pageSize);
-            $scope.currentActive = "near";
             $scope.currentPage = {
                 page: 0,
                 pages: _.range(window.Math.min($scope.totalPages, $scope.pageParameters.pagesInBar))
@@ -73,7 +76,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     if ($location.path().indexOf('dashboard') > -1) {
         switchToNearOrders();
     } else {
-        switchToMyOrders();
+        switchToInProgressOrders();
     }
 
     $scope.setClickedOrder = function(order){
