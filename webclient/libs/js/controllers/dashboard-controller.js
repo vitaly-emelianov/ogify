@@ -16,12 +16,12 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     };
     
     $scope.selfMarker = {
-        coords  : { latitude: 55.7, longitude: 37.6 },
+        coords  : { latitude: 55.927106, longitude: 37.523662 },
         id: "currentPosition"
     };
 
     $rootScope.map = {
-        center: { latitude: 55.7, longitude: 37.6 },
+        center: { latitude: 55.927106, longitude: 37.523662 },
         zoom: 10,
         control: {}
     };
@@ -46,7 +46,10 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
 
     $scope.$on('createdNewOrderEvent', function(event, order) {
     });
-
+    $scope.$on('takeOrderEvent', function(event) {
+        switchToNearOrders();
+    });
+    
     var switchToInProgressOrders = function() {
         $scope.user.$promise.then(function(user) {
             UserProfile.getExecutingOrders(user).$promise.then(function(data){
