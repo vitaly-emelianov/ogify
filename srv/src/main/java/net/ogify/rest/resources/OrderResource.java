@@ -5,6 +5,7 @@ import net.ogify.database.entities.Order;
 import net.ogify.database.entities.OrderItem;
 import net.ogify.engine.order.OrderProcessor;
 import net.ogify.engine.secure.AuthController;
+import net.ogify.rest.elements.RateRequest;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -106,19 +107,28 @@ public class OrderResource {
         return orderProcessor.createOrder(userId, order);
     }
 
-    @POST
-    @Path("/{orderId}/status")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void completeOrder(@PathParam("orderId") Long orderId,
-                              @NotNull @FormParam("status") Order.OrderStatus status) {
+    /**
+     * Change order status on specified in request.
+     *
+     * @param orderId id of order to change.
+     * @param status status which should be set on order.
+     */
+    @PUT
+    @Path("/{id}/status")
+    public void completeOrder(@PathParam("id") Long orderId,
+                              @NotNull Order.OrderStatus status) {
         orderProcessor.changeOrderStatus(userId, orderId, status);
     }
 
-    @POST
-    @Path("/{orderId}/rate")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void rateOrder(@PathParam("orderId") Long orderId, @NotNull @FormParam("rate") double rate,
-                          @FormParam("comment") String comment) {
-        orderProcessor.rateOrderParty(userId, orderId, rate, comment);
+    /**
+     * Rate other side of order.
+     *
+     * @param orderId id of order related to rate.
+     * @param rateRequest object contains rate details.
+     */
+    @PUT
+    @Path("/{id}/rate")
+    public void rateOrder(@PathParam("id") Long orderId, @NotNull RateRequest rateRequest) {
+        orderProcessor.rateOrderParty(userId, orderId, rateRequest.getRate(), rateRequest.getComment());
     }
 }

@@ -132,7 +132,7 @@ public class OrderProcessor {
 
         if(order == null) // We can't work if order not founded
             throw new NotFoundException(String.format("Order with id %d is not presented on server", orderId));
-        if(order.isUserOwner(changer) && order.isUserExecutor(changer)) // Check that we have access to order
+        if(!order.isUserOwner(changer) && !order.isUserExecutor(changer)) // Check that we have access to order
             throw new ForbiddenException("You haven't right for change status of the order");
         if(order.isInFinalState()) // Check that order not in Completed or Canceled state
             throw new ForbiddenException("You can't change status of completed or canceled orders");
@@ -159,6 +159,10 @@ public class OrderProcessor {
                             String.format("Owner can't change order status from %s to %s state",
                                     order.getStatus().toString(), status.toString()));
             }
+        } else {
+            throw new ForbiddenException(
+                    String.format("Owner can't change order status from %s to %s state",
+                            order.getStatus().toString(), status.toString()));
         }
 
         // And finally, if we don't have errors save order
