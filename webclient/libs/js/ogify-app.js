@@ -220,7 +220,7 @@ ogifyApp.factory('ClickedOrder', function() {
     return ClickedOrder;
 });
 
-ogifyApp.controller('ShowOrderModalController', function ($scope, $filter, ClickedOrder) {
+ogifyApp.controller('ShowOrderModalController', function ($scope, $filter, ClickedOrder, Order) {
     $scope.getDescription = function() {
         return ClickedOrder.order.description;
     };
@@ -240,10 +240,10 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $filter, Click
         return ClickedOrder.order.status;
     };
     $scope.userTakesTask = function() {
-        Order.getToExecution({orderId:ClickedOrder.order.id});
+        Order.getToExecution({orderId: ClickedOrder.order.id});
     };
     $scope.orderToDone = function() {
-        //TODO
+        Order.changeStatus({orderId: ClickedOrder.order.id, newStatus: !!!!!!!!!!});
     };
     $scope.getExpireDate = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'd MMMM yyyy');
