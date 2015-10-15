@@ -242,6 +242,9 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $filter, Click
     $scope.userTakesTask = function() {
         Order.getToExecution({orderId:ClickedOrder.order.id});
     };
+    $scope.orderToDone = function() {
+        //TODO
+    };
     $scope.getExpireDate = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'd MMMM yyyy');
     };
