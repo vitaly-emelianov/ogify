@@ -221,7 +221,6 @@ ogifyApp.factory('ClickedOrder', function() {
 });
 
 ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $filter, ClickedOrder, Order) {
-    
     $scope.getDescription = function() {
         return ClickedOrder.order.description;
     };
@@ -247,6 +246,9 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
             },
             function(errorResponse) {
             });
+    };
+    $scope.orderToDone = function() {
+        
     };
     $scope.getExpireDate = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'd MMMM yyyy');
