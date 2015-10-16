@@ -62,7 +62,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                 }
             });
         });
-    }
+    };
     
     var switchToNearOrders = function(){
         Order.getNearMe($scope.map.center).$promise.then(function(data){
@@ -74,7 +74,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                 pages: _.range(window.Math.min($scope.totalPages, $scope.pageParameters.pagesInBar))
             }
         });
-    }
+    };
 
     if ($location.path().indexOf('dashboard') > -1) {
         switchToNearOrders();

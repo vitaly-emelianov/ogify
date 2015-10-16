@@ -42,12 +42,10 @@
     text-align: center;
 }
 
-p {
-    word-wrap: break-word;
-}
-
-small {
-    word-wrap: break-word;
+.list-group-item-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .panel>.list-group>.order-list-Friends {

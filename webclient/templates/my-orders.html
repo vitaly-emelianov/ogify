@@ -12,13 +12,13 @@
                          data-target="#showOrderModal"
                          ng-click="setClickedOrder(order)">
                             <span class="label label-default pull-right">№{{order.id}}</span>
-                            <p>{{order.description.slice(0, maxDescriptionLength)}}</p>
-                            <small>Адрес: {{order.address.slice(0, maxAddressLength)}}</small>
+                            <p class="list-group-item-text">{{order.description}}</p>
+                            <p class="small list-group-item-text"><b>Адрес:</b> {{order.address}}</p>
                         </a>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <h4 class="text-center">В исполнении</p></h4>
+                    <h4 class="text-center">В исполнении</h4>
                     <hr class="divider">
                     <div class="list-group">
                         <a class="list-group-item" 
@@ -27,8 +27,8 @@
                          data-target="#showOrderModal"
                          ng-click="setClickedOrder(order)">
                             <span class="label label-warning pull-right">№{{order.id}}</span>
-                            <p>{{order.description.slice(0, maxDescriptionLength)}}</p>
-                            <small>Адрес: {{order.address.slice(0, maxAddressLength)}}</small>
+                            <p class="list-group-item-text">{{order.description}}</p>
+                            <p class="small list-group-item-text"><b>Адрес:</b> {{order.address}}</p>
                         </a>
                     </div>
                 </div>
@@ -42,8 +42,8 @@
                          data-target="#showOrderModal"
                          ng-click="setClickedOrder(order)">
                             <span class="label label-success pull-right">№{{order.id}}</span>
-                            <p>{{order.description.slice(0, maxDescriptionLength)}}</p>
-                            <small>Адрес: {{order.address.slice(0, maxAddressLength)}}</small>
+                            <p class="list-group-item-text">{{order.description}}</p>
+                            <p class="small list-group-item-text"><b>Адрес:</b> {{order.address}}</p>
                         </a>
                     </div>
                 </div>
