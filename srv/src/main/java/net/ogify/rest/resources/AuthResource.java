@@ -113,7 +113,6 @@ public class AuthResource {
     @GET
     @PermitAll
     @Consumes(MediaType.WILDCARD)
-    @Produces(MediaType.TEXT_HTML)
     @ReturnType("java.lang.Void")
     public Response auth(
             @QueryParam("code") String code,
