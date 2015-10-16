@@ -46,6 +46,9 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
 
     $scope.$on('createdNewOrderEvent', function(event, order) {
     });
+    $scope.$on('finishOrderEvent', function(event) {
+        switchToInProgressOrders();
+    });
     $scope.$on('takeOrderEvent', function(event) {
         switchToNearOrders();
     });
