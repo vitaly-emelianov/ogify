@@ -240,15 +240,20 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
         return ClickedOrder.order.status;
     };
     $scope.userTakesTask = function() {
-        Order.getToExecution({orderId:ClickedOrder.order.id}, function(successResponse) {
+        Order.getToExecution({orderId: ClickedOrder.order.id}, function(successResponse) {
                 angular.element('#showOrderModal').modal('hide');
                 $rootScope.$broadcast('takeOrderEvent');
             },
             function(errorResponse) {
-            });
+        });
     };
     $scope.orderToDone = function() {
-        
+        Order.changeStatus({orderId: ClickedOrder.order.id}, 2, function(successResponse) {
+                angular.element('#showOrderModal').modal('hide');
+                $rootScope.$broadcast('finishOrderEvent');
+            },
+            function(errorResponse) {
+        });
     };
     $scope.getExpireDate = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'd MMMM yyyy');
