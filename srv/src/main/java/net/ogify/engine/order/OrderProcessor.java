@@ -100,24 +100,19 @@ public class OrderProcessor {
      * @param orderId id of changed order
      */
     public void changeOrderExecutor(Long executorId, Long orderId) {
+        User executor = userController.getUserById(executorId);
+        assert executor != null;
         Order order = orderController.getOrderById(orderId);
+
         if(order == null) // We can't work if order not founded
             throw new NotFoundException(String.format("Order with id %d is not presented on server", orderId));
         if(order.isInFinalState()) // Check that order not in Completed or Canceled state
             throw new ForbiddenException("You can't execute completed or canceled orders");
-
-        if(executorId != null) {
-            User executor = userController.getUserById(executorId);
-            assert executor != null;
-
-            if(order.getExecutor() != null)
-                throw new ForbiddenException("This order already has executor");
-            if(order.isUserOwner(executor)) // Check that we have access to order
-                throw new ForbiddenException("You haven't get to execution your own order");
-            order.setExecutor(executor);
-        } else {
-            order.setExecutor(null);
-        }
+        if(order.getExecutor() != null)
+            throw new ForbiddenException("This order already has executor");
+        if(order.isUserOwner(executor)) // Check that we have access to order
+            throw new ForbiddenException("You haven't get to execution your own order");
+        order.setExecutor(executor);
 
         // And finally, if we don't have errors save order
         orderController.saveOrUpdate(order);
