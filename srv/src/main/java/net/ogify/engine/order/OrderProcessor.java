@@ -176,7 +176,7 @@ public class OrderProcessor {
      * @param orderId id of changed order
      * @param status status which order should have after change
      */
-    public void denyOrderExecution(Long changerUserId, Long orderId, Order.OrderStatus status) {
+    public void denyOrderExecution(Long changerUserId, Long orderId) {
         Order order = orderController.getOrderById(orderId);
         if(order == null) // We can't work if order not founded
             throw new NotFoundException(String.format("Order with id %d is not presented on server", orderId));
@@ -189,7 +189,7 @@ public class OrderProcessor {
             throw new ForbiddenException("You haven't right for change status of the order");
 
         order.setExecutor(null);
-        order.setStatus(status);
+        order.setStatus(OrderStatus.New);
 
         // And finally, if we don't have errors save order
         orderController.saveOrUpdate(order);
