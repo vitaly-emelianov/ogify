@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  * @author Morgen Matvey
  */
 public class TelephoneNumberValidator implements ConstraintValidator<TelephoneNumber, String> {
-    protected static final Pattern telephoneNumberPattern = Pattern.compile("\\d{10}");
+    protected static final Pattern telephoneNumberPattern = Pattern.compile("[+]\\d{11}");
 
     @Override
     public void initialize(TelephoneNumber telephoneNumber) {
