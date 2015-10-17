@@ -74,6 +74,8 @@ ogifyServices.factory('Order', ['$resource',
                 params: {orderId: '@orderId'}},
             getOrdersLinks: {url: BASE_PATH + ORDER_PATH + '/socialLinks', method: 'GET'},
             changeStatus: {url: BASE_PATH + ORDER_PATH + '/:orderId' +'/status', method: 'PUT', 
+                params: {orderId: '@orderId'}},
+            denyOrderExecution: {url: BASE_PATH + ORDER_PATH + '/:orderId' +'/executor', method: 'DELETE', 
                 params: {orderId: '@orderId'}}
         });
 }]);

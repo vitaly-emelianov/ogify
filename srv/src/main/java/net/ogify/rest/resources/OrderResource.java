@@ -76,6 +76,13 @@ public class OrderResource {
         orderProcessor.changeOrderStatus(userId, orderId, Order.OrderStatus.Running);
     }
 
+    @DELETE
+    @Path("/{id}/executor")
+    public void denyOrderExecution(@PathParam("id") Long orderId) {
+        orderProcessor.changeOrderStatus(userId, orderId, Order.OrderStatus.New);
+        orderProcessor.changeOrderExecutor(null, orderId);
+    }
+
     @GET
     @Path("/{id}/socialLink")
     public Order.OrderNamespace getSocialLink(@NotNull @PathParam("id") Long orderId) throws ExecutionException {

@@ -1,4 +1,4 @@
-﻿<div class="modal fade" id="showOrderModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="showOrderModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document" ng-controller="ShowOrderModalController">
         <div class="modal-content">
             <div class="modal-header">
@@ -18,6 +18,12 @@
                                     ng-hide="getStatus() != 'New'"
                                     class="btn btn-default btn-s btn-block" >
                                 Выполнить заказ
+                            </button>
+                            <button type="button" 
+                                    ng-click="cancelOrder()"
+                                    ng-hide="getStatus() != 'Running'"
+                                    class="btn btn-danger btn-s btn-block" >
+                                Отказаться от заказа
                             </button>
                             <button type="button" 
                                     ng-click="orderToDone()"
