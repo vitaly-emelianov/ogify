@@ -131,4 +131,10 @@ public class OrderResource {
     public void rateOrder(@PathParam("id") Long orderId, @NotNull RateRequest rateRequest) {
         orderProcessor.rateOrderParty(userId, orderId, rateRequest.getRate(), rateRequest.getComment());
     }
+
+    @DELETE
+    @Path("/{id}/executor")
+    public void denyOrderExecution(@PathParam("id") Long orderId) {
+
+    }
 }

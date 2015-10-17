@@ -38,17 +38,17 @@ public class FriendService {
     public FriendService() {
         friendsCache = CacheBuilder.newBuilder()
                 .maximumSize(cacheSize)
-                .expireAfterWrite(2, TimeUnit.HOURS)
+                .expireAfterWrite(7, TimeUnit.DAYS)
                 .build(new FriendCacheLoader(this));
 
         extendedFriendsCache = CacheBuilder.newBuilder()
                 .maximumSize(cacheSize)
-                .expireAfterWrite(2, TimeUnit.HOURS)
+                .expireAfterWrite(7, TimeUnit.DAYS)
                 .build(new ExtendedFriendCacheLoader(this));
 
         vkFriendsCache = CacheBuilder.newBuilder()
                 .maximumSize(cacheSize)
-                .expireAfterWrite(2, TimeUnit.HOURS)
+                .expireAfterWrite(7, TimeUnit.DAYS)
                 .build(new VkFriendsCacheLoader());
 
     }
