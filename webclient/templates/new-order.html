@@ -65,7 +65,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="additemlistel">Добавить товар:</label>
+                    <label>Добавить товар:</label>
                     <div class="row input-group double-input">
                         <div ng-repeat="item in order.items">
                             <div class="col-md-7">
@@ -91,6 +91,10 @@
                     <label for="address">Адрес:</label>
                     <input class="form-control" type="text" id="address"
                             ng-model="order.address.plainAddress"/>
+                </div>
+                <div class="form-group">
+                    <label for="telephoneNumber">Телефон для связи</label>
+                    <input id="telephoneNumber" type="tel" class="form-control">
                 </div>
                 <div class="form-group">
                     <label for="namespace">Кто может выполнить:</label>

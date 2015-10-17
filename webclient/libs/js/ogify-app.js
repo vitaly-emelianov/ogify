@@ -110,6 +110,39 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, $lo
 
 ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order,
                                                             myAddress) {
+    // Init telephone input
+    $scope.telephoneInput = angular.element("#telephoneNumber");
+    $scope.telephoneInput.intlTelInput({
+        defaultCountry: "ru",
+        preferredCountries: ["ru", "by", "ua"]
+    });
+
+    $scope.telephoneInput.blur(function () {
+        if(this.value.length < 1) {
+            this.classList.remove('iti-invalid-key');
+            return;
+        }
+
+        var isNumberValid = $scope.telephoneInput.intlTelInput("isValidNumber");
+        if(!isNumberValid) {
+            this.classList.add('iti-invalid-key');
+        } else {
+            this.classList.remove('iti-invalid-key');
+        }
+    });
+
+    $scope.telephoneInput.keyup(function(){
+        var isNumberValid = $scope.telephoneInput.intlTelInput("isValidNumber");
+        var error = $scope.telephoneInput.intlTelInput("getValidationError");
+        if(!isNumberValid &&
+            (error == intlTelInputUtils.validationError.TOO_LONG
+            || error == intlTelInputUtils.validationError.IS_POSSIBLE)) {
+            this.classList.add('iti-invalid-key');
+        } else {
+            this.classList.remove('iti-invalid-key');
+        }
+    });
+
     $scope.order = {
         expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
         expireTime: $filter('date')(new Date(), 'hh:mm'),
@@ -130,7 +163,7 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
     $scope.hideAlert = function() {
         $scope.alerts.warning = [];
         $scope.alerts.error = [];
-    }
+    };
 
     $scope.chooseTime = function() {
         var input = angular.element('#expire_in_time').clockpicker();
@@ -148,6 +181,8 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             latitude: myAddress.getAddress().latitude,
             longitude: myAddress.getAddress().longitude,
             reward: $scope.order.reward,
+            telephoneNumber: $scope.telephoneInput[0].value.length > 0 ?
+                $scope.telephoneInput.intlTelInput("getNumber") : null,
             status: 'New',
             owner: null,
             executor: null,
@@ -160,7 +195,6 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         };
 
         var MAX_TEXT_SIZE = 200;
-
         var restrictions = [
             {
                 isAppearing: newOrder.description.length > MAX_TEXT_SIZE,
@@ -173,12 +207,17 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             {
                 isAppearing: newOrder.address.length > MAX_TEXT_SIZE,
                 message: "Слишком длинный адрес"
+            },
+            {
+                isAppearing: !$scope.telephoneInput.intlTelInput("isValidNumber")
+                && $scope.telephoneInput[0].value.length > 0,
+                message: "Некорректный номер телефона"
             }
         ];
 
         for (var i in restrictions) {
-            if (i.isAppearing) {
-                $scope.showAlert(i.message, 'warning');
+            if (restrictions[i].isAppearing) {
+                $scope.showAlert(restrictions[i].message, 'warning');
                 return;
             }
         }
