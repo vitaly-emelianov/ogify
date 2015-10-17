@@ -180,11 +180,63 @@ public class OrderProcessor {
      * @param changerUserId who is changing status
      * @param orderId id of changed order
      * @param status status which order should have after change
-     * @param executor executor which order should have after change
+     * @param executorId id of executor which order should have after change
      */
-    public void denyOrderExecution(Long changerUserId, Long orderId, Order.OrderStatus status, Long executor) {
-        changeOrderStatus(changerUserId, orderId, status);
-        changeOrderExecutor(executor, orderId);
+    public void denyOrderExecution(Long changerUserId, Long orderId, Order.OrderStatus status, Long executorId) {
+        Order order = orderController.getOrderById(orderId);
+        if(order == null) // We can't work if order not founded
+            throw new NotFoundException(String.format("Order with id %d is not presented on server", orderId));
+        if(order.isInFinalState()) // Check that order not in Completed or Canceled state
+            throw new ForbiddenException("You can't execute completed or canceled orders");
+
+        User changer = userController.getUserById(changerUserId);
+        assert changer != null;
+        if(!order.isUserOwner(changer) && !order.isUserExecutor(changer)) // Check that we have access to order
+            throw new ForbiddenException("You haven't right for change status of the order");
+
+        if(executorId != null) {
+            User executor = userController.getUserById(executorId);
+            assert executor != null;
+
+            if(order.getExecutor() != null)
+                throw new ForbiddenException("This order already has executor");
+            if(order.isUserOwner(executor)) // Check that we have access to order
+                throw new ForbiddenException("You haven't get to execution your own order");
+            if(order.isUserExecutor(changer)) { // Orders executor try to change status
+                switch(status) { // Executor can complete, start execution or take order back
+                    case Running:
+                    case Completed:
+                    case New:
+                        order.setStatus(status);
+                        break;
+                    default:
+                        throw new ForbiddenException(
+                                String.format("Executor can't change order status from %s to %s state",
+                                        order.getStatus().toString(), status.toString()));
+                }
+            } else if(order.getStatus() != OrderStatus.Running) { // Owner mustn't change status of running order
+                switch(status) {
+                    case Canceled:
+                        order.setStatus(status);
+                        break;
+                    default:
+                        throw new ForbiddenException(
+                                String.format("Owner can't change order status from %s to %s state",
+                                        order.getStatus().toString(), status.toString()));
+                }
+            } else {
+                throw new ForbiddenException(
+                        String.format("Owner can't change order status from %s to %s state",
+                                order.getStatus().toString(), status.toString()));
+            }
+            order.setExecutor(executor);
+        } else {
+            order.setExecutor(null);
+
+        }
+
+        // And finally, if we don't have errors save order
+        orderController.saveOrUpdate(order);
     }
 
     /**
