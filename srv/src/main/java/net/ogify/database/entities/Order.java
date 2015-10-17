@@ -231,10 +231,6 @@ public class Order {
     }
 
     public void setTelephoneNumber(String telephoneNumber) {
-        if(!telephoneNumber.matches("\\d{10}")) {
-            throw new IllegalArgumentException("Wrong telephone number, there must be 10 digits");
-        }
-
         this.telephoneNumber = telephoneNumber;
     }
 
