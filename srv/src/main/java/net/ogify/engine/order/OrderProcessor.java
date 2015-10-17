@@ -170,6 +170,32 @@ public class OrderProcessor {
     }
 
     /**
+     * Method change workflow status of order and its executor.
+     *
+     * @param changerUserId who is changing status
+     * @param orderId id of changed order
+     * @param status status which order should have after change
+     */
+    public void denyOrderExecution(Long changerUserId, Long orderId) {
+        Order order = orderController.getOrderById(orderId);
+        if(order == null) // We can't work if order not founded
+            throw new NotFoundException(String.format("Order with id %d is not presented on server", orderId));
+        if(order.isInFinalState()) // Check that order not in Completed or Canceled state
+            throw new ForbiddenException("You can't execute completed or canceled orders");
+
+        User changer = userController.getUserById(changerUserId);
+        assert changer != null;
+        if(!order.isUserExecutor(changer)) // Check that we have access to order
+            throw new ForbiddenException("You haven't right for change status of the order");
+
+        order.setExecutor(null);
+        order.setStatus(OrderStatus.New);
+
+        // And finally, if we don't have errors save order
+        orderController.saveOrUpdate(order);
+    }
+
+    /**
      * @param userId id of user which orders should be retrieved.
      * @param firstResult the position of the first result to retrieve.
      * @param maxResults the maximum number of results to retrieve.

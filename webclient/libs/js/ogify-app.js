@@ -294,6 +294,14 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
             function(errorResponse) {
         });
     };
+    $scope.cancelOrder = function() {
+        Order.denyOrderExecution({orderId: ClickedOrder.order.id}, function(successResponse) {
+                angular.element('#showOrderModal').modal('hide');
+                $rootScope.$broadcast('finishOrderEvent');
+            },
+            function(errorResponse) {
+        });
+    };
     $scope.getExpireDate = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'd MMMM yyyy');
     };
