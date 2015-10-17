@@ -79,7 +79,7 @@ public class OrderResource {
     @DELETE
     @Path("/{id}/executor")
     public void denyOrderExecution(@PathParam("id") Long orderId) {
-        orderProcessor.denyOrderExecution(userId, orderId, Order.OrderStatus.New, null);
+        orderProcessor.denyOrderExecution(userId, orderId, Order.OrderStatus.New);
     }
 
     @GET
