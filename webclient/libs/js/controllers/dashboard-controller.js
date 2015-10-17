@@ -6,7 +6,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     $scope.getOrdersLinks = function() {
         var showingOrdersIds = [];
 
-        $scope.showingOrders.forEach(function(order, i, arr) {
+        $scope.showingOrders.forEach(function(order) {
             showingOrdersIds.push(order.id);
         });
 
@@ -20,29 +20,55 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         id: "currentPosition"
     };
 
+    $scope.markersEvents = {
+        click: function(marker, eventName, model){
+            $scope.setClickedOrder(model);
+            $("#showOrderModal").modal();
+        }
+    };
+
     $rootScope.map = {
         center: { latitude: 55.927106, longitude: 37.523662 },
         zoom: 10,
-        control: {}
+        control: {},
+        events: {
+            zoom_changed: function (map) {
+                $scope.doSpider = (map.getZoom() > 16);
+            }
+        }
     };
-    
+
+    $scope.clusterOptions = {
+        gridSize: 60,
+        ignoreHidden: true,
+        minimumClusterSize: 2,
+        maxZoom: 16
+    };
+
+    $scope.spiderOptions = {
+        keepSpiderfied: true
+    };
+
+    $scope.doSpider = false;
+
+
     var getMaxOrdersInPage = function() {
         return 5;
-    }
+    };
     
     var getMaxDescription = function() {
         return 50;
-    }
+    };
     
     var getMaxPagesInBar = function() {
         return 9;
-    }
+    };
     
     $scope.pageParameters = {
         pageSize: getMaxOrdersInPage(),
         pagesInBar: getMaxPagesInBar(),
         descriptionLength: getMaxDescription()
-    }
+    };
 
     $scope.$on('createdNewOrderEvent', function(event, order) {
     });
@@ -109,7 +135,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                 currentPage.pages = _.range(currentPage.page,
                                        window.Math.min(currentPage.page + $scope.pageParameters.pagesInBar, $scope.totalPages));
             }
-        };
+        }
     };
 
     $scope.setPage = function(currentPage, i){
