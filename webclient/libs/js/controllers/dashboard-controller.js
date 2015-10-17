@@ -17,7 +17,8 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     
     $scope.selfMarker = {
         coords  : { latitude: 55.927106, longitude: 37.523662 },
-        id: "currentPosition"
+        id: "currentPosition",
+        visible: false
     };
 
     $scope.markersEvents = {
