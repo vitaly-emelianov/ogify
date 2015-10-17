@@ -175,6 +175,19 @@ public class OrderProcessor {
     }
 
     /**
+     * Method change workflow status of order and its executor.
+     *
+     * @param changerUserId who is changing status
+     * @param orderId id of changed order
+     * @param status status which order should have after change
+     * @param executor executor which order should have after change
+     */
+    public void denyOrderExecution(Long changerUserId, Long orderId, Order.OrderStatus status, Long executor) {
+        changeOrderStatus(changerUserId, orderId, status);
+        changeOrderExecutor(executor, orderId);
+    }
+
+    /**
      * @param userId id of user which orders should be retrieved.
      * @param firstResult the position of the first result to retrieve.
      * @param maxResults the maximum number of results to retrieve.
