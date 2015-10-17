@@ -1,6 +1,7 @@
 package net.ogify.database.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import net.ogify.database.entities.validation.TelephoneNumber;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -98,76 +99,80 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     @XmlElement(nillable = true, required = false)
-    Long id;
+    private Long id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_owner", nullable = false)
     @XmlElement(nillable = false, required = true)
-    User owner;
+    private User owner;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "order_executor", nullable = true)
     @XmlElement(nillable = true, required = true)
-    User executor;
+    private User executor;
 
     @NotNull
     @Column(name = "order_status", nullable = false)
     @Enumerated(EnumType.STRING)
     @XmlElement(nillable = false, required = true)
-    OrderStatus status;
+    private OrderStatus status;
 
     @NotNull
     @Column(name = "order_namespace", nullable = false)
     @Enumerated(EnumType.STRING)
     @XmlElement(nillable = false, required = true)
-    OrderNamespace namespace;
+    private OrderNamespace namespace;
 
     @NotNull
     @Column(name = "latitude", nullable = false)
     @XmlElement(required = true, nillable = false)
-    Double latitude;
+    private Double latitude;
 
     @NotNull
     @Column(name = "longitude", nullable = false)
     @XmlElement(required = true, nillable = false)
-    Double longitude;
+    private Double longitude;
 
     @Column(name = "address")
     @XmlElement(name = "address")
-    String address;
+    private String address;
 
     @Column(name = "reward")
     @XmlElement(name = "reward")
-    String reward;
+    private String reward;
 
     @Column(name = "order_description")
     @XmlElement
-    String description;
+    private String description;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
     @XmlElement
-    Date createdAt = new Date();
+    private Date createdAt = new Date();
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "done_at", nullable = true)
     @XmlElement
-    Date doneAt;
+    private Date doneAt;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "expire_in")
     @XmlElement
-    Date expireIn;
+    private Date expireIn;
 
     @NotNull
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @XmlElement(name = "items")
-    List<OrderItem> items = new ArrayList<OrderItem>();
+    private List<OrderItem> items = new ArrayList<OrderItem>();
 
     @OneToMany
     @JsonIgnore
-    List<Feedback> relatedFeedbacks;
+    private List<Feedback> relatedFeedbacks;
+
+    @TelephoneNumber
+    @XmlElement
+    private String telephoneNumber;
 
     public boolean isUserOwner(User user) {
         return user.equals(owner);
@@ -181,12 +186,12 @@ public class Order {
         return status == OrderStatus.Completed || status == OrderStatus.Canceled;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public List<OrderItem> getItems() {
@@ -197,12 +202,12 @@ public class Order {
         this.executor = executor;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
     public void makeCreatedNow() {
         createdAt = new Date();
+    }
+
+    public void setOwner(User user) {
+        this.owner = user;
     }
 
     public User getOwner() {
@@ -219,5 +224,85 @@ public class Order {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public String getTelephoneNumber() {
+        return telephoneNumber;
+    }
+
+    public void setTelephoneNumber(String telephoneNumber) {
+        this.telephoneNumber = telephoneNumber;
+    }
+
+    public OrderNamespace getNamespace() {
+        return namespace;
+    }
+
+    public void setNamespace(OrderNamespace namespace) {
+        this.namespace = namespace;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getReward() {
+        return reward;
+    }
+
+    public void setReward(String reward) {
+        this.reward = reward;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public Date getDoneAt() {
+        return doneAt;
+    }
+
+    public void setDoneAt(Date doneAt) {
+        this.doneAt = doneAt;
+    }
+
+    public Date getExpireIn() {
+        return expireIn;
+    }
+
+    public void setExpireIn(Date expireIn) {
+        this.expireIn = expireIn;
+    }
+
+    public List<Feedback> getRelatedFeedbacks() {
+        return relatedFeedbacks;
     }
 }

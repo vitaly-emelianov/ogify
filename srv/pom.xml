@@ -194,9 +194,9 @@
                             </excludes>
                         </filter>
                         <fieldVisibility>
-                            <GETTER>NONE</GETTER>
-                            <IS_GETTER>NONE</IS_GETTER>
-                            <SETTER>NONE</SETTER>
+                            <GETTER>PUBLIC</GETTER>
+                            <IS_GETTER>PUBLIC</IS_GETTER>
+                            <SETTER>PUBLIC</SETTER>
                             <CREATOR>PUBLIC_ONLY</CREATOR>
                             <FIELD>NON_PRIVATE</FIELD>
                         </fieldVisibility>
@@ -233,12 +233,13 @@
                                 <httpCode>415</httpCode>
                                 <document>always</document>
                                 <defaultMessage>Content-Type is invalid (probably, not JSON).</defaultMessage>
+                                <sticky>true</sticky>
                             </httpStatusCode>
                             <httpStatusCode>
                                 <httpCode>500</httpCode>
                                 <document>always</document>
                                 <defaultMessage>The service call has not succeeded.</defaultMessage>
-                                <sticky>true</sticky> <!-- Document always, even if there is an @statuscode tag -->
+                                <sticky>true</sticky>
                             </httpStatusCode>
                         </httpStatusCodes>
                     </restModel>
