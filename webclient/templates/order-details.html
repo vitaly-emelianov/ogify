@@ -15,7 +15,7 @@
                         <div class="col-md-12">
                             <button type="button" 
                                     ng-click="userTakesTask()"
-                                    ng-hide="getStatus() != 'New' || getExecutor().id != user.id"
+                                    ng-hide="getStatus() != 'New' || getOrder().owner.userId == user.userId"
                                     class="btn btn-default btn-s btn-block" >
                                 Выполнить заказ
                             </button>
