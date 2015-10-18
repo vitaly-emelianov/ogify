@@ -192,7 +192,8 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                             });
                         }
                     },
-                    id: "currentPosition"
+                    id: "currentPosition",
+                    visible: true
                 };
                 $scope.selfMarker = selfMarker;
             });

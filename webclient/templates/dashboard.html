@@ -3,6 +3,7 @@
         <div class="panel-body">
             <ui-gmap-google-map center='map.center' zoom='map.zoom' control="map.control" events="map.events">
                 <ui-gmap-marker
+                        ng-if="selfMarker.visible"
                         coords="selfMarker.coords"
                         options="selfMarker.options"
                         idkey="selfMarker.id"
