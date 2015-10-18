@@ -1,8 +1,11 @@
 package net.ogify.engine.secure;
 
+import net.ogify.database.BetaKeyController;
 import net.ogify.database.UserController;
+import net.ogify.database.entities.BetaKey;
 import net.ogify.database.entities.SocialNetwork;
 import net.ogify.database.entities.User;
+import net.ogify.engine.secure.exceptions.ForbiddenException;
 import net.ogify.engine.vkapi.VkAuth;
 import net.ogify.engine.vkapi.VkUsers;
 import net.ogify.engine.vkapi.elements.VkAccessResponse;
@@ -30,6 +33,22 @@ public class AuthController {
     @Autowired
     UserController userController;
 
+    @Autowired
+    BetaKeyController betaKeyController;
+
+    /**
+     * Method generate secure random number which should be used as session secret
+     * @return random generated string
+     */
+    public static String generateSessionSecret() {
+        Random randomGenerator = new SecureRandom();
+        byte[] sessionSecretAsBytes = new byte[16];
+        randomGenerator.nextBytes(sessionSecretAsBytes);
+
+        return DatatypeConverter.printHexBinary(sessionSecretAsBytes);
+    }
+
+
     /**
      * Method check data provided by client for correctness and session validity.
      * @param userId vkId of user, provided by client.
@@ -47,25 +66,20 @@ public class AuthController {
      * @param code code provided by client (client must request it from vk first).
      * @param redirectUrl redirect uri which client provide to vk client and which client call for invoke auth.
      * @param sessionSecret client session secret.
-     * @param socialNetwork argument specify which social network we use to authentication.
+     * @param betaKey special key used for beta programs.
      * @return vk id returned from
      * @throws VkSideError if vk say about error, or we have a trouble when connecting to vk.
      */
-    public Long auth(String code, String redirectUrl, String sessionSecret, SocialNetwork socialNetwork)
+    public Long auth(String code, String redirectUrl, String sessionSecret, String betaKey)
             throws VkSideError {
-        Long userId;
-        switch(socialNetwork) {
-            case Vk:
-                userId = authVk(code, redirectUrl, sessionSecret);
-                break;
-            case FaceBook:
-                userId = authFb(code, redirectUrl, sessionSecret);
-                break;
-            default:
-                throw new RuntimeException("Argument of type social network have unsupported value");
-        }
+        BetaKey betaKeyInternal = checkBetaKey(betaKey);
 
-        return userId;
+        betaKeyInternal.incrementUsedTime();
+        betaKeyController.saveOrUpdate(betaKeyInternal);
+
+        betaKeyController.saveOrUpdate(betaKeyInternal);
+
+        return authVk(code, redirectUrl, sessionSecret);
     }
 
     public Long authVk(String code, String redirectUrl, String sessionSecret) throws VkSideError {
@@ -85,19 +99,17 @@ public class AuthController {
         return user.getId();
     }
 
-    public static Long authFb(String code, String redirectUrl, String sessionSecret) throws VkSideError {
+    public Long authFb(String code, String redirectUrl, String sessionSecret) throws VkSideError {
         return null;
     }
 
-    /**
-     * Method generate secure random number which should be used as session secret
-     * @return random generated string
-     */
-    public static String generateSessionSecret() {
-        Random randomGenerator = new SecureRandom();
-        byte[] sessionSecretAsBytes = new byte[16];
-        randomGenerator.nextBytes(sessionSecretAsBytes);
+    public BetaKey checkBetaKey(String key) {
+        BetaKey betaKeyInternal = betaKeyController.getByKey(key);
+        if(betaKeyInternal == null)
+            throw new ForbiddenException("Sorry there is no provided key");
+        if(betaKeyInternal.getUsedTime() > 5)
+            throw new ForbiddenException("You have used your key too many times");
 
-        return DatatypeConverter.printHexBinary(sessionSecretAsBytes);
+        return betaKeyInternal;
     }
 }
