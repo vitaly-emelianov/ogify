@@ -22,7 +22,7 @@ ogifyApp.controller('MyOrdersController', function ($scope, UserProfile, Clicked
     };
 
     $scope.onlyDone = function(order) {
-        return order.status == 'Done';
+        return order.status == 'Completed';
     };
 
     $scope.$on('createdNewOrderEvent', function(event, order) {
