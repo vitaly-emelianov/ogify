@@ -38,40 +38,54 @@
                         <div class="col-md-12">                            
                             <div class="row">
                                 <div class="col-md-6">                                
-                                    <label for="comment">Описание:</label>
+                                    <label>Описание:</label>
                                     <p class="text-justify">
                                         {{getDescription()}}
                                     </p>
 
-                                    <label for="order_cost">Вознаграждение:</label>
+                                    <label>Вознаграждение:</label>
                                     <p class="text-justify">
                                         {{getReward()}}
                                     </p>
 
-                                    <label for="address">Адрес:</label>
+                                    <label>Адрес:</label>
                                     <p class="text-justify">
                                         {{getAddress()}}
                                     </p>
         
-                                    <label for="expire_in_container">Актуально до:</label>
+                                    <label>Актуально до:</label>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <p class="text-justify" rows="3"id="expire_in_time">
+                                            <p class="text-justify" rows="3" id="expireDate">
                                                 {{getExpireDate()}}
                                             </p>
                                         </div>
                                         <div class="col-md-6">
-                                            <p class="text-justify" rows="3"id="expire_in_time">
+                                            <p class="text-justify" rows="3" id="expireTime">
                                                 {{getExpireTime()}}
                                             </p>
                                         </div>
                                     </div>
+
+                                    <label>Телефон заказчика:</label>
+                                    <p class="text-justify">
+                                        <i ng-hide="getOrder().telephoneNumber != null">
+                                            Не указан
+                                        </i>
+                                        <i ng-hide="getOrder().telephoneNumber == null">
+                                            {{getOrder().telephoneNumber}}
+                                        </i>
+                                    </p>
                                 </div>
                                 
                                 <div class="col-md-6">
-                                    <label for="comment">Автор:</label>
-                                    <a href="#/profile/{{phone.id}}">{{getOwnerName()}}</a>
-                                    <a href="#/profile/{{phone.id}}" ><img ng-src="{{getOwnerPhotoUrl()}}" class="img-thumbnail"></a>
+                                    <label>Автор:</label>
+                                    <a href="#/profile/{{getOrder().owner.userId}}">
+                                        {{getOwnerName()}}
+                                    </a>
+                                    <a href="#/profile/{{getOrder().owner.userId}}" >
+                                        <img ng-src="{{getOwnerPhotoUrl()}}" class="img-thumbnail">
+                                    </a>
                                 </div>
                             </div>                            
                         </div>
