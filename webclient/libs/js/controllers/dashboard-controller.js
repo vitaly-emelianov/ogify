@@ -1,7 +1,7 @@
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter, uiGmapGoogleMapApi,
                                                      $location, Order, myAddress, ClickedOrder,
                                                      UserProfile) {
-    $scope.user = UserProfile.get();;
+    $scope.user = UserProfile.get();
 
     $scope.getOrdersLinks = function() {
         var showingOrdersIds = [];
