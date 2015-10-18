@@ -153,7 +153,7 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
 
     $scope.order = {
         expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
-        expireTime: $filter('date')(new Date(), 'hh:mm'),
+        expireTime: $filter('date')(new Date(), 'H:MM'),
         reward: '',
         address: myAddress.getAddress(),
         namespace: 'FriendsOfFriends',
