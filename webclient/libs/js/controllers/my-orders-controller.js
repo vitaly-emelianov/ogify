@@ -1,6 +1,11 @@
-ogifyApp.controller('MyOrdersController', function ($scope, Order, ClickedOrder) {
+ogifyApp.controller('MyOrdersController', function ($scope, UserProfile, ClickedOrder) {
+    // TODO: put user profile into service, to avoid server spamming.
+    $scope.user = UserProfile.get();
 
-    $scope.myOrders = Order.getMyOrders();
+    $scope.user.$promise.then(function(user) {
+        $scope.myOrders = UserProfile.getCreatedOrders({userId: user.userId});
+    });
+
     $scope.maxDescriptionLength = 50;
     $scope.maxAddressLength = 20;
 
@@ -10,15 +15,15 @@ ogifyApp.controller('MyOrdersController', function ($scope, Order, ClickedOrder)
 
     $scope.onlyNew = function(order) {
         return order.status == 'New';
-    }
+    };
 
     $scope.onlyRunning = function(order) {
         return order.status == 'Running';
-    }
+    };
 
     $scope.onlyDone = function(order) {
         return order.status == 'Done';
-    }
+    };
 
     $scope.$on('createdNewOrderEvent', function(event, order) {
         $scope.myOrders.push(order);

@@ -53,7 +53,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
 
 
     var getMaxOrdersInPage = function() {
-        return 5;
+        return (angular.element('#order-list-container').height() / 54 + 15) | 0;
     };
     
     var getMaxDescription = function() {
@@ -81,7 +81,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     
     var switchToInProgressOrders = function() {
         $scope.user.$promise.then(function(user) {
-            UserProfile.getExecutingOrders(user).$promise.then(function(data){
+            UserProfile.getExecutingOrders({userId: user.userId}).$promise.then(function(data){
                 $scope.executingOrders = data;
                 $scope.showingOrders = data;
                 $scope.totalPages = window.Math.ceil(data.length / $scope.pageParameters.pageSize);

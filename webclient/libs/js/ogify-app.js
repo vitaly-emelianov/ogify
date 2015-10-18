@@ -260,6 +260,9 @@ ogifyApp.factory('ClickedOrder', function() {
 });
 
 ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $filter, ClickedOrder, Order) {
+    $scope.getOrder = function() {
+        return ClickedOrder.order;
+    };
     $scope.getDescription = function() {
         return ClickedOrder.order.description;
     };
