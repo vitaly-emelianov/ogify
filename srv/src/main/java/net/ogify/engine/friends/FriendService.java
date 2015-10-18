@@ -4,6 +4,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableSet;
 import net.ogify.database.UserController;
+import net.ogify.database.entities.SocialNetwork;
+import net.ogify.database.entities.SocialToken;
 import net.ogify.database.entities.User;
 import net.ogify.engine.exceptions.SocialNetworkTokenMissedException;
 import net.ogify.engine.vkapi.exceptions.VkSideError;
@@ -49,8 +51,12 @@ public class FriendService {
         vkFriendsCache = CacheBuilder.newBuilder()
                 .maximumSize(cacheSize)
                 .expireAfterWrite(7, TimeUnit.DAYS)
-                .build(new VkFriendsCacheLoader());
+                .build(new VkFriendsCacheLoader(this));
 
+    }
+
+    SocialToken getSocialToken(User user) {
+        return userController.getUserAuthToken(user, SocialNetwork.Vk);
     }
 
     protected Set<Long> loadFriendList(Long userId)
@@ -58,9 +64,6 @@ public class FriendService {
         User user = userController.getUserById(userId);
         if(user == null)
             throw new IllegalArgumentException(String.format("Invalid user with id: %d", userId));
-
-        if(user.getVkToken() == null)
-            throw new SocialNetworkTokenMissedException(userId);
 
         Set<Long> vkFriendsIds = vkFriendsCache.get(user);
         List<User> filteredFriends = userController.getUserWithVkIds(vkFriendsIds);

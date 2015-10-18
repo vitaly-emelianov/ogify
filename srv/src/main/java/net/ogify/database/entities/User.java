@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by melges.morgen on 14.02.15.
@@ -128,14 +131,7 @@ public class User {
 
     @JsonIgnore
     public SocialToken getVkToken() {
-        tokens.sort(new Comparator<SocialToken>() {
-            @Override
-            public int compare(SocialToken o1, SocialToken o2) {
-                return o1.getExpireIn().compareTo(o2.getExpireIn());
-            }
-        });
-
-        return tokens.get(0);
+        return tokens.get(tokens.size() - 1);
     }
 
     public void addSession(String sessionSecret, Long expireIn) {
