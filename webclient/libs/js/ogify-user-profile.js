@@ -3,7 +3,6 @@
  */
 ogifyApp.service('currentUserProfile', function() {
     var profile = {};
-
 });
 
 ogifyApp.controller('ProfilePageController', function ($scope, $routeParams, UserProfile) {
