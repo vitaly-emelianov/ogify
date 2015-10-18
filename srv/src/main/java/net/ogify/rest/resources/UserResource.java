@@ -7,6 +7,7 @@ import net.ogify.engine.friends.FriendService;
 import net.ogify.engine.order.OrderProcessor;
 import net.ogify.engine.secure.AuthController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -23,6 +24,7 @@ import java.util.concurrent.ExecutionException;
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Component
 public class UserResource {
     @Autowired
     private UserController userController;

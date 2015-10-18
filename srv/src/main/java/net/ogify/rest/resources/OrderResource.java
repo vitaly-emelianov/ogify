@@ -8,6 +8,7 @@ import net.ogify.engine.secure.AuthController;
 import net.ogify.rest.elements.RateRequest;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -23,6 +24,7 @@ import java.util.concurrent.ExecutionException;
 @Path("/orders")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Component
 public class OrderResource {
     /**
      * Field storing the vk id of the user if the user not authorized it is null.
@@ -40,7 +42,7 @@ public class OrderResource {
     @GET
     @Path("/near")
     public List<Order> getOrdersNear(@NotNull @QueryParam("latitude") Double latitude,
-                                    @NotNull @QueryParam("longitude") Double longitude) throws ExecutionException {
+                                     @NotNull @QueryParam("longitude") Double longitude) throws ExecutionException {
         return orderProcessor.getNearestOrders(latitude, longitude, userId);
     }
 

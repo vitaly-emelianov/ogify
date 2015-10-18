@@ -37,9 +37,9 @@ import java.util.List;
                         "orders.namespace = :enumOrderFriendsOfFriends and " +
                         "(orders.owner.id in :userExtendedFriendsIds) or (orders.owner.id in :userFriendsIds))" +
                     "or (orders.namespace = :enumOrderFriends and orders.owner.id in :userFriendsIds)" +
-                    "or (orders.namespace = :enumOrderPrivate and orders.executor = :user)" +
                 ") " +
                 "and orders.owner != :user " +
+                "and orders.executor != :user " +
                 "ORDER BY orders.expireIn"),
         @NamedQuery(name = "Order.getOrderByIdFiltered", query = "SELECT orders FROM Order orders WHERE " +
                     "orders.owner = :user AND orders.id = :orderId " +
