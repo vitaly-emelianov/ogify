@@ -1,18 +1,15 @@
 package net.ogify.rest.resources;
 
 import com.qmino.miredot.annotations.ReturnType;
-import net.ogify.database.entities.SocialNetwork;
 import net.ogify.engine.secure.AuthController;
 import net.ogify.engine.vkapi.VkAuth;
 import net.ogify.engine.vkapi.exceptions.VkSideError;
 import net.ogify.rest.elements.SNRequestUri;
-import net.ogify.rest.elements.SocialNetworkParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
@@ -71,31 +68,21 @@ public class AuthResource {
      * @summary Generate authenticate url
      *
      * @param uriInfo context parameter with uri.
-     * @param socialNetwork social network which will be used for authentication.
+     * @param betaKey special key provided for beta testing.
      * @return authentication url.
      */
     @GET
     @Path("/getRequestUri")
     @PermitAll
     public SNRequestUri getRequestUri(@Context UriInfo uriInfo,
-                                      @NotNull @QueryParam("sn") SocialNetworkParam socialNetwork) {
+                                      @QueryParam("betaKey") String betaKey) {
+        authController.checkBetaKey(betaKey);
+
         URI authRequestUri = uriInfo.getBaseUriBuilder()
                 .path(AuthResource.class) // Add class path;
                 .build();
 
-        SNRequestUri generatedUriResponse;
-        switch(socialNetwork.getValue()) {
-            case Vk:
-                generatedUriResponse = vkAuth.getClientAuthUri(authRequestUri);
-                break;
-            case FaceBook:
-                generatedUriResponse = new SNRequestUri();
-                break;
-            default:
-                generatedUriResponse = new SNRequestUri();
-        }
-
-        return generatedUriResponse;
+        return vkAuth.getClientAuthUri(authRequestUri, betaKey);
     }
 
     /**
@@ -104,7 +91,7 @@ public class AuthResource {
      *
      * @summary Authenticate client
      * @param code secret code returned by social network.
-     * @param socialNetwork should show which social network used for authentication.
+     * @param betaKey special secret key used for auth users subscribed on beta program.
      * @param request request from context.
      * @return response which sets cookie and redirect client to client application.
      * @throws VkSideError if there error returned from vk on authentication process.
@@ -116,19 +103,17 @@ public class AuthResource {
     @ReturnType("java.lang.Void")
     public Response auth(
             @QueryParam("code") String code,
-            @QueryParam("state") SocialNetworkParam socialNetwork,
+            @QueryParam("state") String betaKey,
             @Context HttpServletRequest request) throws VkSideError, URISyntaxException {
         if(code == null || code.isEmpty())
             return Response.seeOther(new URI("/landing")).build();
 
-        if(socialNetwork.getValue() == SocialNetwork.Other)
-            throw new WebApplicationException("sn must be vk or facebook", Response.Status.BAD_REQUEST);
         String uri = request.getRequestURL().toString();
         if(sessionSecret == null)
             sessionSecret = AuthController.generateSessionSecret();
 
         NewCookie snIdCookie = new NewCookie(AuthController.USER_ID_COOKIE_NAME,
-                authController.auth(code, uri, sessionSecret, socialNetwork.getValue()).toString(), "/", null,
+                authController.auth(code, uri, sessionSecret, betaKey).toString(), "/", null,
                 null, 2629744, false); // Valid for a month
         NewCookie sessionIdCookie = new NewCookie(AuthController.SESSION_COOKIE_NAME, sessionSecret, "/", null,
                 null, 2629744, false); // Valid for a month
