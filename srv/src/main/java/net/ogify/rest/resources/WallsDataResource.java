@@ -6,6 +6,7 @@ import net.ogify.engine.vkapi.elements.wall.WallPost;
 import net.ogify.engine.vkapi.exceptions.VkSideError;
 import net.ogify.engine.walls.WallPostsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -19,6 +20,7 @@ import java.util.concurrent.ExecutionException;
 @Path("/data/walls")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Component
 public class WallsDataResource {
     @Autowired
     UserController userController;
