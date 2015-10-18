@@ -295,6 +295,7 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
                 $rootScope.$broadcast('takeOrderEvent');
             },
             function(errorResponse) {
+
         });
     };
     $scope.orderToDone = function() {
