@@ -30,9 +30,17 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
         }).when('/dashboard', {
             templateUrl: 'templates/dashboard.html',
             controller: 'DashboardController'
-        }).when('/profile', {
+        }).when('/profile/:userId', {
             templateUrl: 'templates/user-profile.html',
-            controller: 'ProfilePageController'
+            controller: 'ProfilePageController',
+            resolve: {
+                // Hide detail order modal when we going to profile page
+                // TODO: Rewrite it in more common way
+                hideModal: function () {
+                    angular.element('#showOrderModal').modal('hide');
+                    return true;
+                }
+            }
         }).when('/my-orders', {
             templateUrl: 'templates/my-orders.html',
             controller: 'MyOrdersController'
