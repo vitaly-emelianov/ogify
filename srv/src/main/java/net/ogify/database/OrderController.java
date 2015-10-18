@@ -123,7 +123,6 @@ public class OrderController {
             query.setParameter("enumOrderAll", Order.OrderNamespace.All);
             query.setParameter("enumOrderFriends", Order.OrderNamespace.Friends);
             query.setParameter("enumOrderFriendsOfFriends", Order.OrderNamespace.FriendsOfFriends);
-            query.setParameter("enumOrderPrivate", Order.OrderNamespace.Private);
 
             return query.getResultList();
         } finally {
