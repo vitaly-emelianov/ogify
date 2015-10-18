@@ -1,4 +1,5 @@
 ogifyApp.controller('MyOrdersController', function ($scope, UserProfile, ClickedOrder) {
+    // TODO: put user profile into service, to avoid server spamming.
     $scope.user = UserProfile.get();
 
     $scope.user.$promise.then(function(user) {
