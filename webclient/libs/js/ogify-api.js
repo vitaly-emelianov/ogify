@@ -55,6 +55,8 @@ ogifyServices.factory('UserProfile', ['$resource', 'AuthInterceptor',
             getFriends: {url: BASE_PATH + PROFILE_PATH + '/:userId/friends', isArray: true, params: {
                 userId: '@userId'}},
             getExecutingOrders: {url: BASE_PATH + PROFILE_PATH + '/:userId/executing', isArray: true, params: {
+                userId: '@userId'}},
+            getCreatedOrders: {url: BASE_PATH + PROFILE_PATH + '/:userId/created', isArray: true, params: {
                 userId: '@userId'}}
         });
     }

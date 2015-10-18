@@ -35,7 +35,7 @@
         </div>
     </div>
 </div>
-<div class="col-sm-8 col-md-4 current-orders-height">
+<div class="col-sm-8 col-md-4 current-orders-height" id="order-list-container">
     <div id="orders" class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
@@ -56,7 +56,7 @@
         </div>
     </div>
 </div>
-<div class="container-fluid col-md-4s col-sm-8" position="fixed">
+<div position="fixed" ng-hide="currentPage.pages < 2">
     <nav align="center">
         <ul class="pagination">
             <li>
