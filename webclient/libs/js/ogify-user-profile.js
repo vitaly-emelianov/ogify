@@ -7,5 +7,6 @@ ogifyApp.service('currentUserProfile', function() {
 });
 
 ogifyApp.controller('ProfilePageController', function ($scope, UserProfile) {
+
     $scope.currentUserProfile = UserProfile.get();
 });

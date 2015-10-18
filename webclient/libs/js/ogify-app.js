@@ -30,7 +30,7 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
         }).when('/dashboard', {
             templateUrl: 'templates/dashboard.html',
             controller: 'DashboardController'
-        }).when('/profile', {
+        }).when('/profile/:userId', {
             templateUrl: 'templates/user-profile.html',
             controller: 'ProfilePageController'
         }).when('/my-orders', {
