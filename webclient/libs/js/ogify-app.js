@@ -257,6 +257,7 @@ ogifyApp.factory('ClickedOrder', function() {
     ClickedOrder.order = {
         description: null,
         reward: null,
+        items: [],
         address: null,
         expireIn: null,
         owner: {photoUri: null, fullName: null}
@@ -273,6 +274,12 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
     };
     $scope.getDescription = function() {
         return ClickedOrder.order.description;
+    };
+    $scope.getItemList = function() {
+        return ClickedOrder.order.items;
+    };
+    $scope.itemsEmpty = function() {
+        return (ClickedOrder.order.items.length == 0);
     };
     $scope.getOwnerName = function() {
         return ClickedOrder.order.owner.fullName;
