@@ -40,7 +40,7 @@ import java.util.List;
                     "or (orders.namespace = :enumOrderFriends and orders.owner.id in :userFriendsIds)" +
                 ") " +
                 "and orders.owner != :user " +
-                "and orders.executor != :user " +
+                "and orders.executor is null " +
                 "ORDER BY orders.expireIn"),
         @NamedQuery(name = "Order.getOrderByIdFiltered", query = "SELECT orders FROM Order orders WHERE " +
                     "orders.owner = :user AND orders.id = :orderId " +
