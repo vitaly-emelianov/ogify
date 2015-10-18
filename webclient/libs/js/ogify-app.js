@@ -279,7 +279,7 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
         return ClickedOrder.order.items;
     };
     $scope.itemsEmpty = function() {
-        return (ClickedOrder.order.items.length == 0)
+        return (ClickedOrder.order.items.length == 0);
     };
     $scope.getOwnerName = function() {
         return ClickedOrder.order.owner.fullName;
