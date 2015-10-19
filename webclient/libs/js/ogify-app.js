@@ -59,7 +59,7 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
     });
 });
 
-ogifyApp.run(function ($rootScope, $http, $cookies, $window) {
+ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {
     $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
     $rootScope.createOrderTemplateUri = 'templates/new-order.html';
     $rootScope.showOrderTemplateUri = 'templates/order-details.html'
@@ -70,12 +70,17 @@ ogifyApp.run(function ($rootScope, $http, $cookies, $window) {
         $window.location.replace($rootScope.landingUri);
     }
 
+    var timeoutPromise;
+
     $rootScope.$watch(function () {
         return $http.pendingRequests.length > 0;
     }, function (v) {
         if (v) {
-            waitingDialog.show();
+
+            timeoutPromise = $timeout(waitingDialog.show, 1500);
+            //waitingDialog.show();
         } else {
+            $timeout.cancel(timeoutPromise);
             waitingDialog.hide();
         }
     });

@@ -28,14 +28,32 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         }
     };
 
+    var mapChanged = function(map) {
+        var bounds = map.getBounds();
+        $scope.map.bounds.neLatitude = bounds.getNorthEast().lat();
+        $scope.map.bounds.neLongitude = bounds.getNorthEast().lng();
+        $scope.map.bounds.swLatitude = bounds.getSouthWest().lat();
+        $scope.map.bounds.swLongitude = bounds.getSouthWest().lng();
+
+        updateOrders();
+    };
+
     $rootScope.map = {
         center: { latitude: 55.927106, longitude: 37.523662 },
         zoom: 10,
+        bounds: {
+            neLatitude: 55.95,
+            neLongitude: 37.82,
+            swLatitude: 55.76,
+            swLongitude: 37.37
+        },
         control: {},
         events: {
             zoom_changed: function (map) {
                 $scope.doSpider = (map.getZoom() > 16);
-            }
+            },
+            dragend: mapChanged,
+            idle: mapChanged
         }
     };
 
@@ -95,7 +113,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     };
     
     var switchToNearOrders = function(){
-        Order.getNearMe($scope.map.center).$promise.then(function(data){
+        Order.getNearMe($scope.map.bounds).$promise.then(function(data){
             $scope.showingOrders = data;
             $scope.getOrdersLinks();
             $scope.totalPages = window.Math.ceil(data.length / $scope.pageParameters.pageSize);
@@ -106,11 +124,14 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         });
     };
 
-    if ($location.path().indexOf('dashboard') > -1) {
-        switchToNearOrders();
-    } else {
-        switchToInProgressOrders();
-    }
+    var updateOrders = function() {
+        if ($location.path().indexOf('dashboard') > -1) {
+            switchToNearOrders();
+        } else {
+            switchToInProgressOrders();
+        }
+    };
+    updateOrders();
 
     $scope.setClickedOrder = function(order){
         ClickedOrder.set(order);
