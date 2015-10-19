@@ -17,32 +17,15 @@
 }
 
 .angular-google-map-container {
-    height: calc(100vh - 150px);
-    height: -webkit-calc(100vh - 150px);
-    height: -moz-calc(100vh - 150px);
+    height: calc(80vh);
+    height: -webkit-calc(80vh);
+    height: -moz-calc(80vh);
 }
 
-.map-container-height {
-    height: calc(100vh - 120px);
-    height: -webkit-calc(100vh - 120px);
-    height: -moz-calc(100vh - 120px);
-}
-
-.current-orders-height {
-    height: calc(89vh - 110px);
-    height: -webkit-calc(89vh - 110px);
-    height: -moz-calc(89vh - 110px);
-}
-
-.pagination-size {
-    height: calc(11vh);
-    height: -webkit-calc(11vh);
-    height: -moz-calc(11vh);
-}
-
-.order-list-item {
-    height: 71px;
-    font-size: 10.8pt;
+.list-orders-height {
+    height: calc(76vh);
+    height: -webkit-calc(76vh);
+    height: -moz-calc(76vh);
 }
 
 .new-order-fileds { 
