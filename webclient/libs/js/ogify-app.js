@@ -129,7 +129,7 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         defaultCountry: "ru",
         preferredCountries: ["ru", "by", "ua"]
     });
-
+    
     $scope.telephoneInput.blur(function () {
         if(this.value.length < 1) {
             this.classList.remove('iti-invalid-key');
@@ -287,7 +287,34 @@ ogifyApp.factory('ClickedOrder', function() {
     return ClickedOrder;
 });
 
-ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $filter, ClickedOrder, Order) {
+ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $filter, ClickedOrder, Order, $interval) {
+    $scope.timer = 60;
+    var stop;
+    $scope.startTimer = function() {
+      // Don't start a new fight if we are already fighting
+      if ( angular.isDefined(stop) ) return;
+
+      stop = $interval(function() {
+        if ($scope.timer > 0) {
+          $scope.timer = $scope.timer - 1;
+        } else {
+          $scope.stopTimer();
+        }
+      }, 1000);
+    };
+
+    $scope.stopTimer = function() {
+      if (angular.isDefined(stop)) {
+        $interval.cancel(stop);
+        stop = undefined;
+      }
+    };
+
+    $scope.$on('$destroy', function() {
+      // Make sure that the interval is destroyed too
+      $scope.stopTimer();
+    });
+
     $scope.getOrder = function() {
         return ClickedOrder.order;
     };
@@ -329,6 +356,7 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
             function(errorResponse) {
 
         });
+        $scope.startTimer();
     };
     $scope.orderToDone = function() {
         Order.changeStatus({orderId: ClickedOrder.order.id}, 2, function(successResponse) {
@@ -352,4 +380,29 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
     $scope.getExpireTime = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'HH:mm');
     };
-});
+})
+.directive('myCurrentTime', ['$interval', 'dateFilter',
+      function($interval, dateFilter) {
+        // return the directive link function. (compile function not needed)
+        return function(scope, element, attrs) {
+          var stopTime; // so that we can cancel the time updates
+
+          // used to update the UI
+          function updateTime() {
+            element.text(dateFilter(new Date()));
+          }
+
+          // watch the expression, and update the UI on change.
+          scope.$watch(attrs.myCurrentTime, function(value) {
+            updateTime();
+          });
+
+          stopTime = $interval(updateTime, 1000);
+
+          // listen on DOM destroy (removal) event, and cancel the next UI update
+          // to prevent updating time after the DOM element was removed.
+          element.on('$destroy', function() {
+            $interval.cancel(stopTime);
+          });
+        }
+      }]);

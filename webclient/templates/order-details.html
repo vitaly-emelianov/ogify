@@ -84,7 +84,15 @@
                                     </div>
 
                                     <label>Телефон заказчика:</label>
-                                    <p class="text-justify">
+                                    <p class="text-justify" ng-show="getStatus() == 'New'">
+                                        <i>Скрыт</i>
+                                    </p>
+                                    <p class="text-justify" ng-show="timer > 0 && getStatus() == 'Running'">
+                                        <i>
+                                            Станет доступен через <font>{{timer}}</font> секунд
+                                        </i>
+                                    </p>
+                                    <p class="text-justify" ng-hide="timer > 0">
                                         <i ng-hide="getOrder().telephoneNumber != null">
                                             Не указан
                                         </i>
