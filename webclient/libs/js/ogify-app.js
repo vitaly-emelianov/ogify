@@ -327,6 +327,13 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
             function(errorResponse) {
         });
     };
+    $scope.rateCurrentOrder = function(rating) {
+        Order.rateOrder({orderId: ClickedOrder.order.id}, {rate: rating} , function(successResponse) {
+                angular.element('#rateDoneOrder').modal('hide');
+            },
+            function(errorResponse) {
+        });
+    };
     $scope.getExpireDate = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'd MMMM yyyy');
     };
