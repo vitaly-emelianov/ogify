@@ -62,7 +62,8 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
 ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {
     $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
     $rootScope.createOrderTemplateUri = 'templates/new-order.html';
-    $rootScope.showOrderTemplateUri = 'templates/order-details.html'
+    $rootScope.showOrderTemplateUri = 'templates/order-details.html';
+    $rootScope.rateDoneOrderTemplateUri = 'templates/rate-done-order.html';
     $rootScope.landingUri = '/landing';
 
     if(($cookies.get('sId') == undefined || $cookies.get('ogifySessionSecret') == undefined)
@@ -311,12 +312,12 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
         });
     };
     $scope.orderToDone = function() {
-        Order.changeStatus({orderId: ClickedOrder.order.id}, 2, function(successResponse) {
+        //Order.changeStatus({orderId: ClickedOrder.order.id}, 2, function(successResponse) {
                 angular.element('#showOrderModal').modal('hide');
                 $rootScope.$broadcast('finishOrderEvent');
-            },
-            function(errorResponse) {
-        });
+        //    },
+        //    function(errorResponse) {
+        //});
     };
     $scope.cancelOrder = function() {
         Order.denyOrderExecution({orderId: ClickedOrder.order.id}, function(successResponse) {

@@ -79,6 +79,8 @@ ogifyServices.factory('Order', ['$resource',
             changeStatus: {url: BASE_PATH + ORDER_PATH + '/:orderId' +'/status', method: 'PUT', 
                 params: {orderId: '@orderId'}},
             denyOrderExecution: {url: BASE_PATH + ORDER_PATH + '/:orderId' +'/executor', method: 'DELETE', 
-                params: {orderId: '@orderId'}}
+                params: {orderId: '@orderId'}},
+            rateOrder: {url: BASE_PATH + ORDER_PATH + '/:orderId' +'/rate', method: 'PUT', 
+                params: {orderId: '@orderId'}},
         });
 }]);
