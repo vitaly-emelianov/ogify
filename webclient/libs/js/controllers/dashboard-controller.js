@@ -224,4 +224,8 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     $scope.getExpireDate = function(order) {
         return $filter('date')(order.expireIn, 'd MMMM yyyy HH:mm');
     };
+    
+    $scope.isOrderRated = function(orderId) {
+        return Order.isOrderRated({orderId: orderId});
+    };
 });

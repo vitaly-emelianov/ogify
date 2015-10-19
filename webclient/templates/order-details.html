@@ -34,7 +34,7 @@
                                     class="btn btn-success btn-s btn-block" >
                                 Завершить выполнение
                             </button>
-                            <div ng-if="1==1" ng-hide="getStatus() != 'Completed'" class="row">
+                            <div ng-if="!isOrderRated()" ng-hide="getStatus() != 'Completed'" class="row">
                                 <div class="col-md-8 col-md-offset-2">
                                     <button type="button" class="btn btn-default btn-lg" ng-click="rateCurrentOrder(1)">
                                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 1

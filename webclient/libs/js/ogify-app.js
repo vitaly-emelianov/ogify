@@ -334,6 +334,9 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
             function(errorResponse) {
         });
     };
+    $scope.isOrderRated = function() {
+        return Order.isOrderRated({orderId: ClickedOrder.order.id});
+    };
     $scope.getExpireDate = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'd MMMM yyyy');
     };
