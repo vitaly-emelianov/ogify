@@ -70,25 +70,21 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
 
     $scope.doSpider = false;
 
-
     var getMaxOrdersInPage = function() {
         return Math.floor(Math.max((angular.element('.list-orders-height').height() - 2*angular.element('.row').height()) / (angular.element('#hidden-order').height() + angular.element('.row').height()), 1));
-    };
-    
-    var getMaxDescription = function() {
-        return 50;
     };
     
     var getMaxPagesInBar = function() {
         return 9;
     };
 
-    $scope.pageParameters = {
-        pageSize: getMaxOrdersInPage(),
-        pagesInBar: getMaxPagesInBar(),
-        descriptionLength: getMaxDescription()
-    };
-
+    if (!!!$rootScope.pageParameters) {
+        $rootScope.pageParameters = {
+            pageSize: getMaxOrdersInPage(),
+            pagesInBar: getMaxPagesInBar()
+        };
+    }
+    
     $scope.$on('createdNewOrderEvent', function(event, order) {
     });
     $scope.$on('finishOrderEvent', function(event) {
@@ -103,10 +99,10 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
             UserProfile.getExecutingOrders({userId: user.userId}).$promise.then(function(data){
                 $scope.executingOrders = data;
                 $scope.showingOrders = data;
-                $scope.totalPages = window.Math.ceil(data.length / $scope.pageParameters.pageSize);
+                $scope.totalPages = window.Math.ceil(data.length / $rootScope.pageParameters.pageSize);
                 $scope.currentPage = {
                     page: 0,
-                    pages: _.range(window.Math.min($scope.totalPages, $scope.pageParameters.pagesInBar))
+                    pages: _.range(window.Math.min($scope.totalPages, $rootScope.pageParameters.pagesInBar))
                 }
             });
         });
@@ -116,10 +112,10 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         Order.getNearMe($scope.map.bounds).$promise.then(function(data){
             $scope.showingOrders = data;
             $scope.getOrdersLinks();
-            $scope.totalPages = window.Math.ceil(data.length / $scope.pageParameters.pageSize);
+            $scope.totalPages = window.Math.ceil(data.length / $rootScope.pageParameters.pageSize);
             $scope.currentPage = {
                 page: 0,
-                pages: _.range(window.Math.min($scope.totalPages, $scope.pageParameters.pagesInBar))
+                pages: _.range(window.Math.min($scope.totalPages, $rootScope.pageParameters.pagesInBar))
             }
         });
     };
@@ -142,9 +138,9 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
             currentPage.page -= 1;
             if (currentPage.page + 1 == currentPage.pages[0]) {
                 Math = window.Math;
-                currentPage.pages = _.range(Math.floor(currentPage.page / $scope.pageParameters.pagesInBar), 
-                                       Math.min(Math.floor(currentPage.page / $scope.pageParameters.pagesInBar)
-                                                           +$scope.pageParameters.pagesInBar,
+                currentPage.pages = _.range(Math.floor(currentPage.page / $rootScope.pageParameters.pagesInBar), 
+                                       Math.min(Math.floor(currentPage.page / $rootScope.pageParameters.pagesInBar)
+                                                           +$rootScope.pageParameters.pagesInBar,
                                                 $scope.totalPages));
             }
         }
@@ -155,7 +151,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
             currentPage.page += 1;
             if (currentPage.page - 1 == currentPage.pages[currentPage.pages.length-1]) {
                 currentPage.pages = _.range(currentPage.page,
-                                       window.Math.min(currentPage.page + $scope.pageParameters.pagesInBar, $scope.totalPages));
+                                       window.Math.min(currentPage.page + $rootScope.pageParameters.pagesInBar, $scope.totalPages));
             }
         }
     };
