@@ -76,11 +76,16 @@
                                     <span class="glyphicon glyphicon-rub form-control-feedback"></span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-1">
-                            <span ng-click="addToList()" class="btn btn-default">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </span>
+                            <div ng-if="itemInList($index)" class="col-md-1">
+                                <span ng-click="removeFromList($index)" class="btn btn-danger">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </span>
+                            </div>
+                            <div ng-if="!itemInList($index)" class="col-md-1">
+                                <span ng-click="addToList()" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
