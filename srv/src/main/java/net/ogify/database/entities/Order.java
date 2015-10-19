@@ -28,8 +28,8 @@ import java.util.List;
         @NamedQuery(name = "Order.getNearestOrdersFiltered", query = "select distinct orders from Order orders " +
                 "where orders.id in (" +
                     "select orders.id from Order orders where " +
-                    "orders.latitude > (:latitude - 0.07) and orders.latitude < (:latitude + 0.07) " +
-                    "and orders.longitude > (:longitude - 0.07) and orders.longitude < (:longitude + 0.07)" +
+                    "orders.latitude > :swLatitude and orders.latitude < :neLatitude " +
+                    "and orders.longitude > :swLongitude and orders.longitude < :neLongitude " +
                     "and (orders.expireIn > CURRENT_TIMESTAMP or orders.expireIn is null) " +
                     "and orders.status = :enumOrderNew) " +
                 "and (" +

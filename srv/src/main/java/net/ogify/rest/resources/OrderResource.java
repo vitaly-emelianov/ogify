@@ -41,9 +41,12 @@ public class OrderResource {
 
     @GET
     @Path("/near")
-    public List<Order> getOrdersNear(@NotNull @QueryParam("latitude") Double latitude,
-                                     @NotNull @QueryParam("longitude") Double longitude) throws ExecutionException {
-        return orderProcessor.getNearestOrders(latitude, longitude, userId);
+    public List<Order> getOrdersNear(@NotNull @QueryParam("neLatitude") Double neLatitude,
+                                     @NotNull @QueryParam("neLongitude") Double neLongitude,
+                                     @NotNull @QueryParam("swLatitude") Double swLatitude,
+                                     @NotNull @QueryParam("swLongitude") Double swLongitude)
+            throws ExecutionException {
+        return orderProcessor.getNearestOrders(neLatitude, neLongitude, swLatitude, swLongitude, userId);
     }
 
     /**
