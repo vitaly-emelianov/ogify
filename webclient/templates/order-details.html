@@ -28,6 +28,8 @@
                                     ng-click="orderToDone()"
                                     data-toggle="modal"
                                     data-target="#rateDoneOrder"
+                                    data-backdrop="static"
+                                    data-keyboard="false"
                                     ng-hide="getStatus() != 'Running' || getOrder().owner.userId == user.userId"
                                     class="btn btn-success btn-s btn-block" >
                                 Завершить выполнение

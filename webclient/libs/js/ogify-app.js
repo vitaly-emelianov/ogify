@@ -312,12 +312,12 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
         });
     };
     $scope.orderToDone = function() {
-        //Order.changeStatus({orderId: ClickedOrder.order.id}, 2, function(successResponse) {
+        Order.changeStatus({orderId: ClickedOrder.order.id}, 2, function(successResponse) {
                 angular.element('#showOrderModal').modal('hide');
                 $rootScope.$broadcast('finishOrderEvent');
-        //    },
-        //    function(errorResponse) {
-        //});
+            },
+            function(errorResponse) {
+        });
     };
     $scope.cancelOrder = function() {
         Order.denyOrderExecution({orderId: ClickedOrder.order.id}, function(successResponse) {
@@ -332,5 +332,15 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
     };
     $scope.getExpireTime = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'HH:mm');
+    };
+});
+
+ogifyApp.controller('rateDoneOrderController', function ($scope, $rootScope, $filter, ClickedOrder, Order) {
+    $scope.rateCurrentOrder = function(rating) {
+        Order.rateOrder({orderId: ClickedOrder.order.id}, {rate: rating} , function(successResponse) {
+                angular.element('#rateDoneOrder').modal('hide');
+            },
+            function(errorResponse) {
+        });
     };
 });
