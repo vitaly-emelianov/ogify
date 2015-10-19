@@ -182,7 +182,21 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         $scope.order.items.push({});
     };
 
+    $scope.itemInList = function(index) {
+        return (index != $scope.order.items.length - 1);
+    };
+
+    $scope.removeFromList = function(index) {
+        $scope.order.items.splice(index, 1);
+    };
+
     $scope.createOrder = function() {
+        var last_item_index = $scope.order.items.length - 1;
+        var $last_item = $scope.order.items[last_item_index];
+        if(!$last_item.comment) {
+            $scope.order.items.splice(last_item_index, 1);
+        }
+
         var newOrder = {
             items: $scope.order.items,
             expireIn: parseDate($scope.order.expireDate, $scope.order.expireTime).getTime(),

@@ -67,20 +67,25 @@
                     <label>Добавить товар:</label>
                     <div class="row">
                         <div ng-repeat="item in order.items">
-                            <div class="col-md-7">
+                            <div class="col-md-6">
                                 <input type="text" class="form-control" placeholder="Товар" ng-model="item.comment">
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group has-feedback">
-                                    <input type="text" class="form-control" placeholder="Цена" ng-model="item.expectedCost">
+                                    <input type="text" class="form-control" placeholder="{{itemInList($index)}} || {{$index}}" ng-model="item.expectedCost">
                                     <span class="glyphicon glyphicon-rub form-control-feedback"></span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-1">
-                            <span ng-click="addToList()" class="btn btn-default">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </span>
+                            <div ng-if="itemInList($index)" class="col-md-1">
+                                <span ng-click="removeFromList($index)" class="btn btn-danger">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </span>
+                            </div>
+                            <div ng-if="!itemInList($index)" class="col-md-1">
+                                <span ng-click="addToList()" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
