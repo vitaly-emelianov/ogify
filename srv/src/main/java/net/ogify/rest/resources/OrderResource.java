@@ -74,6 +74,12 @@ public class OrderResource {
         return orderController.getOrderById(orderId).getItems();
     }
 
+    @GET
+    @Path("/{id}/isRated")
+    public Boolean getSocialLinks(@PathParam("id") Long orderId) {
+        return orderController.isOrderRated(orderController.getOrderById(orderId));
+    }
+
     @PUT
     @Path("/{id}/getToExecution")
     public void getToExecution(@PathParam("id") Long orderId) {

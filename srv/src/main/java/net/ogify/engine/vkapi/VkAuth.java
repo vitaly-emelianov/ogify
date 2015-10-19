@@ -30,8 +30,8 @@ public class VkAuth {
 
     public VkAuthUri getClientAuthUri(URI redirectUri, String betaKey) {
         String scope = "notify,offline,friends";
-        return new VkAuthUri(String.format("%s?client_id=%s&scope=%s&redirect_uri=%s&response_type=code&v=%s&state=%s",
-                VK_CLIENT_ACCESS_URI, APP_ID, scope, redirectUri.toString(), VK_API_VERSION, betaKey));
+        return new VkAuthUri(String.format("%s?client_id=%s&scope=%s&redirect_uri=%s&response_type=code&v=%s",
+                VK_CLIENT_ACCESS_URI, APP_ID, scope, redirectUri.toString(), VK_API_VERSION));
     }
 
     /**
