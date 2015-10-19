@@ -289,8 +289,14 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
     $scope.getOwnerName = function() {
         return ClickedOrder.order.owner.fullName;
     };
+    $scope.getExecutorName = function() {
+        return ClickedOrder.order.executor.fullName;
+    };
     $scope.getOwnerPhotoUrl = function() {
         return ClickedOrder.order.owner.photoUri;
+    };
+    $scope.getExecutorPhotoUrl = function() {
+        return ClickedOrder.order.executor.photoUri;
     };
     $scope.getAddress = function() {
         return ClickedOrder.order.address;
