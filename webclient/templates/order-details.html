@@ -95,13 +95,25 @@
                                 </div>
                                 
                                 <div class="col-md-6">
-                                    <label>Автор:</label>
-                                    <a href="#/profile/{{getOrder().owner.userId}}">
-                                        {{getOwnerName()}}
-                                    </a>
-                                    <a href="#/profile/{{getOrder().owner.userId}}">
-                                        <img ng-src="{{getOwnerPhotoUrl()}}" class="img-thumbnail">
-                                    </a>
+                                    <div ng-hide="getOrder().owner.userId == user.userId && getStatus() != 'New'">
+                                        <label>Автор:</label>
+                                        <a href="#/profile/{{getOrder().owner.userId}}">
+                                            {{getOwnerName()}}
+                                        </a>
+                                        <a href="#/profile/{{getOrder().owner.userId}}">
+                                            <img ng-src="{{getOwnerPhotoUrl()}}" class="img-thumbnail">
+                                        </a>
+                                    </div>
+
+                                    <div ng-show="getOrder().owner.userId == user.userId && getStatus() != 'New'">
+                                        <label>Исполнитель:</label>
+                                        <a href="#/profile/{{getOrder().executor.userId}}">
+                                            {{getExecutorName()}}
+                                        </a>
+                                        <a href="#/profile/{{getOrder().executor.userId}}">
+                                            <img ng-src="{{getExecutorPhotoUrl()}}" class="img-thumbnail">
+                                        </a>
+                                    </div>
                                 </div>
                             </div>                            
                         </div>
