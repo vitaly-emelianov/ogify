@@ -72,7 +72,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
 
 
     var getMaxOrdersInPage = function() {
-        return (angular.element('.current-orders-height').height() * 95 / ((angular.element('.current-orders-height').height() + 120) * 11));
+        return Math.max(angular.element('.current-orders-height').height() / 70, 1);
     };
     
     var getMaxDescription = function() {
