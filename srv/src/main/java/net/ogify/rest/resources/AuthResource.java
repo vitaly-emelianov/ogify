@@ -76,7 +76,7 @@ public class AuthResource {
     @PermitAll
     public SNRequestUri getRequestUri(@Context UriInfo uriInfo,
                                       @QueryParam("betaKey") String betaKey) {
-        //authController.checkBetaKey(betaKey);
+        authController.checkBetaKey(betaKey);
 
         URI authRequestUri = uriInfo.getBaseUriBuilder()
                 .path(AuthResource.class) // Add class path;
