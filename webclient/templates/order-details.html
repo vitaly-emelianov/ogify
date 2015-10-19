@@ -20,7 +20,7 @@
                             </button>
                             <button type="button" 
                                     ng-click="cancelOrder()"
-                                    ng-hide="getStatus() != 'Running' || getOrder().owner.userId == user.userId"
+                                    ng-show="getStatus() == 'Running' && getOrder().owner.userId != user.userId && timer > 0"
                                     class="btn btn-danger btn-s btn-block" >
                                 Отказаться от заказа
                             </button>
