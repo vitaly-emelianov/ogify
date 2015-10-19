@@ -86,11 +86,13 @@ public class OrderProcessor {
      * @return visible for specified user orders.
      * @throws ExecutionException on any exception thrown while attempting to get results.
      */
-    public List<Order> getNearestOrders(Double latitude, Double longitude, Long userId)
-            throws ExecutionException {
+    public List<Order> getNearestOrders(Double neLatitude, Double neLongitude,
+                                        Double swLatitude, Double swLongitude,
+                                        Long userId) throws ExecutionException {
         Set<Long> friends = friendService.getUserFriendsIds(userId);
         Set<Long> friendsOfFriends = friendService.getUserExtendedFriendsIds(userId);
-        return orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends, latitude, longitude);
+        return orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
+                neLatitude, neLongitude, swLatitude, swLongitude);
     }
 
     /**
