@@ -34,6 +34,13 @@
     height: -moz-calc(95vh - 120px);
 }
 
+.order-list-item {
+    height: calc(11vh);
+    height: -webkit-calc(11vh);
+    height: -moz-calc(11vh);
+    font-size: 2.2vh;
+}
+
 .new-order-fileds { 
     resize:vertical;
 }
