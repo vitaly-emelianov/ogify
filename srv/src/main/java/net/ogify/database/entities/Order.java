@@ -1,12 +1,14 @@
 package net.ogify.database.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import net.ogify.database.entities.validation.TelephoneNumber;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -161,6 +163,14 @@ public class Order {
     @XmlElement
     private Date expireIn;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "executor_get_in")
+    @JsonIgnore
+    private Date executorGetIn;
+
+    @TelephoneNumber
+    private String telephoneNumber;
+
     @NotNull
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @XmlElement(name = "items")
@@ -169,10 +179,6 @@ public class Order {
     @OneToMany
     @JsonIgnore
     private List<Feedback> relatedFeedbacks;
-
-    @TelephoneNumber
-    @XmlElement
-    private String telephoneNumber;
 
     public boolean isUserOwner(User user) {
         return user.equals(owner);
@@ -226,10 +232,23 @@ public class Order {
         this.status = status;
     }
 
+    @JsonProperty("telephoneNumber")
     public String getTelephoneNumber() {
+        if(executorGetIn == null)
+            return null;
+
+        Calendar currentCalendar = Calendar.getInstance();
+        currentCalendar.add(Calendar.MINUTE, -1);
+        Calendar executorGetInCalendar = Calendar.getInstance();
+        executorGetInCalendar.setTime(executorGetIn);
+
+        if(currentCalendar.before(executorGetInCalendar))
+            return null;
+
         return telephoneNumber;
     }
 
+    @JsonProperty("telephoneNumber")
     public void setTelephoneNumber(String telephoneNumber) {
         this.telephoneNumber = telephoneNumber;
     }
@@ -300,6 +319,14 @@ public class Order {
 
     public void setExpireIn(Date expireIn) {
         this.expireIn = expireIn;
+    }
+
+    public Date getExecutorGetIn() {
+        return executorGetIn;
+    }
+
+    public void setExecutorGetIn(Date executorGetIn) {
+        this.executorGetIn = executorGetIn;
     }
 
     public List<Feedback> getRelatedFeedbacks() {
