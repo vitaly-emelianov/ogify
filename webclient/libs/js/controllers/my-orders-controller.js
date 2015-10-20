@@ -34,6 +34,8 @@ ogifyApp.controller('MyOrdersController', function ($scope, UserProfile, Clicked
     };
     
     $scope.$on('rateMyOrderEvent', function(event) {
-        $scope.myOrders = UserProfile.getCreatedOrders({userId: user.userId});
+        $scope.user.$promise.then(function(user) {
+            $scope.myOrders = UserProfile.getCreatedOrders({userId: user.userId});
+        });
     });
 });
