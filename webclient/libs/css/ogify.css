@@ -46,6 +46,10 @@
     cursor: pointer;
 }
 
+p.break-word {
+    word-wrap: break-word;
+}
+
 .panel>.list-group>.order-list-Friends {
     border-left: 3px solid #5cb85c; !important;
 }
