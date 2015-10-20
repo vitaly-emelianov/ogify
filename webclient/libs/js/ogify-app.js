@@ -279,7 +279,8 @@ ogifyApp.factory('ClickedOrder', function() {
         items: [],
         address: null,
         expireIn: null,
-        owner: {photoUri: null, fullName: null}
+        owner: {photoUri: null, fullName: null},
+        executor: {photoUri: null, fullName: null}
     };
     ClickedOrder.set = function(order) {
         ClickedOrder.order = order;
