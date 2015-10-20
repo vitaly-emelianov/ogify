@@ -327,15 +327,14 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
             function(errorResponse) {
         });
     };
-    $scope.rateCurrentOrder = function(rating) {
+    
+    $scope.isOrderRated = Order.isOrderRated({orderId: ClickedOrder.order.id});
+    $scope.rateMyOrder = function(rating) {
         Order.rateOrder({orderId: ClickedOrder.order.id}, {rate: rating} , function(successResponse) {
-                angular.element('#rateDoneOrder').modal('hide');
+                $scope.isOrderRated = true;
             },
             function(errorResponse) {
         });
-    };
-    $scope.isOrderRated = function() {
-        return Order.isOrderRated({orderId: ClickedOrder.order.id});
     };
     $scope.getExpireDate = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'd MMMM yyyy');
