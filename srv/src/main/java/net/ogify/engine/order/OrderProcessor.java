@@ -18,10 +18,7 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -80,8 +77,6 @@ public class OrderProcessor {
     /**
      * Search for orders near (in square with) specified point.
      *
-     * @param latitude latitude of point.
-     * @param longitude longitude of point.
      * @param userId id of user who make request.
      * @return visible for specified user orders.
      * @throws ExecutionException on any exception thrown while attempting to get results.
@@ -115,6 +110,7 @@ public class OrderProcessor {
         if(order.isUserOwner(executor)) // Check that we have access to order
             throw new ForbiddenException("You haven't get to execution your own order");
         order.setExecutor(executor);
+        order.setExecutorGetIn(new Date());
 
         // And finally, if we don't have errors save order
         orderController.saveOrUpdate(order);
@@ -155,6 +151,7 @@ public class OrderProcessor {
             switch(status) {
                 case Canceled:
                     order.setStatus(status);
+                    order.setExecutorGetIn(null);
                     break;
                 default:
                     throw new ForbiddenException(
@@ -176,7 +173,6 @@ public class OrderProcessor {
      *
      * @param changerUserId who is changing status
      * @param orderId id of changed order
-     * @param status status which order should have after change
      */
     public void denyOrderExecution(Long changerUserId, Long orderId) {
         Order order = orderController.getOrderById(orderId);

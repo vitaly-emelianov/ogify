@@ -65,12 +65,14 @@ public class OrderResource {
     @GET
     @Path(("/{id}"))
     public Order getOrder(@NotNull @PathParam("id") Long orderId) {
+        // TODO: Rewrite using processor
         return orderController.getOrderById(orderId);
     }
 
     @GET
     @Path("/{id}/items")
     public List<OrderItem> getOrderItems(@NotNull @PathParam("id") Long orderId) {
+        // TODO: Rewrite using processor
         return orderController.getOrderById(orderId).getItems();
     }
 
