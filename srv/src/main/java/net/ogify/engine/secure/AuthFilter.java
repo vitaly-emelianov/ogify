@@ -4,6 +4,7 @@ import net.ogify.engine.secure.exceptions.ForbiddenException;
 import net.ogify.engine.secure.exceptions.NotAuthenticatedException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
@@ -24,6 +25,7 @@ import java.util.Map;
  * Class must check is the client which is try to call resource method has a right for that.
  */
 @Provider
+@Component
 public class AuthFilter implements ContainerRequestFilter {
     /**
      * Class logger.
