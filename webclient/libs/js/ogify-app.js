@@ -332,6 +332,7 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
     $scope.rateMyOrder = function(rating) {
         Order.rateOrder({orderId: ClickedOrder.order.id}, {rate: rating} , function(successResponse) {
                 $scope.isOrderRated = true;
+                $rootScope.$broadcast('rateMyOrderEvent');
             },
             function(errorResponse) {
         });
