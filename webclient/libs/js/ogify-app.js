@@ -3,7 +3,7 @@
  */
 
 var ogifyApp = angular.module('ogifyApp', ['ogifyServices', 'ngRoute', 'ngCookies', 'uiGmapgoogle-maps', 'angulartics',
-    'angulartics.google.analytics']);
+    'angulartics.google.analytics', 'ngSanitize']);
 
 ogifyApp.service('myAddress', function () {
     var address = {

@@ -38,13 +38,11 @@
                             <div class="row">
                                 <div class="col-md-6">                                
                                     <label>Описание:</label>
-                                    <p class="text-justify break-word">
-                                        {{getDescription()}}
+                                    <p class="text-justify break-word" ng-bind-html="getDescription() | linky">
                                     </p>
 
                                     <label>Вознаграждение:</label>
-                                    <p class="text-justify break-word">
-                                        {{getReward()}}
+                                    <p class="text-justify break-word" ng-bind-html="getReward() | linky">
                                     </p>
 
                                     <label ng-if="!itemsEmpty()">Товары:</label>
