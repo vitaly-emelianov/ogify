@@ -6,7 +6,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     $scope.getOrdersLinks = function() {
         var showingOrdersIds = [];
 
-        $scope.showingOrders.forEach(function(order, i, arr) {
+        $scope.showingOrders.forEach(function(order) {
             showingOrdersIds.push(order.id);
         });
 
@@ -17,33 +17,74 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     
     $scope.selfMarker = {
         coords  : { latitude: 55.927106, longitude: 37.523662 },
-        id: "currentPosition"
+        id: "currentPosition",
+        visible: false
+    };
+
+    $scope.markersEvents = {
+        click: function(marker, eventName, model){
+            $scope.setClickedOrder(model);
+            $("#showOrderModal").modal();
+        }
+    };
+
+    var mapChanged = function(map) {
+        var bounds = map.getBounds();
+        $scope.map.bounds.neLatitude = bounds.getNorthEast().lat();
+        $scope.map.bounds.neLongitude = bounds.getNorthEast().lng();
+        $scope.map.bounds.swLatitude = bounds.getSouthWest().lat();
+        $scope.map.bounds.swLongitude = bounds.getSouthWest().lng();
+
+        updateOrders();
     };
 
     $rootScope.map = {
         center: { latitude: 55.927106, longitude: 37.523662 },
         zoom: 10,
-        control: {}
+        bounds: {
+            neLatitude: 55.95,
+            neLongitude: 37.82,
+            swLatitude: 55.76,
+            swLongitude: 37.37
+        },
+        control: {},
+        events: {
+            zoom_changed: function (map) {
+                $scope.doSpider = (map.getZoom() > 16);
+            },
+            dragend: mapChanged,
+            idle: mapChanged
+        }
     };
-    
+
+    $scope.clusterOptions = {
+        gridSize: 60,
+        ignoreHidden: true,
+        minimumClusterSize: 2,
+        maxZoom: 16
+    };
+
+    $scope.spiderOptions = {
+        keepSpiderfied: true
+    };
+
+    $scope.doSpider = false;
+
     var getMaxOrdersInPage = function() {
-        return 5;
-    }
-    
-    var getMaxDescription = function() {
-        return 50;
-    }
+        return Math.floor(Math.max((angular.element('.list-orders-height').height() - 2*angular.element('.row').height()) / (angular.element('#hidden-order').height() + angular.element('.row').height()), 1));
+    };
     
     var getMaxPagesInBar = function() {
         return 9;
+    };
+
+    if (!!!$rootScope.pageParameters) {
+        $rootScope.pageParameters = {
+            pageSize: getMaxOrdersInPage(),
+            pagesInBar: getMaxPagesInBar()
+        };
     }
     
-    $scope.pageParameters = {
-        pageSize: getMaxOrdersInPage(),
-        pagesInBar: getMaxPagesInBar(),
-        descriptionLength: getMaxDescription()
-    }
-
     $scope.$on('createdNewOrderEvent', function(event, order) {
     });
     $scope.$on('finishOrderEvent', function(event) {
@@ -55,35 +96,38 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     
     var switchToInProgressOrders = function() {
         $scope.user.$promise.then(function(user) {
-            UserProfile.getExecutingOrders(user).$promise.then(function(data){
+            UserProfile.getExecutingOrders({userId: user.userId}).$promise.then(function(data){
                 $scope.executingOrders = data;
                 $scope.showingOrders = data;
-                $scope.totalPages = window.Math.ceil(data.length / $scope.pageParameters.pageSize);
+                $scope.totalPages = window.Math.ceil(data.length / $rootScope.pageParameters.pageSize);
                 $scope.currentPage = {
                     page: 0,
-                    pages: _.range(window.Math.min($scope.totalPages, $scope.pageParameters.pagesInBar))
+                    pages: _.range(window.Math.min($scope.totalPages, $rootScope.pageParameters.pagesInBar))
                 }
             });
         });
     };
     
     var switchToNearOrders = function(){
-        Order.getNearMe($scope.map.center).$promise.then(function(data){
+        Order.getNearMe($scope.map.bounds).$promise.then(function(data){
             $scope.showingOrders = data;
             $scope.getOrdersLinks();
-            $scope.totalPages = window.Math.ceil(data.length / $scope.pageParameters.pageSize);
+            $scope.totalPages = window.Math.ceil(data.length / $rootScope.pageParameters.pageSize);
             $scope.currentPage = {
                 page: 0,
-                pages: _.range(window.Math.min($scope.totalPages, $scope.pageParameters.pagesInBar))
+                pages: _.range(window.Math.min($scope.totalPages, $rootScope.pageParameters.pagesInBar))
             }
         });
     };
 
-    if ($location.path().indexOf('dashboard') > -1) {
-        switchToNearOrders();
-    } else {
-        switchToInProgressOrders();
-    }
+    var updateOrders = function() {
+        if ($location.path().indexOf('dashboard') > -1) {
+            switchToNearOrders();
+        } else {
+            switchToInProgressOrders();
+        }
+    };
+    updateOrders();
 
     $scope.setClickedOrder = function(order){
         ClickedOrder.set(order);
@@ -94,9 +138,9 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
             currentPage.page -= 1;
             if (currentPage.page + 1 == currentPage.pages[0]) {
                 Math = window.Math;
-                currentPage.pages = _.range(Math.floor(currentPage.page / $scope.pageParameters.pagesInBar), 
-                                       Math.min(Math.floor(currentPage.page / $scope.pageParameters.pagesInBar)
-                                                           +$scope.pageParameters.pagesInBar,
+                currentPage.pages = _.range(Math.floor(currentPage.page / $rootScope.pageParameters.pagesInBar), 
+                                       Math.min(Math.floor(currentPage.page / $rootScope.pageParameters.pagesInBar)
+                                                           +$rootScope.pageParameters.pagesInBar,
                                                 $scope.totalPages));
             }
         }
@@ -107,9 +151,9 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
             currentPage.page += 1;
             if (currentPage.page - 1 == currentPage.pages[currentPage.pages.length-1]) {
                 currentPage.pages = _.range(currentPage.page,
-                                       window.Math.min(currentPage.page + $scope.pageParameters.pagesInBar, $scope.totalPages));
+                                       window.Math.min(currentPage.page + $rootScope.pageParameters.pagesInBar, $scope.totalPages));
             }
-        };
+        }
     };
 
     $scope.setPage = function(currentPage, i){
@@ -165,7 +209,8 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                             });
                         }
                     },
-                    id: "currentPosition"
+                    id: "currentPosition",
+                    visible: true
                 };
                 $scope.selfMarker = selfMarker;
             });

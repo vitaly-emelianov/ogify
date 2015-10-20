@@ -92,7 +92,8 @@ public class OrderController {
     }
 
     public List<Order> getNearestOrdersFiltered(Long userId, Set<Long> userFriends, Set<Long> extendedFriends,
-                                                Double latitude, Double longitude) {
+                                                Double neLatitude, Double neLongitude,
+                                                Double swLatitude, Double swLongitude) {
         EntityManager em = entityManagerService.createEntityManager();
         try {
             User user = em.find(User.class, userId);
@@ -113,8 +114,10 @@ public class OrderController {
                 searchExtendedFriendsIdsSet = extendedFriends;
 
             TypedQuery<Order> query = em.createNamedQuery("Order.getNearestOrdersFiltered", Order.class);
-            query.setParameter("latitude", latitude);
-            query.setParameter("longitude", longitude);
+            query.setParameter("neLatitude", neLatitude);
+            query.setParameter("neLongitude", neLongitude);
+            query.setParameter("swLatitude", swLatitude);
+            query.setParameter("swLongitude", swLongitude);
             query.setParameter("userExtendedFriendsIds", searchExtendedFriendsIdsSet);
             query.setParameter("userFriendsIds", searchFriendsIdsSet);
             query.setParameter("user", user);
@@ -123,7 +126,6 @@ public class OrderController {
             query.setParameter("enumOrderAll", Order.OrderNamespace.All);
             query.setParameter("enumOrderFriends", Order.OrderNamespace.Friends);
             query.setParameter("enumOrderFriendsOfFriends", Order.OrderNamespace.FriendsOfFriends);
-            query.setParameter("enumOrderPrivate", Order.OrderNamespace.Private);
 
             return query.getResultList();
         } finally {

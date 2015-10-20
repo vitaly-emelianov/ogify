@@ -1,8 +1,9 @@
 <div class="col-sm-12 col-md-8 main ">
-    <div class="panel panel-default map-container-height">
+    <div class="panel panel-default">
         <div class="panel-body">
-            <ui-gmap-google-map center='map.center' zoom='map.zoom' control="map.control">
+            <ui-gmap-google-map center='map.center' zoom='map.zoom' control="map.control" events="map.events">
                 <ui-gmap-marker
+                        ng-if="selfMarker.visible"
                         coords="selfMarker.coords"
                         options="selfMarker.options"
                         idkey="selfMarker.id"
@@ -11,14 +12,31 @@
                 </ui-gmap-marker>
 
                 <ui-gmap-markers
+                        ng-if="!doSpider"
                         models="showingOrders"
-                        idKey="'id'"
-                        coords="'self'"></ui-gmap-markers>
+                        coords="'self'"
+                        idkey="'id'"
+                        events="markersEvents"
+                        type="'cluster'"
+                        typeOptions="clusterOptions"
+                        >
+                </ui-gmap-markers>
+                <ui-gmap-markers
+                        ng-if="doSpider"
+                        models="showingOrders"
+                        coords="'self'"
+                        idkey="'id'"
+                        typeEvents="markersEvents"
+                        type="'spider'"
+                        modelsbyref="true"
+                        typeOptions="spiderOptions"
+                        >
+                </ui-gmap-markers>
             </ui-gmap-google-map>
         </div>
     </div>
 </div>
-<div class="col-sm-8 col-md-4 current-orders-height">
+<div class="col-sm-8 col-md-4 list-orders-height" id="order-list-container">
     <div id="orders" class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
@@ -26,6 +44,11 @@
             </div>
         </div>
         <div class="list-group">
+            <a class="list-group-item" id="hidden-order" ng-hide="1">
+                <p class="list-group-item-text">description</p>
+                <p class="list-group-item-text"><b>Адрес: </b></p>
+                <p class="list-group-item-text"><b>Актуально до: </b></p>
+            </a>
             <a id="{{order.id}}"
                 data-toggle="modal"
                 data-target="#showOrderModal"
@@ -39,7 +62,7 @@
         </div>
     </div>
 </div>
-<div class="container-fluid col-md-4s col-sm-8" position="fixed">
+<div position="fixed" ng-hide="currentPage.pages < 2">
     <nav align="center">
         <ul class="pagination">
             <li>

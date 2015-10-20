@@ -86,11 +86,13 @@ public class OrderProcessor {
      * @return visible for specified user orders.
      * @throws ExecutionException on any exception thrown while attempting to get results.
      */
-    public List<Order> getNearestOrders(Double latitude, Double longitude, Long userId)
-            throws ExecutionException {
+    public List<Order> getNearestOrders(Double neLatitude, Double neLongitude,
+                                        Double swLatitude, Double swLongitude,
+                                        Long userId) throws ExecutionException {
         Set<Long> friends = friendService.getUserFriendsIds(userId);
         Set<Long> friendsOfFriends = friendService.getUserExtendedFriendsIds(userId);
-        return orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends, latitude, longitude);
+        return orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
+                neLatitude, neLongitude, swLatitude, swLongitude);
     }
 
     /**
@@ -164,6 +166,32 @@ public class OrderProcessor {
                     String.format("Owner can't change order status from %s to %s state",
                             order.getStatus().toString(), status.toString()));
         }
+
+        // And finally, if we don't have errors save order
+        orderController.saveOrUpdate(order);
+    }
+
+    /**
+     * Method change workflow status of order and its executor.
+     *
+     * @param changerUserId who is changing status
+     * @param orderId id of changed order
+     * @param status status which order should have after change
+     */
+    public void denyOrderExecution(Long changerUserId, Long orderId) {
+        Order order = orderController.getOrderById(orderId);
+        if(order == null) // We can't work if order not founded
+            throw new NotFoundException(String.format("Order with id %d is not presented on server", orderId));
+        if(order.isInFinalState()) // Check that order not in Completed or Canceled state
+            throw new ForbiddenException("You can't execute completed or canceled orders");
+
+        User changer = userController.getUserById(changerUserId);
+        assert changer != null;
+        if(!order.isUserExecutor(changer)) // Check that we have access to order
+            throw new ForbiddenException("You haven't right for change status of the order");
+
+        order.setExecutor(null);
+        order.setStatus(OrderStatus.New);
 
         // And finally, if we don't have errors save order
         orderController.saveOrUpdate(order);

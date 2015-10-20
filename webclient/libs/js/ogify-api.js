@@ -55,6 +55,8 @@ ogifyServices.factory('UserProfile', ['$resource', 'AuthInterceptor',
             getFriends: {url: BASE_PATH + PROFILE_PATH + '/:userId/friends', isArray: true, params: {
                 userId: '@userId'}},
             getExecutingOrders: {url: BASE_PATH + PROFILE_PATH + '/:userId/executing', isArray: true, params: {
+                userId: '@userId'}},
+            getCreatedOrders: {url: BASE_PATH + PROFILE_PATH + '/:userId/created', isArray: true, params: {
                 userId: '@userId'}}
         });
     }
@@ -66,14 +68,17 @@ ogifyServices.factory('Order', ['$resource',
             get: {url: BASE_PATH + ORDER_PATH + '/:orderId', method: 'GET', params: {orderId: '@orderId'}},
             create: {method: 'POST'},
             getNearMe: {url: BASE_PATH + ORDER_PATH + '/near', method: 'GET',
-                params: {latitude: '', longitude: ''}, isArray: true},
+                params: {neLatitude: '', neLongitude: '', swLatitude: '', swLongitude: ''}, isArray: true},
             getDoneOrders: {url: BASE_PATH + ORDER_PATH + '/done', method: 'GET',
                 params: {latitude: '', longitude: ''}},
             getMyOrders: {method: 'GET', isArray: true},
             getToExecution: {url: BASE_PATH + ORDER_PATH + '/:orderId' +'/getToExecution', method: 'PUT', 
                 params: {orderId: '@orderId'}},
+            getItemsList: {url: BASE_PATH + ORDER_PATH + '/:orderId' + 'items', method: 'GET', isArray: true},    
             getOrdersLinks: {url: BASE_PATH + ORDER_PATH + '/socialLinks', method: 'GET'},
             changeStatus: {url: BASE_PATH + ORDER_PATH + '/:orderId' +'/status', method: 'PUT', 
+                params: {orderId: '@orderId'}},
+            denyOrderExecution: {url: BASE_PATH + ORDER_PATH + '/:orderId' +'/executor', method: 'DELETE', 
                 params: {orderId: '@orderId'}}
         });
 }]);

@@ -30,9 +30,17 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
         }).when('/dashboard', {
             templateUrl: 'templates/dashboard.html',
             controller: 'DashboardController'
-        }).when('/profile', {
+        }).when('/profile/:userId', {
             templateUrl: 'templates/user-profile.html',
-            controller: 'ProfilePageController'
+            controller: 'ProfilePageController',
+            resolve: {
+                // Hide detail order modal when we going to profile page
+                // TODO: Rewrite it in more common way
+                hideModal: function () {
+                    angular.element('#showOrderModal').modal('hide');
+                    return true;
+                }
+            }
         }).when('/my-orders', {
             templateUrl: 'templates/my-orders.html',
             controller: 'MyOrdersController'
@@ -51,7 +59,7 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
     });
 });
 
-ogifyApp.run(function ($rootScope, $http, $cookies, $window) {
+ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {
     $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
     $rootScope.createOrderTemplateUri = 'templates/new-order.html';
     $rootScope.showOrderTemplateUri = 'templates/order-details.html'
@@ -62,12 +70,17 @@ ogifyApp.run(function ($rootScope, $http, $cookies, $window) {
         $window.location.replace($rootScope.landingUri);
     }
 
+    var timeoutPromise;
+
     $rootScope.$watch(function () {
         return $http.pendingRequests.length > 0;
     }, function (v) {
         if (v) {
-            waitingDialog.show();
+
+            timeoutPromise = $timeout(waitingDialog.show, 1500);
+            //waitingDialog.show();
         } else {
+            $timeout.cancel(timeoutPromise);
             waitingDialog.hide();
         }
     });
@@ -110,9 +123,42 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, $lo
 
 ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order,
                                                             myAddress) {
+    // Init telephone input
+    $scope.telephoneInput = angular.element("#telephoneNumber");
+    $scope.telephoneInput.intlTelInput({
+        defaultCountry: "ru",
+        preferredCountries: ["ru", "by", "ua"]
+    });
+    
+    $scope.telephoneInput.blur(function () {
+        if(this.value.length < 1) {
+            this.classList.remove('iti-invalid-key');
+            return;
+        }
+
+        var isNumberValid = $scope.telephoneInput.intlTelInput("isValidNumber");
+        if(!isNumberValid) {
+            this.classList.add('iti-invalid-key');
+        } else {
+            this.classList.remove('iti-invalid-key');
+        }
+    });
+
+    $scope.telephoneInput.keyup(function(){
+        var isNumberValid = $scope.telephoneInput.intlTelInput("isValidNumber");
+        var error = $scope.telephoneInput.intlTelInput("getValidationError");
+        if(!isNumberValid &&
+            (error == intlTelInputUtils.validationError.TOO_LONG
+            || error == intlTelInputUtils.validationError.IS_POSSIBLE)) {
+            this.classList.add('iti-invalid-key');
+        } else {
+            this.classList.remove('iti-invalid-key');
+        }
+    });
+
     $scope.order = {
         expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
-        expireTime: $filter('date')(new Date(), 'hh:mm'),
+        expireTime: $filter('date')(new Date(), 'H:MM'),
         reward: '',
         address: myAddress.getAddress(),
         namespace: 'FriendsOfFriends',
@@ -130,7 +176,7 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
     $scope.hideAlert = function() {
         $scope.alerts.warning = [];
         $scope.alerts.error = [];
-    }
+    };
 
     $scope.chooseTime = function() {
         var input = angular.element('#expire_in_time').clockpicker();
@@ -141,13 +187,29 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         $scope.order.items.push({});
     };
 
+    $scope.itemInList = function(index) {
+        return (index != $scope.order.items.length - 1);
+    };
+
+    $scope.removeFromList = function(index) {
+        $scope.order.items.splice(index, 1);
+    };
+
     $scope.createOrder = function() {
+        var last_item_index = $scope.order.items.length - 1;
+        var $last_item = $scope.order.items[last_item_index];
+        if(!$last_item.comment) {
+            $scope.order.items.splice(last_item_index, 1);
+        }
+
         var newOrder = {
             items: $scope.order.items,
             expireIn: parseDate($scope.order.expireDate, $scope.order.expireTime).getTime(),
             latitude: myAddress.getAddress().latitude,
             longitude: myAddress.getAddress().longitude,
             reward: $scope.order.reward,
+            telephoneNumber: $scope.telephoneInput[0].value.length > 0 ?
+                $scope.telephoneInput.intlTelInput("getNumber") : null,
             status: 'New',
             owner: null,
             executor: null,
@@ -160,7 +222,6 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         };
 
         var MAX_TEXT_SIZE = 200;
-
         var restrictions = [
             {
                 isAppearing: newOrder.description.length > MAX_TEXT_SIZE,
@@ -173,12 +234,17 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             {
                 isAppearing: newOrder.address.length > MAX_TEXT_SIZE,
                 message: "Слишком длинный адрес"
+            },
+            {
+                isAppearing: !$scope.telephoneInput.intlTelInput("isValidNumber")
+                && $scope.telephoneInput[0].value.length > 0,
+                message: "Некорректный номер телефона"
             }
         ];
 
         for (var i in restrictions) {
-            if (i.isAppearing) {
-                $scope.showAlert(i.message, 'warning');
+            if (restrictions[i].isAppearing) {
+                $scope.showAlert(restrictions[i].message, 'warning');
                 return;
             }
         }
@@ -210,6 +276,7 @@ ogifyApp.factory('ClickedOrder', function() {
     ClickedOrder.order = {
         description: null,
         reward: null,
+        items: [],
         address: null,
         expireIn: null,
         owner: {photoUri: null, fullName: null}
@@ -220,15 +287,57 @@ ogifyApp.factory('ClickedOrder', function() {
     return ClickedOrder;
 });
 
-ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $filter, ClickedOrder, Order) {
+ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $filter, ClickedOrder, Order, $interval) {
+    $scope.timer = 60;
+    var stop;
+    $scope.startTimer = function() {
+      // Don't start a new fight if we are already fighting
+      if ( angular.isDefined(stop) ) return;
+
+      stop = $interval(function() {
+        if ($scope.timer > 0) {
+          $scope.timer = $scope.timer - 1;
+        } else {
+          $scope.stopTimer();
+        }
+      }, 1000);
+    };
+
+    $scope.stopTimer = function() {
+      if (angular.isDefined(stop)) {
+        $interval.cancel(stop);
+        stop = undefined;
+      }
+    };
+
+    $scope.$on('$destroy', function() {
+      // Make sure that the interval is destroyed too
+      $scope.stopTimer();
+    });
+
+    $scope.getOrder = function() {
+        return ClickedOrder.order;
+    };
     $scope.getDescription = function() {
         return ClickedOrder.order.description;
+    };
+    $scope.getItemList = function() {
+        return ClickedOrder.order.items;
+    };
+    $scope.itemsEmpty = function() {
+        return (ClickedOrder.order.items.length == 0);
     };
     $scope.getOwnerName = function() {
         return ClickedOrder.order.owner.fullName;
     };
+    $scope.getExecutorName = function() {
+        return ClickedOrder.order.executor.fullName;
+    };
     $scope.getOwnerPhotoUrl = function() {
         return ClickedOrder.order.owner.photoUri;
+    };
+    $scope.getExecutorPhotoUrl = function() {
+        return ClickedOrder.order.executor.photoUri;
     };
     $scope.getAddress = function() {
         return ClickedOrder.order.address;
@@ -245,10 +354,20 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
                 $rootScope.$broadcast('takeOrderEvent');
             },
             function(errorResponse) {
+
         });
+        $scope.startTimer();
     };
     $scope.orderToDone = function() {
         Order.changeStatus({orderId: ClickedOrder.order.id}, 2, function(successResponse) {
+                angular.element('#showOrderModal').modal('hide');
+                $rootScope.$broadcast('finishOrderEvent');
+            },
+            function(errorResponse) {
+        });
+    };
+    $scope.cancelOrder = function() {
+        Order.denyOrderExecution({orderId: ClickedOrder.order.id}, function(successResponse) {
                 angular.element('#showOrderModal').modal('hide');
                 $rootScope.$broadcast('finishOrderEvent');
             },
@@ -261,4 +380,29 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
     $scope.getExpireTime = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'HH:mm');
     };
-});
+})
+.directive('myCurrentTime', ['$interval', 'dateFilter',
+      function($interval, dateFilter) {
+        // return the directive link function. (compile function not needed)
+        return function(scope, element, attrs) {
+          var stopTime; // so that we can cancel the time updates
+
+          // used to update the UI
+          function updateTime() {
+            element.text(dateFilter(new Date()));
+          }
+
+          // watch the expression, and update the UI on change.
+          scope.$watch(attrs.myCurrentTime, function(value) {
+            updateTime();
+          });
+
+          stopTime = $interval(updateTime, 1000);
+
+          // listen on DOM destroy (removal) event, and cancel the next UI update
+          // to prevent updating time after the DOM element was removed.
+          element.on('$destroy', function() {
+            $interval.cancel(stopTime);
+          });
+        }
+      }]);

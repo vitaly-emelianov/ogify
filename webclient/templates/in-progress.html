@@ -1,5 +1,5 @@
 <div class="col-sm-12 col-md-8 main ">
-    <div class="panel panel-default map-container-height">
+    <div class="panel panel-default">
         <div class="panel-body">
             <ui-gmap-google-map center='map.center' zoom='map.zoom' control="map.control">
                 <ui-gmap-marker
@@ -18,7 +18,7 @@
         </div>
     </div>
 </div>
-<div class="col-sm-8 col-md-4 current-orders-height">
+<div class="col-sm-8 col-md-4 list-orders-height">
     <div id="orders" class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
@@ -26,20 +26,25 @@
             </div>
         </div>
         <div class="list-group">
+            <a class="list-group-item" id="hidden-order" ng-hide="1">
+                <p class="list-group-item-text">description</p>
+                <p class="list-group-item-text"><b>Адрес: </b></p>
+                <p class="list-group-item-text"><b>Актуально до: </b></p>
+            </a>
             <a id="{{order.id}}" 
                 data-toggle="modal" 
                 data-target="#showOrderModal"
                 class="list-group-item order-list-{{ordersLinks[order.id]}}"
                 ng-click="setClickedOrder(order)"
                 ng-repeat="order in showingOrders.slice(pageParameters.pageSize*currentPage.page, pageParameters.pageSize*(currentPage.page+1))">
-                <p class="list-group-item-text">{{order.description.slice(0, pageParameters.descriptionLength)}}</p>
-                <p class="list-group-item-text"><b>Адерс: </b>{{order.address}}</p>
+                <p class="list-group-item-text">{{order.description}}</p>
+                <p class="list-group-item-text"><b>Адрес: </b>{{order.address}}</p>
                 <p class="list-group-item-text"><b>Актуально до: </b>{{getExpireDate(order)}}</p>
             </a>
         </div>
     </div>
 </div>
-<div class="container-fluid" position="fixed" class="col-md-4s col-sm-8" ng-if="currentPage.pages.length > 0">
+<div position="fixed" ng-hide="currentPage.pages < 2">
     <nav align="center">
         <ul class="pagination">
             <li>
@@ -51,7 +56,6 @@
                 <a ng-click="setPage(currentPage, i)">
                     {{i+1}}
                 </a>
-            </li>
             </li>
             <li>
                 <a aria-label="Next" ng-click="nextPage(currentPage)">

@@ -3,6 +3,7 @@ package net.ogify.engine.vkapi;
 import net.ogify.engine.vkapi.elements.VkErrorResponse;
 import net.ogify.engine.vkapi.exceptions.VkSideError;
 import org.apache.log4j.Logger;
+import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
 import javax.ws.rs.client.Client;
@@ -25,7 +26,11 @@ public class VkClient {
     public static <T> T call(String targetUri, Map<String, Object> parameters, Class<T> entityClass) throws VkSideError {
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
 
-        Response response = null;
+        // Decrease timeout to avoid slowing vk queries
+        client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
+        client.property(ClientProperties.READ_TIMEOUT, 3000);
+
+        Response response;
         try {
             WebTarget target = client.target(targetUri);
             for(Map.Entry<String, Object> entry : parameters.entrySet())
