@@ -96,9 +96,9 @@ public class OrderResource {
     }
 
     @GET
-    @Path("/{id}/socialLink")
-    public Order.OrderNamespace getSocialLink(@NotNull @PathParam("id") Long orderId) throws ExecutionException {
-        return orderProcessor.getOrderConnectionWithUser(orderId, userId);
+    @Path("/{id}/rate")
+    public boolean iRated(@NotNull @PathParam("id") Long orderId) throws ExecutionException {
+        return orderProcessor.isRated(userId, orderId);
     }
 
     /**

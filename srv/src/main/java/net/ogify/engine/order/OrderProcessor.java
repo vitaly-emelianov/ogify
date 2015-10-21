@@ -193,6 +193,18 @@ public class OrderProcessor {
         orderController.saveOrUpdate(order);
     }
 
+    public boolean isRated(Long userId, Long orderId) {
+        User userWho = userController.getUserById(userId);
+        Order relatedOrder = orderController.getUsersOrder(userId, orderId);
+        if(relatedOrder == null) // Check that order with specified id is presented
+            throw new NotFoundException(String.format("Order with id %d not found", orderId));
+        if(relatedOrder.getStatus() != OrderStatus.Completed) // Check that order is completed
+            throw new WebApplicationException("You can't rate user while order isn't completed",
+                    Response.Status.FORBIDDEN);
+        if(orderController.isOrderRatedBy(relatedOrder, userWho)) // Check that user didn't rate order already
+            return true;
+        return false;
+    }
     /**
      * @param userId id of user which orders should be retrieved.
      * @param firstResult the position of the first result to retrieve.

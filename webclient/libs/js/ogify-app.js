@@ -283,9 +283,16 @@ ogifyApp.factory('ClickedOrder', function() {
         owner: {photoUri: null, fullName: null},
         executor: {photoUri: null, fullName: null}
     };
+    
     ClickedOrder.set = function(order) {
         ClickedOrder.order = order;
+        ClickedOrder.rate = false;
     };
+    ClickedOrder.setWithRate = function(order, rate) {
+        ClickedOrder.order = order;
+        ClickedOrder.rate = rate;
+    };
+    
     return ClickedOrder;
 });
 
@@ -350,6 +357,9 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
     $scope.getStatus = function() {
         return ClickedOrder.order.status;
     };
+    $scope.getRate = function() {
+        return ClickedOrder.rate;
+    };
     $scope.userTakesTask = function() {
         Order.getToExecution({orderId: ClickedOrder.order.id}, function(successResponse) {
                 angular.element('#showOrderModal').modal('hide');
@@ -376,12 +386,10 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
             function(errorResponse) {
         });
     };
-    
-    $scope.isOrderRated = Order.isOrderRated({orderId: ClickedOrder.order.id});
+
     $scope.rateMyOrder = function(rating) {
         Order.rateOrder({orderId: ClickedOrder.order.id}, {rate: rating} , function(successResponse) {
-                $scope.isOrderRated = true;
-                $rootScope.$broadcast('rateMyOrderEvent');
+                $rootScope.$broadcast('rateMyOrderEvent', ClickedOrder.order.id);
             },
             function(errorResponse) {
         });
@@ -392,9 +400,7 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
     $scope.getExpireTime = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'HH:mm');
     };
-})
-
-.directive('myCurrentTime', ['$interval', 'dateFilter',
+}).directive('myCurrentTime', ['$interval', 'dateFilter',
       function($interval, dateFilter) {
         // return the directive link function. (compile function not needed)
         return function(scope, element, attrs) {
@@ -418,8 +424,7 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
             $interval.cancel(stopTime);
           });
         }
-      }]);
-});
+}]);
 
 ogifyApp.controller('rateDoneOrderController', function ($scope, $rootScope, $filter, ClickedOrder, Order) {
     $scope.rateCurrentOrder = function(rating) {

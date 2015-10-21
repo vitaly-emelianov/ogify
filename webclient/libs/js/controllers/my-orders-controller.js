@@ -1,9 +1,17 @@
-ogifyApp.controller('MyOrdersController', function ($scope, UserProfile, ClickedOrder) {
+ogifyApp.controller('MyOrdersController', function ($scope, UserProfile, ClickedOrder, Order) {
     // TODO: put user profile into service, to avoid server spamming.
     $scope.user = UserProfile.get();
 
     $scope.user.$promise.then(function(user) {
-        $scope.myOrders = UserProfile.getCreatedOrders({userId: user.userId});
+        UserProfile.getCreatedOrders({userId: user.userId}).$promise.then(function(data) {
+            $scope.myOrders = [];
+            for (var i = 0; i < data.length; ++i) {
+                $scope.myOrders.push(data[i]);
+                Order.isOrderRated({orderId: data[i].id}).$promise.then(function(response) {
+                    $scope.myOrders[i].rate = response;
+                });
+            }
+        });
     });
 
     $scope.maxDescriptionLength = 50;
@@ -11,6 +19,10 @@ ogifyApp.controller('MyOrdersController', function ($scope, UserProfile, Clicked
 
     $scope.setClickedOrder = function(order) {
         ClickedOrder.set(order);
+    };
+    
+    $scope.setClickedOrderRate = function(order) {
+        ClickedOrder.setWithRate(order, order.rate);
     };
 
     $scope.onlyNew = function(order) {
@@ -26,16 +38,8 @@ ogifyApp.controller('MyOrdersController', function ($scope, UserProfile, Clicked
     };
 
     $scope.$on('createdNewOrderEvent', function(event, order) {
+        order.rate = false;
         $scope.myOrders.push(order);
     });
     
-    $scope.isOrderRated = function(orderId) {
-        return Order.isOrderRated({orderId: orderId});
-    };
-    
-    $scope.$on('rateMyOrderEvent', function(event) {
-        $scope.user.$promise.then(function(user) {
-            $scope.myOrders = UserProfile.getCreatedOrders({userId: user.userId});
-        });
-    });
 });

@@ -76,12 +76,12 @@ ogifyServices.factory('Order', ['$resource',
                 params: {orderId: '@orderId'}},
             getItemsList: {url: BASE_PATH + ORDER_PATH + '/:orderId' + 'items', method: 'GET', isArray: true},    
             getOrdersLinks: {url: BASE_PATH + ORDER_PATH + '/socialLinks', method: 'GET'},
-            changeStatus: {url: BASE_PATH + ORDER_PATH + '/:orderId' +'/status', method: 'PUT', 
+            changeStatus: {url: BASE_PATH + ORDER_PATH + '/:orderId' + '/status', method: 'PUT', 
                 params: {orderId: '@orderId'}},
-            denyOrderExecution: {url: BASE_PATH + ORDER_PATH + '/:orderId' +'/executor', method: 'DELETE', 
+            denyOrderExecution: {url: BASE_PATH + ORDER_PATH + '/:orderId' + '/executor', method: 'DELETE', 
                 params: {orderId: '@orderId'}},
-            rateOrder: {url: BASE_PATH + ORDER_PATH + '/:orderId' +'/rate', method: 'PUT', 
+            rateOrder: {url: BASE_PATH + ORDER_PATH + '/:orderId' + '/rate', method: 'PUT', 
                 params: {orderId: '@orderId'}},
-            isOrderRated: {url: BASE_PATH + ORDER_PATH + '/:orderId/socialLink', method: 'GET', params: {orderId: '@orderId'}}  
-        });
+            isOrderRated: {url: BASE_PATH + ORDER_PATH + '/:orderId' + '/rate', method: 'GET', params: {orderId: '@orderId'}}
+            });
 }]);
