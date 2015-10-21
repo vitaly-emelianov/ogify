@@ -28,5 +28,14 @@ ogifyApp.controller('MyOrdersController', function ($scope, UserProfile, Clicked
     $scope.$on('createdNewOrderEvent', function(event, order) {
         $scope.myOrders.push(order);
     });
-
+    
+    $scope.isOrderRated = function(orderId) {
+        return Order.isOrderRated({orderId: orderId});
+    };
+    
+    $scope.$on('rateMyOrderEvent', function(event) {
+        $scope.user.$promise.then(function(user) {
+            $scope.myOrders = UserProfile.getCreatedOrders({userId: user.userId});
+        });
+    });
 });

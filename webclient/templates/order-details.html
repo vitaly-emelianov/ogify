@@ -26,10 +26,33 @@
                             </button>
                             <button type="button" 
                                     ng-click="orderToDone()"
+                                    data-toggle="modal"
+                                    data-target="#rateDoneOrder"
+                                    data-backdrop="static"
+                                    data-keyboard="false"
                                     ng-hide="getStatus() != 'Running' || getOrder().owner.userId == user.userId"
                                     class="btn btn-success btn-s btn-block" >
                                 Завершить выполнение
                             </button>
+                            <div ng-if="!isOrderRated" ng-hide="getStatus() != 'Completed'" class="row">
+                                <div class="col-md-8 col-md-offset-2">
+                                    <button type="button" class="btn btn-default btn-lg" ng-click="rateMyOrder(1)">
+                                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 1
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-lg" ng-click="rateMyOrder(2)">
+                                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 2
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-lg" ng-click="rateMyOrder(3)">
+                                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 3
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-lg" ng-click="rateMyOrder(4)">
+                                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 4
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-lg" ng-click="rateMyOrder(5)">
+                                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 5
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

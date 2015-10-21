@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Created by melge on 12.07.2015.
  */
 
@@ -62,7 +62,8 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
 ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {
     $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
     $rootScope.createOrderTemplateUri = 'templates/new-order.html';
-    $rootScope.showOrderTemplateUri = 'templates/order-details.html'
+    $rootScope.showOrderTemplateUri = 'templates/order-details.html';
+    $rootScope.rateDoneOrderTemplateUri = 'templates/rate-done-order.html';
     $rootScope.landingUri = '/landing';
 
     if(($cookies.get('sId') == undefined || $cookies.get('ogifySessionSecret') == undefined)
@@ -375,6 +376,16 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
             function(errorResponse) {
         });
     };
+    
+    $scope.isOrderRated = Order.isOrderRated({orderId: ClickedOrder.order.id});
+    $scope.rateMyOrder = function(rating) {
+        Order.rateOrder({orderId: ClickedOrder.order.id}, {rate: rating} , function(successResponse) {
+                $scope.isOrderRated = true;
+                $rootScope.$broadcast('rateMyOrderEvent');
+            },
+            function(errorResponse) {
+        });
+    };
     $scope.getExpireDate = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'd MMMM yyyy');
     };
@@ -382,6 +393,7 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
         return $filter('date')(ClickedOrder.order.expireIn, 'HH:mm');
     };
 })
+
 .directive('myCurrentTime', ['$interval', 'dateFilter',
       function($interval, dateFilter) {
         // return the directive link function. (compile function not needed)
@@ -407,3 +419,14 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
           });
         }
       }]);
+});
+
+ogifyApp.controller('rateDoneOrderController', function ($scope, $rootScope, $filter, ClickedOrder, Order) {
+    $scope.rateCurrentOrder = function(rating) {
+        Order.rateOrder({orderId: ClickedOrder.order.id}, {rate: rating} , function(successResponse) {
+                angular.element('#rateDoneOrder').modal('hide');
+            },
+            function(errorResponse) {
+        });
+    };
+});

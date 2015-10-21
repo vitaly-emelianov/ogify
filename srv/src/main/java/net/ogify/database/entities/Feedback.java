@@ -10,9 +10,11 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Entity
 @Table(name = "feedbacks",
-       uniqueConstraints = @UniqueConstraint(columnNames = {"user_who", "user_whom", "which_order"}))
-@NamedQueries(@NamedQuery(name = "Feedback.getFeedback", query = "select feedback from Feedback feedback where " +
-        "feedback.which = :whichOrder and feedback.who = :whoRate"))
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_who", "user_whom", "which_order"}))
+@NamedQueries({@NamedQuery(name = "Feedback.getFeedback", query = "select feedback from Feedback feedback where " +
+        "feedback.which = :whichOrder and feedback.who = :whoRate"),
+        @NamedQuery(name = "Feedback.isFeedbackRated", query = "select feedback from Feedback feedback where " +
+                "feedback.which = :whichOrder")})
 public class Feedback {
     @XmlType(name = "feedback-type")
     @XmlEnum
