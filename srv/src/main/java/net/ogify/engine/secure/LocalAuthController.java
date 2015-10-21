@@ -36,6 +36,6 @@ public class LocalAuthController implements AuthController {
         user.addAuthToken("DUMMY", SocialNetwork.Vk, calendar.getTimeInMillis());
 
         userController.saveOrUpdate(user);
-        return 1L;
+        return user.getId();
     }
 }

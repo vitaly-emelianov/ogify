@@ -79,13 +79,20 @@ public class OrderProcessor {
      *
      * @param userId id of user who make request.
      * @return visible for specified user orders.
-     * @throws ExecutionException on any exception thrown while attempting to get results.
      */
     public List<Order> getNearestOrders(Double neLatitude, Double neLongitude,
                                         Double swLatitude, Double swLongitude,
-                                        Long userId) throws ExecutionException {
-        Set<Long> friends = friendService.getUserFriendsIds(userId);
-        Set<Long> friendsOfFriends = friendService.getUserExtendedFriendsIds(userId);
+                                        Long userId) {
+        Set<Long> friends;
+        Set<Long> friendsOfFriends;
+        try {
+            friends = friendService.getUserFriendsIds(userId);
+            friendsOfFriends = friendService.getUserExtendedFriendsIds(userId);
+        } catch (ExecutionException e) {
+            friends = Collections.emptySet();
+            friendsOfFriends = Collections.emptySet();
+        }
+
         return orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
                 neLatitude, neLongitude, swLatitude, swLongitude);
     }
@@ -193,18 +200,6 @@ public class OrderProcessor {
         orderController.saveOrUpdate(order);
     }
 
-    public boolean isRated(Long userId, Long orderId) {
-        User userWho = userController.getUserById(userId);
-        Order relatedOrder = orderController.getUsersOrder(userId, orderId);
-        if(relatedOrder == null) // Check that order with specified id is presented
-            throw new NotFoundException(String.format("Order with id %d not found", orderId));
-        if(relatedOrder.getStatus() != OrderStatus.Completed) // Check that order is completed
-            throw new WebApplicationException("You can't rate user while order isn't completed",
-                    Response.Status.FORBIDDEN);
-        if(orderController.isOrderRatedBy(relatedOrder, userWho)) // Check that user didn't rate order already
-            return true;
-        return false;
-    }
     /**
      * @param userId id of user which orders should be retrieved.
      * @param firstResult the position of the first result to retrieve.
@@ -329,5 +324,12 @@ public class OrderProcessor {
         }
 
         throw new ForbiddenException("You are not friends, only friends can see orders of each others");
+    }
+
+    public List<Long> getUnratedOrders(Long userWho, Long userId) {
+        if(!userWho.equals(userId))
+            throw new ForbiddenException("You don't have access to unrated orders of another users");
+
+        return orderController.getUnratedUsersOrders(userId);
     }
 }

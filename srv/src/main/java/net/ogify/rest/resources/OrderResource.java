@@ -76,12 +76,6 @@ public class OrderResource {
         return orderController.getOrderById(orderId).getItems();
     }
 
-    @GET
-    @Path("/{id}/isRated")
-    public Boolean getSocialLinks(@PathParam("id") Long orderId) {
-        return orderController.isOrderRated(orderController.getOrderById(orderId));
-    }
-
     @PUT
     @Path("/{id}/getToExecution")
     public void getToExecution(@PathParam("id") Long orderId) {
@@ -93,12 +87,6 @@ public class OrderResource {
     @Path("/{id}/executor")
     public void denyOrderExecution(@PathParam("id") Long orderId) {
         orderProcessor.denyOrderExecution(userId, orderId);
-    }
-
-    @GET
-    @Path("/{id}/rate")
-    public boolean iRated(@NotNull @PathParam("id") Long orderId) throws ExecutionException {
-        return orderProcessor.isRated(userId, orderId);
     }
 
     /**

@@ -284,4 +284,17 @@ public class OrderController {
             em.close();
         }
     }
+
+    public List<Long> getUnratedUsersOrders(Long userId) {
+        EntityManager em = entityManagerService.createEntityManager();
+        try {
+            TypedQuery<Long> query = em.createNamedQuery("Order.getUnratedOrders", Long.class);
+            query.setParameter("userId", userId);
+            query.setParameter("completedStatus", Order.OrderStatus.Completed);
+
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
 }
