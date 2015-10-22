@@ -82,6 +82,17 @@
                             <goal>exec</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>exec-grunt</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <workingDirectory>../webclient</workingDirectory>
+                            <executable>grunt</executable>
+                        </configuration>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
 
