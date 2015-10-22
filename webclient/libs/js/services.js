@@ -7,10 +7,10 @@ ogifyApp.service('UserProfileService', function ($interval, UserProfile) {
     var unratedOrdersCache = [];
 
     $interval(function() {
-        currentUser.then(function(user) {
-            unratedOrdersCache = UserProfile.getUnratedOrders({userId: user.userId});
-        }, 60 * 2 * 1000);
-    });
+        currentUser.$promise.then(function(user) {
+            unratedOrdersCache = UserProfile.getUnratedOrders({userId: currentUser.userId});
+        });
+    }, 120000);
 
     return {
         getUserProfile: function() {
