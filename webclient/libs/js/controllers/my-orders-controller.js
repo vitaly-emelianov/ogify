@@ -2,6 +2,15 @@ ogifyApp.controller('MyOrdersController', function ($scope, UserProfile, Clicked
     // TODO: put user profile into service, to avoid server spamming.
     $scope.user = UserProfileService.getUserProfile();
 
+    $scope.user.$promise.then(function () {
+        $scope.myOrders = UserProfile.getCreatedOrders({userId: $scope.user.userId});
+    });
+
+    UserProfileService.forceUpdate();
+    $scope.unratedOrders = UserProfileService.getUnratedOrders();
+    $scope.$on('unratedOrdersUpdated', function(event, data) {
+        $scope.unratedOrders = UserProfileService.getUnratedOrders();
+    });
 
     $scope.maxDescriptionLength = 50;
     $scope.maxAddressLength = 20;

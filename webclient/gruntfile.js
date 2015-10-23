@@ -5,7 +5,7 @@ module.exports = function (grunt) {
         uglify: {
             ogify: {
                 options: {
-                    beautify: false,
+                    beautify: true,
                     mangle: false
                 },
                 files: [{
@@ -17,9 +17,9 @@ module.exports = function (grunt) {
             },
             libs: {
                 options: {
-                    beautify: false,
                     mangle: false,
-                    compress: false
+                    compress: false,
+                    beautify: false
                 },
                 files: [{
                     src: [
