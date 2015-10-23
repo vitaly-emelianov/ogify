@@ -40,7 +40,8 @@
                      data-toggle="modal" 
                      data-target="#showOrderModal"
                      ng-click="setClickedOrderRate(order)">
-                        <span ng-class="{true:'glyphicon glyphicon-star pull-left', false:'glyphicon glyphicon-star-empty pull-left'}[order.rate]" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-star pull-left" ng-show=""></span>
+                        <span class="glyphicon glyphicon-star-empty pull-left"></span>
                         <span class="label label-success pull-right">№{{order.id}}</span>
                         <p class="list-group-item-text">{{order.description}}</p>
                         <p class="small list-group-item-text"><b>Адрес:</b> {{order.address}}</p>

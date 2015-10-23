@@ -1,18 +1,7 @@
-ogifyApp.controller('MyOrdersController', function ($scope, UserProfile, ClickedOrder, Order) {
+ogifyApp.controller('MyOrdersController', function ($scope, UserProfile, ClickedOrder, UserProfileService) {
     // TODO: put user profile into service, to avoid server spamming.
-    $scope.user = UserProfile.get();
+    $scope.user = UserProfileService.getUserProfile();
 
-    $scope.user.$promise.then(function(user) {
-        UserProfile.getCreatedOrders({userId: user.userId}).$promise.then(function(data) {
-            $scope.myOrders = [];
-            for (var i = 0; i < data.length; ++i) {
-                $scope.myOrders.push(data[i]);
-                Order.isOrderRated({orderId: data[i].id}).$promise.then(function(response) {
-                    $scope.myOrders[i].rate = response;
-                });
-            }
-        });
-    });
 
     $scope.maxDescriptionLength = 50;
     $scope.maxAddressLength = 20;
