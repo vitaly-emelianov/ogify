@@ -78,7 +78,7 @@ import java.util.List;
                     "orders.namespace in :namespaces ORDER BY orders.expireIn DESC"),
         @NamedQuery(name = "Order.getUnratedOrders", query =
                 "SELECT orders.id FROM Order orders WHERE " +
-                    "orders.executor.id = : userId or orders.owner.id = :userId " +
+                    "orders.executor.id = :userId or orders.owner.id = :userId " +
                     "and orders.status = :completedStatus " +
                     "and orders.id not in (" +
                         "select feedback.which.id from Feedback feedback where feedback.who.id = :userId" +
