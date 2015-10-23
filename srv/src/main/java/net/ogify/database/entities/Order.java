@@ -75,7 +75,14 @@ import java.util.List;
         @NamedQuery(name = "Order.getCreatedByUser", query =
                 "SELECT orders FROM Order orders WHERE " +
                     "orders.owner.id = :ownerId and " +
-                    "orders.namespace in :namespaces ORDER BY orders.expireIn DESC")
+                    "orders.namespace in :namespaces ORDER BY orders.expireIn DESC"),
+        @NamedQuery(name = "Order.getUnratedOrders", query =
+                "SELECT orders.id FROM Order orders WHERE " +
+                    "orders.executor.id = :userId or orders.owner.id = :userId " +
+                    "and orders.status = :completedStatus " +
+                    "and orders.id not in (" +
+                        "select feedback.which.id from Feedback feedback where feedback.who.id = :userId" +
+                    ")")
 })
 @XmlRootElement
 public class Order {

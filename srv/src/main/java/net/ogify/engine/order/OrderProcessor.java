@@ -79,13 +79,20 @@ public class OrderProcessor {
      *
      * @param userId id of user who make request.
      * @return visible for specified user orders.
-     * @throws ExecutionException on any exception thrown while attempting to get results.
      */
     public List<Order> getNearestOrders(Double neLatitude, Double neLongitude,
                                         Double swLatitude, Double swLongitude,
-                                        Long userId) throws ExecutionException {
-        Set<Long> friends = friendService.getUserFriendsIds(userId);
-        Set<Long> friendsOfFriends = friendService.getUserExtendedFriendsIds(userId);
+                                        Long userId) {
+        Set<Long> friends;
+        Set<Long> friendsOfFriends;
+        try {
+            friends = friendService.getUserFriendsIds(userId);
+            friendsOfFriends = friendService.getUserExtendedFriendsIds(userId);
+        } catch (ExecutionException e) {
+            friends = Collections.emptySet();
+            friendsOfFriends = Collections.emptySet();
+        }
+
         return orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
                 neLatitude, neLongitude, swLatitude, swLongitude);
     }
@@ -317,5 +324,12 @@ public class OrderProcessor {
         }
 
         throw new ForbiddenException("You are not friends, only friends can see orders of each others");
+    }
+
+    public List<Long> getUnratedOrders(Long userWho, Long userId) {
+        if(!userWho.equals(userId))
+            throw new ForbiddenException("You don't have access to unrated orders of another users");
+
+        return orderController.getUnratedUsersOrders(userId);
     }
 }

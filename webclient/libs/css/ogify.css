@@ -50,6 +50,10 @@ p.break-word {
     word-wrap: break-word;
 }
 
+.rateDialog {
+    width: 400px;
+}
+
 .panel>.list-group>.order-list-Friends {
     border-left: 3px solid #5cb85c; !important;
 }

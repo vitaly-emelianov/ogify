@@ -3,6 +3,7 @@ package net.ogify.database;
 import net.ogify.database.entities.Feedback;
 import net.ogify.database.entities.Order;
 import net.ogify.database.entities.User;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,8 @@ import java.util.Set;
  */
 @Component
 public class OrderController {
+    private final static Logger logger = Logger.getLogger(OrderController.class);
+
     @Autowired
     private EntityManagerService entityManagerService;
 
@@ -222,6 +225,21 @@ public class OrderController {
         }
     }
 
+    public boolean isOrderRated(Order order) {
+        EntityManager em = entityManagerService.createEntityManager();
+        try {
+            TypedQuery<Feedback> query = em.createNamedQuery("Feedback.isFeedbackRated", Feedback.class);
+            query.setParameter("whichOrder", order);
+            int size = query.getResultList().size();
+            if(size > 1 ){
+                logger.warn(String.format("Unexpected behaviour: Order with id: %d was rated more than once.", order.getId()));
+            }
+            return  size >= 1;
+        } finally {
+            em.close();
+        }
+    }
+
     public List<Order> getOrdersForSocialLinkWithOwner(Long executorId, Set<Long> ordersIds,
                                                        Set<Long> friendsIds, Set<Long> extendedFriendsIds) {
         EntityManager em = entityManagerService.createEntityManager();
@@ -260,6 +278,19 @@ public class OrderController {
             query.setParameter("namespaces", namespaces);
             query.setFirstResult(firstResult);
             query.setMaxResults(maxResults);
+
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Long> getUnratedUsersOrders(Long userId) {
+        EntityManager em = entityManagerService.createEntityManager();
+        try {
+            TypedQuery<Long> query = em.createNamedQuery("Order.getUnratedOrders", Long.class);
+            query.setParameter("userId", userId);
+            query.setParameter("completedStatus", Order.OrderStatus.Completed);
 
             return query.getResultList();
         } finally {
