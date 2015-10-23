@@ -1,9 +1,15 @@
-ogifyApp.controller('MyOrdersController', function ($scope, UserProfile, ClickedOrder) {
+ogifyApp.controller('MyOrdersController', function ($scope, UserProfile, ClickedOrder, UserProfileService) {
     // TODO: put user profile into service, to avoid server spamming.
-    $scope.user = UserProfile.get();
+    $scope.user = UserProfileService.getUserProfile();
 
-    $scope.user.$promise.then(function(user) {
-        $scope.myOrders = UserProfile.getCreatedOrders({userId: user.userId});
+    $scope.user.$promise.then(function () {
+        $scope.myOrders = UserProfile.getCreatedOrders({userId: $scope.user.userId});
+    });
+
+    UserProfileService.forceUpdate();
+    $scope.unratedOrders = UserProfileService.getUnratedOrders();
+    $scope.$on('unratedOrdersUpdated', function(event, data) {
+        $scope.unratedOrders = UserProfileService.getUnratedOrders();
     });
 
     $scope.maxDescriptionLength = 50;
@@ -11,6 +17,10 @@ ogifyApp.controller('MyOrdersController', function ($scope, UserProfile, Clicked
 
     $scope.setClickedOrder = function(order) {
         ClickedOrder.set(order);
+    };
+    
+    $scope.setClickedOrderRate = function(order) {
+        ClickedOrder.setWithRate(order, order.rate);
     };
 
     $scope.onlyNew = function(order) {
@@ -26,7 +36,8 @@ ogifyApp.controller('MyOrdersController', function ($scope, UserProfile, Clicked
     };
 
     $scope.$on('createdNewOrderEvent', function(event, order) {
+        order.rate = false;
         $scope.myOrders.push(order);
     });
-
+    
 });

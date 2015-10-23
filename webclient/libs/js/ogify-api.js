@@ -52,12 +52,26 @@ ogifyServices.factory('UserProfile', ['$resource', 'AuthInterceptor',
         return $resource(BASE_PATH + PROFILE_PATH, {}, {
             getCurrentUser: {method: 'GET', params: {}, interceptor: AuthInterceptor},
             get: {url: BASE_PATH + PROFILE_PATH + '/:userId', method: 'GET'},
-            getFriends: {url: BASE_PATH + PROFILE_PATH + '/:userId/friends', isArray: true, params: {
-                userId: '@userId'}},
-            getExecutingOrders: {url: BASE_PATH + PROFILE_PATH + '/:userId/executing', isArray: true, params: {
-                userId: '@userId'}},
-            getCreatedOrders: {url: BASE_PATH + PROFILE_PATH + '/:userId/created', isArray: true, params: {
-                userId: '@userId'}}
+            getFriends: {
+                url: BASE_PATH + PROFILE_PATH + '/:userId/friends', isArray: true, params: {
+                    userId: '@userId'
+                }
+            },
+            getExecutingOrders: {
+                url: BASE_PATH + PROFILE_PATH + '/:userId/executing', isArray: true, params: {
+                    userId: '@userId'
+                }
+            },
+            getCreatedOrders: {
+                url: BASE_PATH + PROFILE_PATH + '/:userId/created', isArray: true, params: {
+                    userId: '@userId'
+                }
+            },
+            getUnratedOrders: {
+                url: BASE_PATH + PROFILE_PATH + '/:userId/unrated', isArray: true, params: {
+                    userId: '@userId'
+                }
+            }
         });
     }
 ]);
@@ -67,18 +81,33 @@ ogifyServices.factory('Order', ['$resource',
         return $resource(BASE_PATH + ORDER_PATH, {}, {
             get: {url: BASE_PATH + ORDER_PATH + '/:orderId', method: 'GET', params: {orderId: '@orderId'}},
             create: {method: 'POST'},
-            getNearMe: {url: BASE_PATH + ORDER_PATH + '/near', method: 'GET',
-                params: {neLatitude: '', neLongitude: '', swLatitude: '', swLongitude: ''}, isArray: true},
-            getDoneOrders: {url: BASE_PATH + ORDER_PATH + '/done', method: 'GET',
-                params: {latitude: '', longitude: ''}},
+            getNearMe: {
+                url: BASE_PATH + ORDER_PATH + '/near', method: 'GET',
+                params: {neLatitude: '', neLongitude: '', swLatitude: '', swLongitude: ''}, isArray: true
+            },
+            getDoneOrders: {
+                url: BASE_PATH + ORDER_PATH + '/done', method: 'GET',
+                params: {latitude: '', longitude: ''}
+            },
             getMyOrders: {method: 'GET', isArray: true},
-            getToExecution: {url: BASE_PATH + ORDER_PATH + '/:orderId' +'/getToExecution', method: 'PUT', 
-                params: {orderId: '@orderId'}},
-            getItemsList: {url: BASE_PATH + ORDER_PATH + '/:orderId' + 'items', method: 'GET', isArray: true},    
+            getToExecution: {
+                url: BASE_PATH + ORDER_PATH + '/:orderId' + '/getToExecution', method: 'PUT',
+                params: {orderId: '@orderId'}
+            },
+            getItemsList: {url: BASE_PATH + ORDER_PATH + '/:orderId' + 'items', method: 'GET', isArray: true},
             getOrdersLinks: {url: BASE_PATH + ORDER_PATH + '/socialLinks', method: 'GET'},
-            changeStatus: {url: BASE_PATH + ORDER_PATH + '/:orderId' +'/status', method: 'PUT', 
-                params: {orderId: '@orderId'}},
-            denyOrderExecution: {url: BASE_PATH + ORDER_PATH + '/:orderId' +'/executor', method: 'DELETE', 
-                params: {orderId: '@orderId'}}
+            changeStatus: {
+                url: BASE_PATH + ORDER_PATH + '/:orderId' + '/status', method: 'PUT',
+                params: {orderId: '@orderId'}
+            },
+            denyOrderExecution: {
+                url: BASE_PATH + ORDER_PATH + '/:orderId' + '/executor', method: 'DELETE',
+                params: {orderId: '@orderId'}
+            },
+            rateOrder: {
+                url: BASE_PATH + ORDER_PATH + '/:orderId' + '/rate', method: 'PUT',
+                params: {orderId: '@orderId'}
+            }
         });
-}]);
+    }
+]);

@@ -5,6 +5,9 @@
 /**
  * Parse date in format dd.mm.yyyy and time hh:mm
  */
+var ogifyApp = angular.module('ogifyApp', ['ogifyServices', 'ngRoute', 'ngCookies', 'uiGmapgoogle-maps', 'angulartics',
+    'angulartics.google.analytics', 'ngSanitize']);
+
 function parseDate(date, time) {
     dateItems = date.split('.');
     timeItems = time.split(':');

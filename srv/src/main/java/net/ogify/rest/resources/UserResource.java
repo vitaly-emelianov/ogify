@@ -95,4 +95,17 @@ public class UserResource {
             @NotNull @QueryParam("maxResults") int maxResults) {
         return orderProcessor.getUsersOrders(userId, currentUserId, firstResult, maxResults);
     }
+
+    /**
+     * Return orders which wasn't rated by user.
+     *
+     * @summary Unrated users orders.
+     * @param userId id of user which unrated orders will be returned.
+     * @return ids of unrated orders.
+     */
+    @GET
+    @Path("/{id}/unrated")
+    public List<Long> getUnratedOrders(@NotNull @PathParam("id") Long userId) {
+        return orderProcessor.getUnratedOrders(currentUserId, userId);
+    }
 }

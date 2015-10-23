@@ -1,9 +1,6 @@
-/**
+﻿/**
  * Created by melge on 12.07.2015.
  */
-
-var ogifyApp = angular.module('ogifyApp', ['ogifyServices', 'ngRoute', 'ngCookies', 'uiGmapgoogle-maps', 'angulartics',
-    'angulartics.google.analytics', 'ngSanitize']);
 
 ogifyApp.service('myAddress', function () {
     var address = {
@@ -62,7 +59,8 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
 ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {
     $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
     $rootScope.createOrderTemplateUri = 'templates/new-order.html';
-    $rootScope.showOrderTemplateUri = 'templates/order-details.html'
+    $rootScope.showOrderTemplateUri = 'templates/order-details.html';
+    $rootScope.rateDoneOrderTemplateUri = 'templates/rate-done-order.html';
     $rootScope.landingUri = '/landing';
 
     if(($cookies.get('sId') == undefined || $cookies.get('ogifySessionSecret') == undefined)
@@ -282,9 +280,16 @@ ogifyApp.factory('ClickedOrder', function() {
         owner: {photoUri: null, fullName: null},
         executor: {photoUri: null, fullName: null}
     };
+    
     ClickedOrder.set = function(order) {
         ClickedOrder.order = order;
+        ClickedOrder.rate = false;
     };
+    ClickedOrder.setWithRate = function(order, rate) {
+        ClickedOrder.order = order;
+        ClickedOrder.rate = rate;
+    };
+    
     return ClickedOrder;
 });
 
@@ -349,6 +354,9 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
     $scope.getStatus = function() {
         return ClickedOrder.order.status;
     };
+    $scope.getRate = function() {
+        return ClickedOrder.rate;
+    };
     $scope.userTakesTask = function() {
         Order.getToExecution({orderId: ClickedOrder.order.id}, function(successResponse) {
                 angular.element('#showOrderModal').modal('hide');
@@ -375,14 +383,21 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
             function(errorResponse) {
         });
     };
+
+    $scope.rateMyOrder = function(rating) {
+        Order.rateOrder({orderId: ClickedOrder.order.id}, {rate: rating} , function(successResponse) {
+                $rootScope.$broadcast('rateMyOrderEvent', ClickedOrder.order.id);
+            },
+            function(errorResponse) {
+        });
+    };
     $scope.getExpireDate = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'd MMMM yyyy');
     };
     $scope.getExpireTime = function() {
         return $filter('date')(ClickedOrder.order.expireIn, 'HH:mm');
     };
-})
-.directive('myCurrentTime', ['$interval', 'dateFilter',
+}).directive('myCurrentTime', ['$interval', 'dateFilter',
       function($interval, dateFilter) {
         // return the directive link function. (compile function not needed)
         return function(scope, element, attrs) {
@@ -406,4 +421,14 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
             $interval.cancel(stopTime);
           });
         }
-      }]);
+}]);
+
+ogifyApp.controller('rateDoneOrderController', function ($scope, $rootScope, $filter, ClickedOrder, Order) {
+    $scope.rateCurrentOrder = function(rating) {
+        Order.rateOrder({orderId: ClickedOrder.order.id}, {rate: rating} , function(successResponse) {
+                angular.element('#rateDoneOrder').modal('hide');
+            },
+            function(errorResponse) {
+        });
+    };
+});

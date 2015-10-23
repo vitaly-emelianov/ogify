@@ -5,11 +5,11 @@ module.exports = function (grunt) {
         uglify: {
             ogify: {
                 options: {
-                    beautify: false,
+                    beautify: true,
                     mangle: false
                 },
                 files: [{
-                    src: ['libs/js/main.js', 'libs/js/waiting-dialog.js', 'libs/js/ogify-api.js',
+                    src: ['libs/js/main.js', 'libs/js/services.js', 'libs/js/waiting-dialog.js', 'libs/js/ogify-api.js',
                         'libs/js/ogify-app.js', 'libs/js/controllers/dashboard-controller.js',
                         'libs/js/ogify-user-profile.js', 'libs/js/controllers/my-orders-controller.js'],
                     dest: 'jsm/ogify.min.js'
@@ -17,8 +17,9 @@ module.exports = function (grunt) {
             },
             libs: {
                 options: {
-                    beautify: false,
-                    mangle: false
+                    mangle: false,
+                    compress: false,
+                    beautify: false
                 },
                 files: [{
                     src: [
