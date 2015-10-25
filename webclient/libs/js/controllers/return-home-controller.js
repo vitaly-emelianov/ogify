@@ -1,5 +1,4 @@
 ogifyApp.controller('ReturnHomeController', function ($rootScope, $scope, uiGmapGoogleMapApi) {
-
     $scope.returnHome = function() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
