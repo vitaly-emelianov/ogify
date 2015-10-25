@@ -1,6 +1,7 @@
 package net.ogify.rest.resources;
 
 import net.ogify.database.OrderController;
+import net.ogify.database.entities.Feedback;
 import net.ogify.database.entities.Order;
 import net.ogify.database.entities.OrderItem;
 import net.ogify.engine.order.OrderProcessor;
@@ -147,7 +148,7 @@ public class OrderResource {
      */
     @GET
     @Path("/{id}/rate")
-    public Integer getOrderRating(@PathParam("id") Long orderId) {
+    public Feedback getOrderRating(@PathParam("id") Long orderId) {
         return orderProcessor.getUserRateForOrder(userId, orderId);
     }
 }
