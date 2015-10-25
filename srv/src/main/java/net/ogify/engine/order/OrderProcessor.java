@@ -333,7 +333,7 @@ public class OrderProcessor {
         return orderController.getUnratedUsersOrders(userId);
     }
 
-    public Long getUsersRateForOrder(Long userId, Long orderId) {
-        return feedbackController.getUsersRateForOrder(userId, orderId);
+    public Long getUserRateForOrder(Long userId, Long orderId) {
+        return feedbackController.getUserRateForOrder(userId, orderId);
     }
 }

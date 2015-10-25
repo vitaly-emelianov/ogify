@@ -29,7 +29,7 @@ public class FeedbackController {
         }
     }
 
-    public Long getUsersRateForOrder(Long userId, Long orderId) {
+    public Long getUserRateForOrder(Long userId, Long orderId) {
         EntityManager em = entityManagerService.createEntityManager();
         try {
             TypedQuery<Long> query = em.createNamedQuery("Feedback.getFeedback", Long.class);

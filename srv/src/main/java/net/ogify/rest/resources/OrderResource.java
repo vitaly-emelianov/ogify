@@ -148,6 +148,6 @@ public class OrderResource {
     @GET
     @Path("/{id}/rate")
     public Long getOrderRating(@PathParam("id") Long orderId) {
-        return orderProcessor.getUsersRateForOrder(userId, orderId);
+        return orderProcessor.getUserRateForOrder(userId, orderId);
     }
 }
