@@ -1,6 +1,7 @@
 package net.ogify.rest.resources;
 
 import net.ogify.database.OrderController;
+import net.ogify.database.entities.Feedback;
 import net.ogify.database.entities.Order;
 import net.ogify.database.entities.OrderItem;
 import net.ogify.engine.order.OrderProcessor;
@@ -83,11 +84,6 @@ public class OrderResource {
         orderProcessor.changeOrderStatus(userId, orderId, Order.OrderStatus.Running);
     }
 
-    @PUT
-    @Path("/{id}/setAsFailed")
-    public void setAsFailed(@PathParam("id") Long orderId) {
-        orderProcessor.changeOrderStatus(userId, orderId, Order.OrderStatus.Failed);
-    }
     @DELETE
     @Path("/{id}/executor")
     public void denyOrderExecution(@PathParam("id") Long orderId) {
@@ -152,7 +148,7 @@ public class OrderResource {
      */
     @GET
     @Path("/{id}/rate")
-    public Long getOrderRating(@PathParam("id") Long orderId) {
+    public Feedback getOrderRating(@PathParam("id") Long orderId) {
         return orderProcessor.getUserRateForOrder(userId, orderId);
     }
 }

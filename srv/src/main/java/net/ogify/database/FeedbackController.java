@@ -29,14 +29,14 @@ public class FeedbackController {
         }
     }
 
-    public Long getUserRateForOrder(Long userId, Long orderId) {
+    public Feedback getUserRateForOrder(Long userId, Long orderId) {
         EntityManager em = entityManagerService.createEntityManager();
         try {
-            TypedQuery<Long> query = em.createNamedQuery("Feedback.getFeedback", Long.class);
+            TypedQuery<Feedback> query = em.createNamedQuery("Feedback.getFeedback", Feedback.class);
             query.setParameter("whichOrderId", orderId);
             query.setParameter("whoRateId", userId);
 
-            List<Long> resultList = query.getResultList();
+            List<Feedback> resultList = query.getResultList();
             if(resultList.size() == 1)
                 return resultList.get(0);
             if(resultList.size() == 0)

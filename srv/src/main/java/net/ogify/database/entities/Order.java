@@ -92,8 +92,7 @@ public class Order {
         @XmlEnumValue("new") New,
         @XmlEnumValue("running") Running,
         @XmlEnumValue("completed") Completed,
-        @XmlEnumValue("canceled") Canceled,
-        @XmlEnumValue("failed") Failed
+        @XmlEnumValue("canceled") Canceled
     }
 
     @XmlType(name = "order_namespace")
