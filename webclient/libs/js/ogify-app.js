@@ -29,15 +29,7 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
             controller: 'DashboardController'
         }).when('/profile/:userId', {
             templateUrl: 'templates/user-profile.html',
-            controller: 'ProfilePageController',
-            resolve: {
-                // Hide detail order modal when we going to profile page
-                // TODO: Rewrite it in more common way
-                hideModal: function () {
-                    angular.element('#showOrderModal').modal('hide');
-                    return true;
-                }
-            }
+            controller: 'ProfilePageController'
         }).when('/my-orders', {
             templateUrl: 'templates/my-orders.html',
             controller: 'MyOrdersController'
@@ -59,10 +51,18 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
 ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {
     $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
     $rootScope.modalWindowsUri = 'templates/modals/modals.html';
-    $rootScope.createOrderTemplateUri = 'templates/modals/new-order.html';
-    $rootScope.showOrderTemplateUri = 'templates/modals/order-details.html';
-    $rootScope.rateDoneOrderTemplateUri = 'templates/modals/rate-done-order.html';
+    $rootScope.createOrderModalUri = 'templates/modals/new-order.html';
+    $rootScope.showOrderModalUri = 'templates/modals/order-details.html';
+    $rootScope.rateDoneOrderModalUri = 'templates/modals/rate-done-order.html';
     $rootScope.landingUri = '/landing';
+
+    /* Will be fixed in new version of Bootstrap (Angular.js Bootrstap bug) */
+    $rootScope.$on('$locationChangeStart', function(event) {
+        angular.element('#authModal').modal('hide');
+        angular.element('#createOrderModal').modal('hide');
+        angular.element('#showOrderModal').modal('hide');
+        angular.element('#rateDoneOrder').modal('hide');
+    });
 
     if(($cookies.get('sId') == undefined || $cookies.get('ogifySessionSecret') == undefined)
         && $window.location.hostname != 'localhost') {
@@ -87,7 +87,7 @@ ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {
 
 ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, $location, AuthResource, UserProfile) {
 
-    $scope.authWindowUri = 'templates/modals/auth-modal.html';
+    $scope.authWindowModalUri = 'templates/modals/auth-modal.html';
 
     //$scope.authenticationStatus = AuthResource.authenticationStatus();
 
