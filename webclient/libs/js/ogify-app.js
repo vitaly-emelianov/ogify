@@ -2,24 +2,6 @@
  * Created by melge on 12.07.2015.
  */
 
-ogifyApp.service('myAddress', function () {
-    var address = {
-        latitude: 0.0,
-        longitude: 0.0,
-        plainAddress: ''
-    };
-    return {
-        getAddress: function () {
-            return address;
-        },
-        setAddress: function(textAddress, latitude, longitude) {
-            address.plainAddress = textAddress;
-            address.latitude = latitude;
-            address.longitude = longitude;
-        }
-    };
-});
-
 ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
     $routeProvider
         .when('/current', {
@@ -121,7 +103,7 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, $lo
 });
 
 ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order,
-                                                            myAddress) {
+                                                            orderAddress, uiGmapGoogleMapApi) {
     // Init telephone input
     $scope.telephoneInput = angular.element("#telephoneNumber");
     $scope.telephoneInput.intlTelInput({
@@ -154,17 +136,30 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
             this.classList.remove('iti-invalid-key');
         }
     });
-
-    $scope.order = {
-        expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
-        expireTime: $filter('date')(new Date(), 'H:MM'),
-        reward: '',
-        address: myAddress.getAddress(),
-        namespace: 'FriendsOfFriends',
-        description:'',
-        items: [{}]
-    };
-
+    
+    initOrder = function() {
+        $scope.order = {
+            expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
+            expireTime: $filter('date')(new Date(), 'H:MM'),
+            reward: '',
+            address: {latitude: 55.753836,
+                      longitude: 37.620463,
+                      addressField: orderAddress.getAddress()},
+            namespace: 'FriendsOfFriends',
+            description:'',
+            items: [{}]
+        }
+        
+        if(!!navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                $scope.order.address.latitude = position.coords.latitude;
+                $scope.order.address.longitude = position.coords.longitude;
+            });
+        }
+    }
+    
+    initOrder();
+    
     $scope.alerts = {warning: [], error: []};
 
     $scope.showAlert = function(message, type) {
@@ -194,25 +189,48 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         $scope.order.items.splice(index, 1);
     };
 
+    $scope.showSuggestedAddresses = false;
+    $scope.suggestedAddresses = [];
+    $scope.updateAddressCoordinates = function() {
+        uiGmapGoogleMapApi.then(function(maps) {
+            $scope.maps = maps;
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({'address': $scope.order.address.addressField.plainAddress},function(data, status) {
+                if(status == google.maps.GeocoderStatus.OK) {
+                   $scope.suggestedAddresses = data;
+                   $scope.showSuggestedAddresses = true;
+                }
+            });
+        });
+    }
+    
+    $scope.setOrderAddress = function(suggestedAddress){
+        console.log(suggestedAddress)
+        orderAddress.setAddress(suggestedAddress.formatted_address);
+        $scope.order.address.latitude = suggestedAddress.geometry.location.lat();
+        $scope.order.address.longitude = suggestedAddress.geometry.location.lng();
+        $scope.showSuggestedAddresses = false;
+    }
+    
     $scope.createOrder = function() {
         var last_item_index = $scope.order.items.length - 1;
         var $last_item = $scope.order.items[last_item_index];
         if(!$last_item.comment) {
             $scope.order.items.splice(last_item_index, 1);
         }
-
+        
         var newOrder = {
             items: $scope.order.items,
             expireIn: parseDate($scope.order.expireDate, $scope.order.expireTime).getTime(),
-            latitude: myAddress.getAddress().latitude,
-            longitude: myAddress.getAddress().longitude,
+            latitude:  $scope.order.address.latitude,
+            longitude: $scope.order.address.longitude,
             reward: $scope.order.reward,
             telephoneNumber: $scope.telephoneInput[0].value.length > 0 ?
                 $scope.telephoneInput.intlTelInput("getNumber") : null,
             status: 'New',
             owner: null,
             executor: null,
-            address: $scope.order.address.plainAddress,
+            address: $scope.order.address.addressField.plainAddress,
             doneAt: null,
             id: null,
             createdAt: null,
@@ -247,20 +265,11 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
                 return;
             }
         }
-
         newOrder = Order.create(newOrder,
             function(successResponse) {
                 angular.element('#createOrderModal').modal('hide');
                 $scope.hideAlert();
-                $scope.order = {
-                    expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
-                    expireTime: $filter('date')(new Date(), 'hh:mm'),
-                    reward: '',
-                    address: myAddress.getAddress(),
-                    namespace: 'FriendsOfFriends',
-                    description:'',
-                    items: [{}]
-                };
+                initOrder();
                 $rootScope.$broadcast('createdNewOrderEvent', newOrder);
             },
             function(errorResponse) {
