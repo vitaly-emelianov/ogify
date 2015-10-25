@@ -313,11 +313,11 @@ public class OrderProcessor {
         return Order.OrderNamespace.All;
     }
 
-    public List<Order> getRunningByUser(Long userId, Long watcherUserId) {
+    public List<Order> getOrdersByExecutor(Long userId, Long watcherUserId, Order.OrderStatus status) {
         if(userId.equals(watcherUserId)) { // User see all his own orders
-            return orderController.getRunningByUser(userId, ImmutableSet.of(
+            return orderController.getOrdersByExecutor(userId, ImmutableSet.of(
                     Order.OrderNamespace.All, Order.OrderNamespace.Friends,
-                    Order.OrderNamespace.FriendsOfFriends, Order.OrderNamespace.Private));
+                    Order.OrderNamespace.FriendsOfFriends, Order.OrderNamespace.Private), status);
         }
 
         User user = userController.getUserById(userId);
@@ -325,10 +325,10 @@ public class OrderProcessor {
             throw new NotFoundException(String.format("There is no user with id \"%s\"", userId));
 
         if(friendService.isUsersFriends(userId, watcherUserId)) {
-            return orderController.getRunningByUser(userId, ImmutableSet.of(
+            return orderController.getOrdersByExecutor(userId, ImmutableSet.of(
                     Order.OrderNamespace.All, Order.OrderNamespace.Friends,
                     Order.OrderNamespace.FriendsOfFriends
-            ));
+            ), status);
         }
 
         throw new ForbiddenException("You are not friends, only friends can see orders of each others");
