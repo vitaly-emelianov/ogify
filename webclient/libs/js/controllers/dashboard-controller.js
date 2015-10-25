@@ -15,7 +15,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         }
     };
     
-    $scope.selfMarker = {
+    $rootScope.selfMarker = {
         coords  : { latitude: 55.927106, longitude: 37.523662 },
         id: "currentPosition",
         visible: false
@@ -30,10 +30,10 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
 
     var mapChanged = function(map) {
         var bounds = map.getBounds();
-        $scope.map.bounds.neLatitude = bounds.getNorthEast().lat();
-        $scope.map.bounds.neLongitude = bounds.getNorthEast().lng();
-        $scope.map.bounds.swLatitude = bounds.getSouthWest().lat();
-        $scope.map.bounds.swLongitude = bounds.getSouthWest().lng();
+        $rootScope.map.bounds.neLatitude = bounds.getNorthEast().lat();
+        $rootScope.map.bounds.neLongitude = bounds.getNorthEast().lng();
+        $rootScope.map.bounds.swLatitude = bounds.getSouthWest().lat();
+        $rootScope.map.bounds.swLongitude = bounds.getSouthWest().lng();
 
         updateOrders();
     };
@@ -117,7 +117,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     };
     
     var switchToNearOrders = function(){
-        Order.getNearMe($scope.map.bounds).$promise.then(function(data){
+        Order.getNearMe($rootScope.map.bounds).$promise.then(function(data){
             $scope.showingOrders = data;
             $scope.getOrdersLinks();
             $scope.totalPages = window.Math.ceil(data.length / $rootScope.pageParameters.pageSize);
@@ -169,10 +169,10 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     };
 
     uiGmapGoogleMapApi.then(function(maps) {
-        $scope.maps = maps;
+        $rootScope.maps = maps;
         if(!!navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
-                $scope.map.center = { latitude: position.coords.latitude, longitude: position.coords.longitude };
+                $rootScope.map.center = { latitude: position.coords.latitude, longitude: position.coords.longitude };
 
                 var geocoder = new google.maps.Geocoder();
                 var myposition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -186,8 +186,8 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                     }
                 });
 
-                $scope.map.control.refresh($scope.map.center);
-                $scope.map.zoom = 11;
+                $rootScope.map.control.refresh($rootScope.map.center);
+                $rootScope.map.zoom = 11;
 
                 //personal marker init
                 selfMarker = {
@@ -220,7 +220,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                     id: "currentPosition",
                     visible: true
                 };
-                $scope.selfMarker = selfMarker;
+                $rootScope.selfMarker = selfMarker;
             });
         }
     });
