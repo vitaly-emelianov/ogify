@@ -310,6 +310,8 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
       }, 1000);
     };
 
+    $scope.isOrderOutdated = isOrderOutdated;
+
     $scope.stopTimer = function() {
       if (angular.isDefined(stop)) {
         $interval.cancel(stop);

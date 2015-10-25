@@ -78,7 +78,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         return 9;
     };
 
-    if (!!!$rootScope.pageParameters) {
+    if (!$rootScope.pageParameters) {
         $rootScope.pageParameters = {
             pageSize: getMaxOrdersInPage(),
             pagesInBar: getMaxPagesInBar()
@@ -93,7 +93,9 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     $scope.$on('takeOrderEvent', function(event) {
         switchToNearOrders();
     });
-    
+
+    $scope.additionalStyle = {};
+
     var switchToInProgressOrders = function() {
         $scope.user.$promise.then(function(user) {
             UserProfile.getExecutingOrders({userId: user.userId}).$promise.then(function(data){
@@ -103,7 +105,13 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                 $scope.currentPage = {
                     page: 0,
                     pages: _.range(window.Math.min($scope.totalPages, $rootScope.pageParameters.pagesInBar))
-                }
+                };
+
+                $scope.showingOrders.forEach(function(elem) {
+                    if(isOrderOutdated(elem)) {
+                        $scope.additionalStyle[elem.id] = "list-group-item-danger";
+                    }
+                });
             });
         });
     };
