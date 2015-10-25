@@ -1,0 +1,150 @@
+<div class="modal fade" id="showOrderModal" tabindex="-1" role="dialog" aria-labelledby="infoOrderLabel">
+    <div class="modal-dialog" role="document" ng-controller="ShowOrderModalController">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="infoOrderLabel">
+                    Детали заказа
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div ng-if="!getRate()" ng-hide="getStatus() != 'Completed'" class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                            <button type="button" class="btn btn-default btn-lg" ng-click="rateMyOrder(1)">
+                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 1
+                            </button>
+                            <button type="button" class="btn btn-default btn-lg" ng-click="rateMyOrder(2)">
+                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 2
+                            </button>
+                            <button type="button" class="btn btn-default btn-lg" ng-click="rateMyOrder(3)">
+                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 3
+                            </button>
+                            <button type="button" class="btn btn-default btn-lg" ng-click="rateMyOrder(4)">
+                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 4
+                            </button>
+                            <button type="button" class="btn btn-default btn-lg" ng-click="rateMyOrder(5)">
+                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 5
+                            </button>
+                        </div>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Описание:</label>
+                        <p class="text-justify break-word" ng-bind-html="getDescription() | linky">
+                        </p>
+
+                        <label>Вознаграждение:</label>
+                        <p class="text-justify break-word" ng-bind-html="getReward() | linky">
+                        </p>
+
+                        <div ng-show="!itemsEmpty()">
+                            <label>Товары:</label>
+                            <p class="text-justify">
+                                <div ng-repeat="item in getItemList()">
+                                    <div class="row">
+                                        <div class="col-md-1 col-sm-1">
+                                            {{$index + 1}}
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            {{item.comment}}
+                                        </div>
+                                        <div class="col-md-4 col-sm-4">
+                                            {{item.expectedCost}} руб.
+                                        </div>
+                                    </div>
+                                </div>
+                            </p>
+                        </div>
+
+                        <label>Адрес:</label>
+                        <p class="text-justify">
+                            {{getAddress()}}
+                        </p>
+
+                        <label>Актуально до:</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="text-justify" rows="3" id="expireDate">
+                                    {{getExpireDate()}}
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="text-justify" rows="3" id="expireTime">
+                                    {{getExpireTime()}}
+                                </p>
+                            </div>
+                        </div>
+                                        
+                        <div ng-show="getOrder().owner.userId != user.userId">
+                            <label>Телефон заказчика:</label>
+                            <p class="text-justify" ng-show="getStatus() == 'New'">
+                                <i>Скрыт</i>
+                            </p>
+                            <p class="text-justify" ng-show="timer > 0 && getStatus() == 'Running'">
+                                <i>
+                                    Станет доступен через <font>{{timer}}</font> секунд
+                                </i>
+                            </p>
+                            <p class="text-justify" ng-hide="timer > 0">
+                                <i ng-hide="getOrder().telephoneNumber != null">
+                                    Не указан
+                                </i>
+                                <i ng-hide="getOrder().telephoneNumber == null">
+                                    {{getOrder().telephoneNumber}}
+                                </i>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div ng-hide="getOrder().owner.userId == user.userId && getStatus() != 'New'">
+                            <label>Автор:</label>
+                            <a href="#/profile/{{getOrder().owner.userId}}">
+                                {{getOwnerName()}}
+                            </a>
+                            <a href="#/profile/{{getOrder().owner.userId}}">
+                                <img ng-src="{{getOwnerPhotoUrl()}}" class="img-thumbnail">
+                            </a>
+                        </div>
+
+                        <div ng-show="getOrder().owner.userId == user.userId && getStatus() != 'New'">
+                            <label>Исполнитель:</label>
+                            <a href="#/profile/{{getOrder().executor.userId}}">
+                                {{getExecutorName()}}
+                            </a>
+                            <a href="#/profile/{{getOrder().executor.userId}}">
+                                <img ng-src="{{getExecutorPhotoUrl()}}" class="img-thumbnail">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" 
+                        ng-click="userTakesTask()"
+                        ng-hide="getStatus() != 'New' || getOrder().owner.userId == user.userId"
+                        class="btn btn-primary" >
+                    Выполнить заказ
+                </button>
+                <button type="button" 
+                        ng-click="cancelOrder()"
+                        ng-show="getStatus() == 'Running' && getOrder().owner.userId != user.userId && timer > 0"
+                        class="btn btn-danger">
+                    Отказаться от заказа
+                </button>
+                <button type="button" 
+                        ng-click="orderToDone()"
+                        data-toggle="modal"
+                        data-target="#rateDoneOrder"
+                        data-backdrop="static"
+                        data-keyboard="false"
+                        ng-hide="getStatus() != 'Running' || getOrder().owner.userId == user.userId"
+                        class="btn btn-success" >
+                    Завершить выполнение
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
