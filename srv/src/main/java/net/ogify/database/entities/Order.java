@@ -197,7 +197,7 @@ public class Order {
     }
 
     public boolean isInFinalState() {
-        return status == OrderStatus.Completed || status == OrderStatus.Canceled;
+        return status == OrderStatus.Completed || status == OrderStatus.Canceled || status == OrderStatus.Failed;
     }
 
     public void setId(Long id) {
