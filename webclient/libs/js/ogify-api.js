@@ -67,6 +67,11 @@ ogifyServices.factory('UserProfile', ['$resource', 'AuthInterceptor',
                     userId: '@userId'
                 }
             },
+            getCompletedByMeOrders: {
+                url: BASE_PATH + PROFILE_PATH + '/:userId/executed', isArray: true, params: {
+                    userId: '@userId'
+                }
+            },
             getUnratedOrders: {
                 url: BASE_PATH + PROFILE_PATH + '/:userId/unrated', isArray: true, params: {
                     userId: '@userId'

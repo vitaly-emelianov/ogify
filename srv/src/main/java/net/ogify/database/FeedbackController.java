@@ -1,14 +1,14 @@
 package net.ogify.database;
 
 import net.ogify.database.entities.Feedback;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 /**
  * Created by melges on 15.03.2015.
@@ -24,6 +24,25 @@ public class FeedbackController {
             em.getTransaction().begin();
             em.persist(feedback);
             em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
+    public Integer getUserRateForOrder(Long userId, Long orderId) {
+        EntityManager em = entityManagerService.createEntityManager();
+        try {
+            TypedQuery<Integer> query = em.createNamedQuery("Feedback.getFeedbackRate", Integer.class);
+            query.setParameter("whichOrderId", orderId);
+            query.setParameter("whoRateId", userId);
+
+            List<Integer> resultList = query.getResultList();
+            if(resultList.size() == 1)
+                return resultList.get(0);
+            if(resultList.size() == 0)
+                return null;
+
+            throw new NonUniqueResultException("We receive more then one order with specified id, it mustn't happened");
         } finally {
             em.close();
         }

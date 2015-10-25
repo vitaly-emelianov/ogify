@@ -11,9 +11,12 @@ import javax.xml.bind.annotation.XmlType;
 @Entity
 @Table(name = "feedbacks",
         uniqueConstraints = @UniqueConstraint(columnNames = {"user_who", "user_whom", "which_order"}))
-@NamedQueries({@NamedQuery(name = "Feedback.getFeedback", query = "select feedback from Feedback feedback where " +
-        "feedback.which = :whichOrder and feedback.who = :whoRate"),
-        @NamedQuery(name = "Feedback.isFeedbackRated", query = "select feedback from Feedback feedback where " +
+@NamedQueries({
+        @NamedQuery(name = "Feedback.getFeedbackRate", query =
+                "select feedback.rate from Feedback feedback where " +
+                "feedback.which.id = :whichOrderId and feedback.who.id = :whoRateId"),
+        @NamedQuery(name = "Feedback.isFeedbackRated", query =
+                "select feedback from Feedback feedback where " +
                 "feedback.which = :whichOrder")})
 public class Feedback {
     @XmlType(name = "feedback-type")
@@ -42,12 +45,12 @@ public class Feedback {
     @ManyToOne
     Order which;
 
-    Double rate;
+    Integer rate;
 
     public Feedback() {
     }
 
-    public Feedback(String comment, User who, User whom, Order which, Double rate) {
+    public Feedback(String comment, User who, User whom, Order which, Integer rate) {
         this.comment = comment;
         this.who = who;
         this.whom = whom;

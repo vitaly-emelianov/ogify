@@ -67,11 +67,11 @@ import java.util.List;
                     "orders.id in :ordersIds and " +
                     "orders.owner.id not in :friendsIds and " +
                     "orders.owner.id not in :extendedFriendsIds"),
-        @NamedQuery(name = "Order.getRunningByUser", query =
+        @NamedQuery(name = "Order.getOrdersByExecutor", query =
                 "SELECT orders FROM Order orders WHERE " +
                     "orders.executor.id = :executorId and " +
                     "orders.namespace in :namespaces and " +
-                    "orders.status = :runningStatus ORDER BY orders.expireIn DESC"),
+                    "orders.status = :status ORDER BY orders.expireIn DESC"),
         @NamedQuery(name = "Order.getCreatedByUser", query =
                 "SELECT orders FROM Order orders WHERE " +
                     "orders.owner.id = :ownerId and " +

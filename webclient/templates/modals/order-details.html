@@ -5,7 +5,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="infoOrderLabel">
-                    Детали заказа
+                    Детали заказа №{{getOrder().id}}
                     <span ng-show="isOrderOutdated(getOrder())" class="label label-danger">Просрочен</span>
                 </h4>
             </div>

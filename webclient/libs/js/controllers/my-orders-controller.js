@@ -18,7 +18,7 @@ ogifyApp.controller('MyOrdersController', function ($scope, UserProfile, Clicked
     $scope.setClickedOrder = function(order) {
         ClickedOrder.set(order);
     };
-    
+
     $scope.setClickedOrderRate = function(order) {
         ClickedOrder.setWithRate(order, order.rate);
     };
