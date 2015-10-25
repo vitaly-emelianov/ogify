@@ -341,7 +341,7 @@ public class OrderProcessor {
         return orderController.getUnratedUsersOrders(userId);
     }
 
-    public Integer getUserRateForOrder(Long userId, Long orderId) {
+    public Feedback getUserRateForOrder(Long userId, Long orderId) {
         return feedbackController.getUserRateForOrder(userId, orderId);
     }
 }

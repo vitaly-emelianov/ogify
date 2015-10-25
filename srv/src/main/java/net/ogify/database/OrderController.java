@@ -215,7 +215,7 @@ public class OrderController {
     public boolean isOrderRatedBy(Order order, User user) {
         EntityManager em = entityManagerService.createEntityManager();
         try {
-            TypedQuery<Integer> query = em.createNamedQuery("Feedback.getFeedbackRate", Integer.class);
+            TypedQuery<Feedback> query = em.createNamedQuery("Feedback.getFeedback", Feedback.class);
             query.setParameter("whichOrderId", order.getId());
             query.setParameter("whoRateId", user.getId());
 

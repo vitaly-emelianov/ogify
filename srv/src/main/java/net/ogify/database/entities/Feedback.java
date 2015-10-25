@@ -12,8 +12,8 @@ import javax.xml.bind.annotation.XmlType;
 @Table(name = "feedbacks",
         uniqueConstraints = @UniqueConstraint(columnNames = {"user_who", "user_whom", "which_order"}))
 @NamedQueries({
-        @NamedQuery(name = "Feedback.getFeedbackRate", query =
-                "select feedback.rate from Feedback feedback where " +
+        @NamedQuery(name = "Feedback.getFeedback", query =
+                "select feedback from Feedback feedback where " +
                 "feedback.which.id = :whichOrderId and feedback.who.id = :whoRateId"),
         @NamedQuery(name = "Feedback.isFeedbackRated", query =
                 "select feedback from Feedback feedback where " +
