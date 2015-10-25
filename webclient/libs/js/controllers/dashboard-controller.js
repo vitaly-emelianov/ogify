@@ -15,7 +15,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         }
     };
     
-    $scope.selfMarker = {
+    $rootScope.selfMarker = {
         coords  : { latitude: 55.927106, longitude: 37.523662 },
         id: "currentPosition",
         visible: false
@@ -208,7 +208,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                     id: "currentPosition",
                     visible: true
                 };
-                $scope.selfMarker = selfMarker;
+                $rootScope.selfMarker = selfMarker;
             });
         }
     });
