@@ -3,8 +3,14 @@ ogifyApp.controller('ReturnHomeController', function ($rootScope, $scope, uiGmap
     $scope.returnHome = function() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
-                $rootScope.map.center = {latitude: position.coords.latitude, longitude: position.coords.longitude};
-                $rootScope.selfMarker.coords = {latitude: position.coords.latitude, longitude: position.coords.longitude};
+                $rootScope.map.center = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                };
+                $rootScope.selfMarker.coords = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                };
                 $rootScope.$apply();
             });
         } else {
