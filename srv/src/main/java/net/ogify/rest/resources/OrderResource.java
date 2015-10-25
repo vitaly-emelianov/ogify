@@ -83,6 +83,11 @@ public class OrderResource {
         orderProcessor.changeOrderStatus(userId, orderId, Order.OrderStatus.Running);
     }
 
+    @PUT
+    @Path("/{id}/setAsFailed")
+    public void setAsFailed(@PathParam("id") Long orderId) {
+        orderProcessor.changeOrderStatus(userId, orderId, Order.OrderStatus.Failed);
+    }
     @DELETE
     @Path("/{id}/executor")
     public void denyOrderExecution(@PathParam("id") Long orderId) {
