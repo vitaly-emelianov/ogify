@@ -75,7 +75,6 @@ public class OrderProcessor {
             throw new ForbiddenException("You can't edit completed or canceled orders");
 
         orderController.saveOrUpdate(order);
-
     }
 
     /**
