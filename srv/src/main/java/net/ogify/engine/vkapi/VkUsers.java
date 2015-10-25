@@ -12,7 +12,7 @@ import java.util.Map;
  * Created by melges on 13.01.15.
  */
 public class VkUsers {
-    private final static Logger logger = Logger.getLogger(VkAuth.class);
+    private final static Logger LOGGER = Logger.getLogger(VkAuth.class);
 
     public static VkUserInfo get(Long vkId, String accessToken) throws VkSideError {
         final String methodName = "users.get";
@@ -21,6 +21,7 @@ public class VkUsers {
         parametersMap.put("fields", "photo_max");
         parametersMap.put("access_token", accessToken);
 
+        LOGGER.info(String.format("Getting user with vkId %d from vk", vkId));
         VkUsersGetResponse response = VkClient.call(VkClient.VK_API_URI + methodName,
                 parametersMap, VkUsersGetResponse.class);
 

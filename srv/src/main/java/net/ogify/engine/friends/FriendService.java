@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * Created by melges on 24.02.2015.
@@ -40,17 +41,17 @@ public class FriendService {
     public FriendService() {
         friendsCache = CacheBuilder.newBuilder()
                 .maximumSize(cacheSize)
-                .expireAfterWrite(7, TimeUnit.DAYS)
+                .expireAfterWrite(2, TimeUnit.DAYS)
                 .build(new FriendCacheLoader(this));
 
         extendedFriendsCache = CacheBuilder.newBuilder()
                 .maximumSize(cacheSize)
-                .expireAfterWrite(7, TimeUnit.DAYS)
+                .expireAfterWrite(2, TimeUnit.DAYS)
                 .build(new ExtendedFriendCacheLoader(this));
 
         vkFriendsCache = CacheBuilder.newBuilder()
                 .maximumSize(cacheSize)
-                .expireAfterWrite(7, TimeUnit.DAYS)
+                .expireAfterWrite(2, TimeUnit.DAYS)
                 .build(new VkFriendsCacheLoader(this));
 
     }
@@ -68,8 +69,7 @@ public class FriendService {
         Set<Long> vkFriendsIds = vkFriendsCache.get(user);
         List<User> filteredFriends = userController.getUserWithVkIds(vkFriendsIds);
         HashSet<Long> resultSet = new HashSet<>(filteredFriends.size());
-        for(User filteredUser : filteredFriends)
-            resultSet.add(filteredUser.getId());
+        resultSet.addAll(filteredFriends.stream().map(User::getId).collect(Collectors.toList()));
 
         return resultSet;
     }
@@ -109,5 +109,26 @@ public class FriendService {
     public boolean isUsersFriends(Long userId, Long possibleFriend) {
         Set<Long> usersFriends = friendsCache.getUnchecked(userId);
         return usersFriends != null && usersFriends.contains(possibleFriend);
+    }
+
+    public void mapNewUser(Long userId) throws ExecutionException {
+        logger.info(String.format("Update social graph with new user: %d", userId));
+        Set<Long> friends = friendsCache.get(userId);
+        friends.forEach(friendId -> {
+            Set<Long> hisFriends = friendsCache.getIfPresent(friendId);
+            if(hisFriends != null)
+                hisFriends.add(userId); // Add yourself to his friends
+
+            Set<Long> hisFriendsOfFriends = extendedFriendsCache.getIfPresent(friendId);
+            if(hisFriendsOfFriends != null)
+                hisFriendsOfFriends.addAll(friends); // Add all of my friends to his friends of friends
+        });
+
+        Set<Long> extendedFriends = extendedFriendsCache.get(userId);
+        extendedFriends.forEach(friendOfFriendId -> {
+            Set<Long> hisFriendsOfFriends = extendedFriendsCache.getIfPresent(friendOfFriendId);
+            if(hisFriendsOfFriends != null)
+                hisFriendsOfFriends.add(userId);
+        });
     }
 }
