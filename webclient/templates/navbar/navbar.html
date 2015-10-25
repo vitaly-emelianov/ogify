@@ -13,9 +13,6 @@
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-controller="NavBarController">
-            <div ng-include="createOrderTemplateUri"></div>
-            <div ng-include="showOrderTemplateUri"></div>
-            <div ng-include="rateDoneOrderTemplateUri"></div>
             <ul class="nav navbar-nav" ng-if="user.$resolved == true && authenticated == true">
                 <li ng-class="getClass('dashboard')">
                     <a href="#/dashboard">Заказы рядом</a>
@@ -64,7 +61,6 @@
                         </div>
                     </div>
                 </div>
-                <!--<div ng-include="modalWindowTemplateUri"></div>-->
 
                 <!-- Load animation -->
                 <div ng-if="authenticated == null" class="navbar-form">
