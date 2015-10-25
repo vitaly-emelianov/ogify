@@ -64,4 +64,16 @@ public class Feedback {
         this.which = which;
         this.rate = rate;
     }
+
+    public Integer getRate() {
+        return rate;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getComment() {
+        return comment;
+    }
 }
