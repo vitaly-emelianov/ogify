@@ -313,9 +313,9 @@ public class OrderProcessor {
         return Order.OrderNamespace.All;
     }
 
-    public List<Order> getExecutingByUser(Long userId, Long watcherUserId, Order.OrderStatus status) {
+    public List<Order> getOrderByExecutor(Long userId, Long watcherUserId, Order.OrderStatus status) {
         if(userId.equals(watcherUserId)) { // User see all his own orders
-            return orderController.getExecutingByUser(userId, ImmutableSet.of(
+            return orderController.getOrderByExecutor(userId, ImmutableSet.of(
                     Order.OrderNamespace.All, Order.OrderNamespace.Friends,
                     Order.OrderNamespace.FriendsOfFriends, Order.OrderNamespace.Private), status);
         }
@@ -325,7 +325,7 @@ public class OrderProcessor {
             throw new NotFoundException(String.format("There is no user with id \"%s\"", userId));
 
         if(friendService.isUsersFriends(userId, watcherUserId)) {
-            return orderController.getExecutingByUser(userId, ImmutableSet.of(
+            return orderController.getOrderByExecutor(userId, ImmutableSet.of(
                     Order.OrderNamespace.All, Order.OrderNamespace.Friends,
                     Order.OrderNamespace.FriendsOfFriends
             ), status);

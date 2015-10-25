@@ -255,14 +255,14 @@ public class OrderController {
         }
     }
 
-    public List<Order> getExecutingByUser(Long userId, Set<Order.OrderNamespace> namespaces,
+    public List<Order> getOrderByExecutor(Long userId, Set<Order.OrderNamespace> namespaces,
                                           Order.OrderStatus status) {
         EntityManager em = entityManagerService.createEntityManager();
         try {
-            TypedQuery<Order> query = em.createNamedQuery("Order.getExecutingByUser", Order.class);
+            TypedQuery<Order> query = em.createNamedQuery("Order.getOrderByExecutor", Order.class);
             query.setParameter("executorId", userId);
             query.setParameter("namespaces", namespaces);
-            query.setParameter("executingStatus", status);
+            query.setParameter("status", status);
 
             return query.getResultList();
         } finally {
