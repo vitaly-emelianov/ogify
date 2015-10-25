@@ -253,7 +253,7 @@ public class OrderProcessor {
      * @param rate how he's rates.
      * @param comment additional comment for rate.
      */
-    public void rateOrderParty(Long userId, Long orderId, double rate, String comment) {
+    public void rateOrderParty(Long userId, Long orderId, Integer rate, String comment) {
         if(rate > 5 || rate < 0)
             throw new BadRequestException("Rate must be in [0, 5] range");
 
@@ -341,7 +341,7 @@ public class OrderProcessor {
         return orderController.getUnratedUsersOrders(userId);
     }
 
-    public Long getUserRateForOrder(Long userId, Long orderId) {
+    public Integer getUserRateForOrder(Long userId, Long orderId) {
         return feedbackController.getUserRateForOrder(userId, orderId);
     }
 }
