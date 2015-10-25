@@ -58,9 +58,10 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
 
 ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {
     $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
-    $rootScope.createOrderTemplateUri = 'templates/new-order.html';
-    $rootScope.showOrderTemplateUri = 'templates/order-details.html';
-    $rootScope.rateDoneOrderTemplateUri = 'templates/rate-done-order.html';
+    $rootScope.modalWindowsUri = 'templates/modals/modals.html';
+    $rootScope.createOrderTemplateUri = 'templates/modals/new-order.html';
+    $rootScope.showOrderTemplateUri = 'templates/modals/order-details.html';
+    $rootScope.rateDoneOrderTemplateUri = 'templates/modals/rate-done-order.html';
     $rootScope.landingUri = '/landing';
 
     if(($cookies.get('sId') == undefined || $cookies.get('ogifySessionSecret') == undefined)
@@ -86,7 +87,7 @@ ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {
 
 ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, $location, AuthResource, UserProfile) {
 
-    $scope.modalWindowTemplateUri = 'templates/navbar/auth-modal.html';
+    $scope.authWindowUri = 'templates/modals/auth-modal.html';
 
     //$scope.authenticationStatus = AuthResource.authenticationStatus();
 
