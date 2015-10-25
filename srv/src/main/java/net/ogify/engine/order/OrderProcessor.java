@@ -21,8 +21,6 @@ import javax.ws.rs.core.Response;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
-import static org.eclipse.persistence.expressions.ExpressionOperator.abs;
-
 /**
  * Created by melges on 24.02.2015.
  */
