@@ -6,12 +6,10 @@ ogifyApp.service('currentUserProfile', function() {
 });
 
 ogifyApp.controller('ProfilePageController', function ($scope, $routeParams, UserProfile, ClickedOrder) {
-
     $scope.currentUserProfile = UserProfile.get({userId: $routeParams.userId});
     $scope.completedOrders = UserProfile.getCompletedByMeOrders({userId: $routeParams.userId});
 
     $scope.setClickedOrder = function(order) {
         ClickedOrder.set(order);
     };
-
 });
