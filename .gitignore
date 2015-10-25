@@ -15,4 +15,5 @@ hs_err_pid*
 .idea
 *.iml
 
-*jsm/
+webclient/jsm/*
+webclient/jsm
