@@ -216,8 +216,8 @@ public class OrderController {
         EntityManager em = entityManagerService.createEntityManager();
         try {
             TypedQuery<Feedback> query = em.createNamedQuery("Feedback.getFeedback", Feedback.class);
-            query.setParameter("whichOrder", order);
-            query.setParameter("whoRate", user);
+            query.setParameter("whichOrderId", order.getId());
+            query.setParameter("whoRateId", user.getId());
 
             return query.getResultList().size() == 1;
         } finally {
