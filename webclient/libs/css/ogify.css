@@ -54,19 +54,18 @@ p.break-word {
     width: 400px;
 }
 
-.panel>.list-group>.order-list-Friends {
+.panel>.list-group>.Friends {
     border-left: 3px solid #5cb85c; !important;
 }
 
-.panel>.list-group>.order-list-FriendsOfFriends {
+.panel>.list-group>.FriendsOfFriends {
     border-left: 3px solid #f0ad4e; !important;
 }
 
-.panel>.list-group>.order-list-All {
+.panel>.list-group>.All {
     border-left: 3px solid #959494; !important;
 }
 
 .intl-tel-input {
     display: table-cell;
 }
-

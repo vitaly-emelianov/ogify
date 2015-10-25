@@ -1,5 +1,7 @@
 package net.ogify.database.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
@@ -35,22 +37,25 @@ public class Feedback {
 
     @JoinColumn(name = "user_who", nullable = false)
     @ManyToOne
+    @JsonIgnore
     User who;
 
     @JoinColumn(name = "user_whom", nullable = false)
     @ManyToOne
+    @JsonIgnore
     User whom;
 
     @JoinColumn(name = "which_order", nullable = false)
     @ManyToOne
+    @JsonIgnore
     Order which;
 
-    Double rate;
+    Integer rate;
 
     public Feedback() {
     }
 
-    public Feedback(String comment, User who, User whom, Order which, Double rate) {
+    public Feedback(String comment, User who, User whom, Order which, Integer rate) {
         this.comment = comment;
         this.who = who;
         this.whom = whom;

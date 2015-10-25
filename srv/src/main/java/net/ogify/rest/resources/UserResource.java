@@ -79,29 +79,16 @@ public class UserResource {
     }
 
     /**
-     * Method returns orders which user has completed, ordered by "expire in" field.
+     * Method returns orders which user has complited, ordered by "expire in" field.
      *
-     * @summary Returns orders which user has completed.
+     * @summary Returns orders which user has complited.
      * @param userId id of user which orders will be returned.
-     * @return list of orders completed by specified user.
+     * @return list of orders complited by specified user.
      */
     @GET
     @Path("/{id}/executed")
     public List<Order> getExecutedByUser(@PathParam("id") Long userId) {
         return orderProcessor.getOrdersByExecutor(userId, currentUserId, Order.OrderStatus.Completed);
-    }
-
-    /**
-     * Method returns orders which user has failed, ordered by "expire in" field.
-     *
-     * @summary Returns orders which user has failed.
-     * @param userId id of user which orders will be returned.
-     * @return list of orders failed by specified user.
-     */
-    @GET
-    @Path("/{id}/failed")
-    public List<Order> getFailedByUser(@PathParam("id") Long userId) {
-        return orderProcessor.getOrdersByExecutor(userId, currentUserId, Order.OrderStatus.Failed);
     }
 
     /**
