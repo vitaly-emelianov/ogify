@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -20,6 +21,7 @@ import javax.xml.bind.annotation.XmlType;
         @NamedQuery(name = "Feedback.isFeedbackRated", query =
                 "select feedback from Feedback feedback where " +
                 "feedback.which = :whichOrder")})
+@XmlRootElement
 public class Feedback {
     @XmlType(name = "feedback-type")
     @XmlEnum
