@@ -93,6 +93,14 @@ public class OrderProcessor {
             friendsOfFriends = Collections.emptySet();
         }
 
+        if(neLongitude < swLongitude)
+            if(180.0 - neLongitude < swLongitude + 180.0)
+                return orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
+                        neLatitude, swLongitude, swLatitude, -180.0);
+            else
+                return orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
+                        neLatitude, 180.0, swLatitude, neLongitude);
+
         return orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
                 neLatitude, neLongitude, swLatitude, swLongitude);
     }
