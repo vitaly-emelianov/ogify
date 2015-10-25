@@ -75,7 +75,7 @@ public class UserResource {
     @GET
     @Path("/{id}/executing")
     public List<Order> getExecutingByUser(@PathParam("id") Long userId) {
-        return orderProcessor.getOrderByExecutor(userId, currentUserId, Order.OrderStatus.Running);
+        return orderProcessor.getOrdersByExecutor(userId, currentUserId, Order.OrderStatus.Running);
     }
 
     /**
