@@ -34,7 +34,8 @@
             <a id="{{order.id}}" 
                 data-toggle="modal" 
                 data-target="#showOrderModal"
-                class="list-group-item order-list-{{ordersLinks[order.id]}}"
+                class="list-group-item"
+                ng-class="[ordersLinks[order.id], additionalStyle[order.id]]"
                 ng-click="setClickedOrder(order)"
                 ng-repeat="order in showingOrders.slice(pageParameters.pageSize*currentPage.page, pageParameters.pageSize*(currentPage.page+1))">
                 <span class="label label-default pull-right">№{{order.id}}</span>
