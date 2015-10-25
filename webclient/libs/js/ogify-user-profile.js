@@ -5,7 +5,8 @@ ogifyApp.service('currentUserProfile', function() {
     var profile = {};
 });
 
-ogifyApp.controller('ProfilePageController', function ($scope, $routeParams, UserProfile, Order, ClickedOrder) {
+ogifyApp.controller('ProfilePageController', function ($scope, $routeParams, UserProfile, ClickedOrder) {
+
     $scope.currentUserProfile = UserProfile.get({userId: $routeParams.userId});
     $scope.completedOrders = UserProfile.getCompletedByMeOrders({userId: $routeParams.userId});
 
@@ -14,4 +15,3 @@ ogifyApp.controller('ProfilePageController', function ($scope, $routeParams, Use
     };
 
 });
-
