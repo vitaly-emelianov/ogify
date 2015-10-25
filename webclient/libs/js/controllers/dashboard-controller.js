@@ -2,18 +2,6 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                                                      $location, Order, myAddress, ClickedOrder,
                                                      UserProfile) {
     $scope.user = UserProfile.get();
-
-    $scope.getOrdersLinks = function() {
-        var showingOrdersIds = [];
-
-        $scope.showingOrders.forEach(function(order) {
-            showingOrdersIds.push(order.id);
-        });
-
-        if(showingOrdersIds.length > 0) {
-            $scope.ordersLinks = Order.getOrdersLinks({ordersIds: showingOrdersIds});
-        }
-    };
     
     $rootScope.selfMarker = {
         coords  : { latitude: 55.927106, longitude: 37.523662 },
@@ -118,8 +106,9 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     
     var switchToNearOrders = function(){
         Order.getNearMe($rootScope.map.bounds).$promise.then(function(data){
-            $scope.showingOrders = data;
-            $scope.getOrdersLinks();
+            $scope.showingOrders = data.orders;
+            $scope.ordersLinks = data.socialLinks;
+            //$scope.getOrdersLinks();
             $scope.totalPages = window.Math.ceil(data.length / $rootScope.pageParameters.pageSize);
             $scope.currentPage = {
                 page: 0,

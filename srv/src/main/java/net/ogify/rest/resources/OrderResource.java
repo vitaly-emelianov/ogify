@@ -6,8 +6,8 @@ import net.ogify.database.entities.Order;
 import net.ogify.database.entities.OrderItem;
 import net.ogify.engine.order.OrderProcessor;
 import net.ogify.engine.secure.AuthController;
+import net.ogify.rest.elements.OrdersWithSocialLinks;
 import net.ogify.rest.elements.RateRequest;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +15,6 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -42,7 +40,7 @@ public class OrderResource {
 
     @GET
     @Path("/near")
-    public List<Order> getOrdersNear(@NotNull @QueryParam("neLatitude") Double neLatitude,
+    public OrdersWithSocialLinks getOrdersNear(@NotNull @QueryParam("neLatitude") Double neLatitude,
                                      @NotNull @QueryParam("neLongitude") Double neLongitude,
                                      @NotNull @QueryParam("swLatitude") Double swLatitude,
                                      @NotNull @QueryParam("swLongitude") Double swLongitude)
@@ -88,20 +86,6 @@ public class OrderResource {
     @Path("/{id}/executor")
     public void denyOrderExecution(@PathParam("id") Long orderId) {
         orderProcessor.denyOrderExecution(userId, orderId);
-    }
-
-    /**
-     * Calculate social link with orders.
-     *
-     * @param ordersIds list of orders, for them would be provided information about social link.
-     * @return map of orders and theirs link with user.
-     * @throws ExecutionException in case of some errors on calculation.
-     */
-    @GET
-    @Path("/socialLinks")
-    public Map<Long, Order.OrderNamespace> getSocialLinks(@NotEmpty @QueryParam("ordersIds") Set<Long> ordersIds)
-            throws ExecutionException {
-        return orderProcessor.getOrdersConnectionsWithUser(ordersIds, userId);
     }
 
     /**

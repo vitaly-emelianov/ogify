@@ -88,7 +88,7 @@ ogifyServices.factory('Order', ['$resource',
             create: {method: 'POST'},
             getNearMe: {
                 url: BASE_PATH + ORDER_PATH + '/near', method: 'GET',
-                params: {neLatitude: '', neLongitude: '', swLatitude: '', swLongitude: ''}, isArray: true
+                params: {neLatitude: '', neLongitude: '', swLatitude: '', swLongitude: ''}, isArray: false
             },
             getDoneOrders: {
                 url: BASE_PATH + ORDER_PATH + '/done', method: 'GET',
@@ -100,7 +100,6 @@ ogifyServices.factory('Order', ['$resource',
                 params: {orderId: '@orderId'}
             },
             getItemsList: {url: BASE_PATH + ORDER_PATH + '/:orderId' + 'items', method: 'GET', isArray: true},
-            getOrdersLinks: {url: BASE_PATH + ORDER_PATH + '/socialLinks', method: 'GET'},
             changeStatus: {
                 url: BASE_PATH + ORDER_PATH + '/:orderId' + '/status', method: 'PUT',
                 params: {orderId: '@orderId'}
