@@ -216,8 +216,8 @@ public class OrderController {
         EntityManager em = entityManagerService.createEntityManager();
         try {
             TypedQuery<Feedback> query = em.createNamedQuery("Feedback.getFeedback", Feedback.class);
-            query.setParameter("whichOrder", order);
-            query.setParameter("whoRate", user);
+            query.setParameter("whichOrderId", order.getId());
+            query.setParameter("whoRateId", user.getId());
 
             return query.getResultList().size() == 1;
         } finally {
@@ -255,13 +255,14 @@ public class OrderController {
         }
     }
 
-    public List<Order> getRunningByUser(Long userId, Set<Order.OrderNamespace> namespaces) {
+    public List<Order> getOrdersByExecutor(Long userId, Set<Order.OrderNamespace> namespaces,
+                                          Order.OrderStatus status) {
         EntityManager em = entityManagerService.createEntityManager();
         try {
-            TypedQuery<Order> query = em.createNamedQuery("Order.getRunningByUser", Order.class);
+            TypedQuery<Order> query = em.createNamedQuery("Order.getOrdersByExecutor", Order.class);
             query.setParameter("executorId", userId);
             query.setParameter("namespaces", namespaces);
-            query.setParameter("runningStatus", Order.OrderStatus.Running);
+            query.setParameter("status", status);
 
             return query.getResultList();
         } finally {

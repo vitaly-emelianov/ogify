@@ -66,16 +66,42 @@ public class UserResource {
     }
 
     /**
-     * Method returns orders which user is executing, ordered by "expire in" field.
+     * Method returns orders which user is running, ordered by "expire in" field.
      *
-     * @summary Returns orders which user is executing.
+     * @summary Returns orders which user is running.
      * @param userId id of user which orders will be returned.
-     * @return list of orders is executing by specified user.
+     * @return list of orders is running by specified user.
      */
     @GET
     @Path("/{id}/executing")
     public List<Order> getExecutingByUser(@PathParam("id") Long userId) {
-        return orderProcessor.getRunningByUser(userId, currentUserId);
+        return orderProcessor.getOrdersByExecutor(userId, currentUserId, Order.OrderStatus.Running);
+    }
+
+    /**
+     * Method returns orders which user has completed, ordered by "expire in" field.
+     *
+     * @summary Returns orders which user has completed.
+     * @param userId id of user which orders will be returned.
+     * @return list of orders completed by specified user.
+     */
+    @GET
+    @Path("/{id}/executed")
+    public List<Order> getExecutedByUser(@PathParam("id") Long userId) {
+        return orderProcessor.getOrdersByExecutor(userId, currentUserId, Order.OrderStatus.Completed);
+    }
+
+    /**
+     * Method returns orders which user has failed, ordered by "expire in" field.
+     *
+     * @summary Returns orders which user has failed.
+     * @param userId id of user which orders will be returned.
+     * @return list of orders failed by specified user.
+     */
+    @GET
+    @Path("/{id}/failed")
+    public List<Order> getFailedByUser(@PathParam("id") Long userId) {
+        return orderProcessor.getOrdersByExecutor(userId, currentUserId, Order.OrderStatus.Failed);
     }
 
     /**

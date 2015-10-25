@@ -83,6 +83,11 @@ public class OrderResource {
         orderProcessor.changeOrderStatus(userId, orderId, Order.OrderStatus.Running);
     }
 
+    @PUT
+    @Path("/{id}/setAsFailed")
+    public void setAsFailed(@PathParam("id") Long orderId) {
+        orderProcessor.changeOrderStatus(userId, orderId, Order.OrderStatus.Failed);
+    }
     @DELETE
     @Path("/{id}/executor")
     public void denyOrderExecution(@PathParam("id") Long orderId) {
@@ -137,5 +142,17 @@ public class OrderResource {
     @Path("/{id}/rate")
     public void rateOrder(@PathParam("id") Long orderId, @NotNull RateRequest rateRequest) {
         orderProcessor.rateOrderParty(userId, orderId, rateRequest.getRate(), rateRequest.getComment());
+    }
+
+    /**
+     * Get rate set by current user to specified order
+     *
+     * @param orderId id of orders which rating will be returned.
+     * @return rating of specified order from specified user or null, if there no rating.
+     */
+    @GET
+    @Path("/{id}/rate")
+    public Long getOrderRating(@PathParam("id") Long orderId) {
+        return orderProcessor.getUserRateForOrder(userId, orderId);
     }
 }

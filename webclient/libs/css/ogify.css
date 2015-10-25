@@ -58,12 +58,12 @@ p.break-word {
     border-left: 3px solid #5cb85c; !important;
 }
 
-.panel>.list-group>.order-list-FriendOfFriend {
+.panel>.list-group>.order-list-FriendsOfFriends {
     border-left: 3px solid #f0ad4e; !important;
 }
 
 .panel>.list-group>.order-list-All {
-    border-left: 3px solid #f0ad4e; !important;
+    border-left: 3px solid #959494; !important;
 }
 
 .intl-tel-input {

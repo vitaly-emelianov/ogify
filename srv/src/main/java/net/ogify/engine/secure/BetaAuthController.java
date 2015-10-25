@@ -3,7 +3,6 @@ package net.ogify.engine.secure;
 import net.ogify.database.BetaKeyController;
 import net.ogify.database.entities.BetaKey;
 import net.ogify.engine.secure.exceptions.ForbiddenException;
-import net.ogify.engine.vkapi.exceptions.VkSideError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +15,7 @@ public class BetaAuthController extends ProductionAuthController {
     BetaKeyController betaKeyController;
 
     @Override
-    public Long auth(String code, String redirectUrl, String sessionSecret, String betaKey) throws VkSideError {
+    public Long auth(String code, String redirectUrl, String sessionSecret, String betaKey) {
         BetaKey betaKeyInternal = checkBetaKey(betaKey);
 
         betaKeyInternal.incrementUsedTime();

@@ -93,6 +93,14 @@ public class OrderProcessor {
             friendsOfFriends = Collections.emptySet();
         }
 
+        if(neLongitude < swLongitude)
+            if(180.0 - neLongitude < swLongitude + 180.0)
+                return orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
+                        neLatitude, swLongitude, swLatitude, -180.0);
+            else
+                return orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
+                        neLatitude, 180.0, swLatitude, neLongitude);
+
         return orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
                 neLatitude, neLongitude, swLatitude, swLongitude);
     }
@@ -305,11 +313,11 @@ public class OrderProcessor {
         return Order.OrderNamespace.All;
     }
 
-    public List<Order> getRunningByUser(Long userId, Long watcherUserId) {
+    public List<Order> getOrdersByExecutor(Long userId, Long watcherUserId, Order.OrderStatus status) {
         if(userId.equals(watcherUserId)) { // User see all his own orders
-            return orderController.getRunningByUser(userId, ImmutableSet.of(
+            return orderController.getOrdersByExecutor(userId, ImmutableSet.of(
                     Order.OrderNamespace.All, Order.OrderNamespace.Friends,
-                    Order.OrderNamespace.FriendsOfFriends, Order.OrderNamespace.Private));
+                    Order.OrderNamespace.FriendsOfFriends, Order.OrderNamespace.Private), status);
         }
 
         User user = userController.getUserById(userId);
@@ -317,10 +325,10 @@ public class OrderProcessor {
             throw new NotFoundException(String.format("There is no user with id \"%s\"", userId));
 
         if(friendService.isUsersFriends(userId, watcherUserId)) {
-            return orderController.getRunningByUser(userId, ImmutableSet.of(
+            return orderController.getOrdersByExecutor(userId, ImmutableSet.of(
                     Order.OrderNamespace.All, Order.OrderNamespace.Friends,
                     Order.OrderNamespace.FriendsOfFriends
-            ));
+            ), status);
         }
 
         throw new ForbiddenException("You are not friends, only friends can see orders of each others");
@@ -331,5 +339,9 @@ public class OrderProcessor {
             throw new ForbiddenException("You don't have access to unrated orders of another users");
 
         return orderController.getUnratedUsersOrders(userId);
+    }
+
+    public Long getUserRateForOrder(Long userId, Long orderId) {
+        return feedbackController.getUserRateForOrder(userId, orderId);
     }
 }
