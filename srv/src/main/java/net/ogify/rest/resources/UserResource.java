@@ -75,7 +75,20 @@ public class UserResource {
     @GET
     @Path("/{id}/executing")
     public List<Order> getExecutingByUser(@PathParam("id") Long userId) {
-        return orderProcessor.getRunningByUser(userId, currentUserId);
+        return orderProcessor.getExecutingByUser(userId, currentUserId, Order.OrderStatus.Running);
+    }
+
+    /**
+     * Method returns orders which user has executed, ordered by "expire in" field.
+     *
+     * @summary Returns orders which user has executed.
+     * @param userId id of user which orders will be returned.
+     * @return list of orders executed by specified user.
+     */
+    @GET
+    @Path("/{id}/executed")
+    public List<Order> getExecutedByUser(@PathParam("id") Long userId) {
+        return orderProcessor.getExecutingByUser(userId, currentUserId, Order.OrderStatus.Completed);
     }
 
     /**
