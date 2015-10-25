@@ -3,24 +3,34 @@ package net.ogify.engine.secure;
 import net.ogify.database.UserController;
 import net.ogify.database.entities.SocialNetwork;
 import net.ogify.database.entities.User;
+import net.ogify.engine.exceptions.TechnicalAuthException;
+import net.ogify.engine.friends.FriendService;
 import net.ogify.engine.vkapi.VkAuth;
 import net.ogify.engine.vkapi.VkUsers;
 import net.ogify.engine.vkapi.elements.VkAccessResponse;
 import net.ogify.engine.vkapi.elements.VkUserInfo;
 import net.ogify.engine.vkapi.exceptions.VkSideError;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * Class contain methods for work with user authentication.
  */
 @Component
 public class ProductionAuthController implements AuthController {
+    private final static Logger logger = Logger.getLogger(ProductionAuthController.class);
+
     @Autowired
     VkAuth vkAuth;
 
     @Autowired
     UserController userController;
+
+    @Autowired
+    FriendService friendService;
 
     /**
      * Method check data provided by client for correctness and session validity.
@@ -41,11 +51,18 @@ public class ProductionAuthController implements AuthController {
      * @param sessionSecret client session secret.
      * @param betaKey special key used for beta programs.
      * @return id of authenticated user.
-     * @throws VkSideError if vk say about error, or we have a trouble when connecting to vk.
      */
-    public Long auth(String code, String redirectUrl, String sessionSecret, String betaKey)
-            throws VkSideError {
-        return authVk(code, redirectUrl, sessionSecret);
+    public Long auth(String code, String redirectUrl, String sessionSecret, String betaKey) {
+        Long authorizedUserId = null;
+        try {
+            authorizedUserId = authVk(code, redirectUrl, sessionSecret);
+            friendService.mapNewUser(authorizedUserId);
+        } catch (VkSideError | ExecutionException error) {
+            logger.warn("Error on user authentication", error);
+            throw new TechnicalAuthException("Error on user authentication", error);
+        }
+
+        return authorizedUserId;
     }
 
     public Long authVk(String code, String redirectUrl, String sessionSecret) throws VkSideError {
