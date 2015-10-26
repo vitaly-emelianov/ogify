@@ -92,7 +92,8 @@ public class Order {
         @XmlEnumValue("new") New,
         @XmlEnumValue("running") Running,
         @XmlEnumValue("completed") Completed,
-        @XmlEnumValue("canceled") Canceled
+        @XmlEnumValue("canceled") Canceled,
+        @XmlEnumValue("failed") Failed
     }
 
     @XmlType(name = "order_namespace")
@@ -196,7 +197,7 @@ public class Order {
     }
 
     public boolean isInFinalState() {
-        return status == OrderStatus.Completed || status == OrderStatus.Canceled;
+        return status == OrderStatus.Completed || status == OrderStatus.Canceled || status == OrderStatus.Failed;
     }
 
     public void setId(Long id) {
