@@ -62,23 +62,6 @@ public class OrderProcessor {
     }
 
     /**
-     * Method edits order on behalf of the specified user.
-     *
-     * @param userId users id on behalf order should be created
-     * @param order order which should be created.
-     */
-    public void editOrder(Long userId, Order order) {
-        User owner = userController.getUserById(userId);
-        assert owner != null;
-        if(!order.isUserOwner(owner)) //if user is not owner of order
-            throw new ForbiddenException("You can't edit not your own order");
-        if(order.isInFinalState()) //if order is completed or canceled
-            throw new ForbiddenException("You can't edit completed or canceled orders");
-
-        orderController.saveOrUpdate(order);
-    }
-
-    /**
      * Get order by id for specified user.
      *
      * @param userId id of user who requests order
