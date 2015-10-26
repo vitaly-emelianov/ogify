@@ -67,7 +67,7 @@ ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {
     });
 });
 
-ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, $location, AuthResource, UserProfile) {
+ogifyApp.controller('NavBarController', function ($scope, $rootScope, $window, $cookies, $location, AuthResource, UserProfile) {
 
     $scope.authWindowModalUri = 'templates/modals/auth-modal.html';
 
@@ -89,6 +89,7 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, $lo
     };
 
     $scope.updateOrderData = function() {
+        $rootScope.$broadcast('updateOrderAddress');
     };
 
     $scope.user = UserProfile.getCurrentUser();
@@ -147,21 +148,28 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
                 expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
                 expireTime: $filter('date')(new Date(), 'H:MM'),
                 reward: '',
-                address: {coords:{latitude: 55.753836, longitude: 37.620463},
+                address: {coords: $rootScope.selfMarker.coords,
                           addressField: orderAddress.getAddress()},
                 namespace: 'FriendsOfFriends',
                 description:'',
                 items: [{}]
             }
-            
-            if(!!navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    $scope.order.address.coords = $rootScope.selfMarker.coords;
-                });
-            }
         }
         
         initOrder();
+        
+        $scope.$on('updateOrderAddress', function() {
+            $scope.order.address.coords = $rootScope.selfMarker.coords;
+            var myposition = new google.maps.LatLng($rootScope.selfMarker.coords.latitude, $rootScope.selfMarker.coords.longitude);
+            geocoder.geocode({'latLng': myposition},function(data,status) {
+                if(status == google.maps.GeocoderStatus.OK) {
+                    orderAddress.setAddress(
+                        data[0].formatted_address
+                    );
+                    $scope.$apply();
+                }
+            });
+        });
         
         $scope.alerts = {warning: [], error: []};
 
