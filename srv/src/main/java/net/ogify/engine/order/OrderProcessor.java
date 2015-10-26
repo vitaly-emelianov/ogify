@@ -11,6 +11,7 @@ import net.ogify.database.entities.OrderItem;
 import net.ogify.database.entities.User;
 import net.ogify.engine.friends.FriendService;
 import net.ogify.engine.secure.exceptions.ForbiddenException;
+import net.ogify.rest.elements.OrdersWithSocialLinks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,9 +81,9 @@ public class OrderProcessor {
      * @param userId id of user who make request.
      * @return visible for specified user orders.
      */
-    public List<Order> getNearestOrders(Double neLatitude, Double neLongitude,
+    public OrdersWithSocialLinks getNearestOrders(Double neLatitude, Double neLongitude,
                                         Double swLatitude, Double swLongitude,
-                                        Long userId) {
+                                        Long userId) throws ExecutionException {
         Set<Long> friends;
         Set<Long> friendsOfFriends;
         try {
@@ -93,8 +94,19 @@ public class OrderProcessor {
             friendsOfFriends = Collections.emptySet();
         }
 
-        return orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
-                neLatitude, neLongitude, swLatitude, swLongitude);
+        List<Order> orders;
+        if(neLongitude < swLongitude) {
+            if (180.0 - neLongitude < swLongitude + 180.0)
+                orders = orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
+                        neLatitude, swLongitude, swLatitude, -180.0);
+            else
+                orders = orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
+                        neLatitude, 180.0, swLatitude, neLongitude);
+        } else
+            orders = orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
+                    neLatitude, neLongitude, swLatitude, swLongitude);
+
+        return new OrdersWithSocialLinks(orders, getOrdersConnectionsWithUser(orders, userId));
     }
 
     /**
@@ -245,7 +257,7 @@ public class OrderProcessor {
      * @param rate how he's rates.
      * @param comment additional comment for rate.
      */
-    public void rateOrderParty(Long userId, Long orderId, double rate, String comment) {
+    public void rateOrderParty(Long userId, Long orderId, Integer rate, String comment) {
         if(rate > 5 || rate < 0)
             throw new BadRequestException("Rate must be in [0, 5] range");
 
@@ -276,10 +288,8 @@ public class OrderProcessor {
         feedbackController.save(feedback);
     }
 
-    public Map<Long, Order.OrderNamespace> getOrdersConnectionsWithUser(Set<Long> ordersIds, Long userId)
+    protected Map<Long, Order.OrderNamespace> getOrdersConnectionsWithUser(List<Order> orders, Long userId)
             throws ExecutionException {
-        List<Order> orders = orderController.getOrdersForSocialLinkWithOwner(userId, ordersIds,
-                friendService.getUserFriendsIds(userId), friendService.getUserExtendedFriendsIds(userId));
         Map<Long, Order.OrderNamespace> resultMap = new HashMap<>();
         for(Order order : orders) {
             if(friendService.getUserFriendsIds(userId).contains(order.getOwner().getId()))
@@ -305,11 +315,11 @@ public class OrderProcessor {
         return Order.OrderNamespace.All;
     }
 
-    public List<Order> getRunningByUser(Long userId, Long watcherUserId) {
+    public List<Order> getOrdersByExecutor(Long userId, Long watcherUserId, Order.OrderStatus status) {
         if(userId.equals(watcherUserId)) { // User see all his own orders
-            return orderController.getRunningByUser(userId, ImmutableSet.of(
+            return orderController.getOrdersByExecutor(userId, ImmutableSet.of(
                     Order.OrderNamespace.All, Order.OrderNamespace.Friends,
-                    Order.OrderNamespace.FriendsOfFriends, Order.OrderNamespace.Private));
+                    Order.OrderNamespace.FriendsOfFriends, Order.OrderNamespace.Private), status);
         }
 
         User user = userController.getUserById(userId);
@@ -317,10 +327,10 @@ public class OrderProcessor {
             throw new NotFoundException(String.format("There is no user with id \"%s\"", userId));
 
         if(friendService.isUsersFriends(userId, watcherUserId)) {
-            return orderController.getRunningByUser(userId, ImmutableSet.of(
+            return orderController.getOrdersByExecutor(userId, ImmutableSet.of(
                     Order.OrderNamespace.All, Order.OrderNamespace.Friends,
                     Order.OrderNamespace.FriendsOfFriends
-            ));
+            ), status);
         }
 
         throw new ForbiddenException("You are not friends, only friends can see orders of each others");
@@ -331,5 +341,9 @@ public class OrderProcessor {
             throw new ForbiddenException("You don't have access to unrated orders of another users");
 
         return orderController.getUnratedUsersOrders(userId);
+    }
+
+    public Feedback getUserRateForOrder(Long userId, Long orderId) {
+        return feedbackController.getUserRateForOrder(userId, orderId);
     }
 }

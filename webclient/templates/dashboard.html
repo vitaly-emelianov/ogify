@@ -2,6 +2,25 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <ui-gmap-google-map center='map.center' zoom='map.zoom' control="map.control" events="map.events">
+
+                <script type="text/ng-template" id="control.tpl.html">
+                    <div class="btn-group">
+                        <button type="button"
+                                class="btn btn-default btn-lg"
+                                ng-click="returnHome()">
+                            <span class="glyphicon glyphicon-home"></span>
+                        </button>
+                    </div>
+                </script>
+
+                <ui-gmap-map-control
+                    template="control.tpl.html"
+                    position="top-right"
+                    controller="ReturnHomeController"
+                    index="-1"
+                >
+                </ui-gmap-map-control>
+
                 <ui-gmap-marker
                         ng-if="selfMarker.visible"
                         coords="selfMarker.coords"
@@ -10,7 +29,6 @@
                         events="selfMarker.events"
                         >
                 </ui-gmap-marker>
-
                 <ui-gmap-markers
                         ng-if="!doSpider"
                         models="showingOrders"
@@ -52,9 +70,11 @@
             <a id="{{order.id}}"
                 data-toggle="modal"
                 data-target="#showOrderModal"
-                class="list-group-item order-list-{{ordersLinks[order.id]}}"
+                class="list-group-item"
+                ng-class="[ordersLinks[order.id], additionalStyle[order.id]]"
                 ng-click="setClickedOrder(order)"
                 ng-repeat="order in showingOrders.slice(pageParameters.pageSize*currentPage.page, pageParameters.pageSize*(currentPage.page+1))">
+                <span class="label label-default pull-right">№{{order.id}}</span>
                 <p class="list-group-item-text">{{order.description}}</p>
                 <p class="list-group-item-text"><b>Адрес: </b>{{order.address}}</p>
                 <p class="list-group-item-text"><b>Актуально до: </b>{{getExpireDate(order)}}</p>

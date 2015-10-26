@@ -14,19 +14,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class RateRequest {
     @NotNull
     @JsonProperty(required = true)
-    private double rate;
+    private Integer rate;
 
     private String comment;
 
     public RateRequest() {
     }
 
-    public RateRequest(double rate, String comment) {
+    public RateRequest(Integer rate, String comment) {
         this.rate = rate;
         this.comment = comment;
     }
 
-    public double getRate() {
+    public Integer getRate() {
         return rate;
     }
 

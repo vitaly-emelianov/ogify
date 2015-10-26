@@ -2,18 +2,6 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                                                      $location, Order, orderAddress, ClickedOrder,
                                                      UserProfile) {
     $scope.user = UserProfile.get();
-
-    $scope.getOrdersLinks = function() {
-        var showingOrdersIds = [];
-
-        $scope.showingOrders.forEach(function(order) {
-            showingOrdersIds.push(order.id);
-        });
-
-        if(showingOrdersIds.length > 0) {
-            $scope.ordersLinks = Order.getOrdersLinks({ordersIds: showingOrdersIds});
-        }
-    };
     
     $rootScope.selfMarker = {
         coords  : { latitude: 55.927106, longitude: 37.523662 },
@@ -78,7 +66,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         return 9;
     };
 
-    if (!!!$rootScope.pageParameters) {
+    if (!$rootScope.pageParameters) {
         $rootScope.pageParameters = {
             pageSize: getMaxOrdersInPage(),
             pagesInBar: getMaxPagesInBar()
@@ -93,7 +81,9 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     $scope.$on('takeOrderEvent', function(event) {
         switchToNearOrders();
     });
-    
+
+    $scope.additionalStyle = {};
+
     var switchToInProgressOrders = function() {
         $scope.user.$promise.then(function(user) {
             UserProfile.getExecutingOrders({userId: user.userId}).$promise.then(function(data){
@@ -103,15 +93,22 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                 $scope.currentPage = {
                     page: 0,
                     pages: _.range(window.Math.min($scope.totalPages, $rootScope.pageParameters.pagesInBar))
-                }
+                };
+
+                $scope.showingOrders.forEach(function(elem) {
+                    if(isOrderOutdated(elem)) {
+                        $scope.additionalStyle[elem.id] = "list-group-item-danger";
+                    }
+                });
             });
         });
     };
     
     var switchToNearOrders = function(){
         Order.getNearMe($rootScope.map.bounds).$promise.then(function(data){
-            $scope.showingOrders = data;
-            $scope.getOrdersLinks();
+            $scope.showingOrders = data.orders;
+            $scope.ordersLinks = data.socialLinks;
+
             $scope.totalPages = window.Math.ceil(data.length / $rootScope.pageParameters.pageSize);
             $scope.currentPage = {
                 page: 0,
@@ -161,7 +158,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     };
 
     uiGmapGoogleMapApi.then(function(maps) {
-        $scope.maps = maps;
+        $rootScope.maps = maps;
         if(!!navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 $rootScope.map.center = { latitude: position.coords.latitude, longitude: position.coords.longitude };
