@@ -82,22 +82,10 @@ public class OrderResource {
         orderProcessor.changeOrderStatus(userId, orderId, Order.OrderStatus.Running);
     }
 
-    @PUT
-    @Path("/{id}/setAsFailed")
-    public void setAsFailed(@PathParam("id") Long orderId) {
-        orderProcessor.changeOrderStatus(userId, orderId, Order.OrderStatus.Failed);
-    }
-
     @DELETE
     @Path("/{id}/executor")
     public void denyOrderExecution(@PathParam("id") Long orderId) {
         orderProcessor.denyOrderExecution(userId, orderId);
-    }
-
-    @DELETE
-    @Path("/{id}")
-    public void deleteOrder(@PathParam("id") Long orderId) {
-        orderProcessor.changeOrderStatus(userId, orderId, Order.OrderStatus.Canceled);
     }
 
     /**
@@ -109,16 +97,6 @@ public class OrderResource {
     @POST
     public Order createNewOrder(Order order) {
         return orderProcessor.createOrder(userId, order);
-    }
-
-    /**
-     * Edit order.
-     *
-     * @param order order body.
-     */
-    @PUT
-    public void editOrder(Order order) {
-        orderProcessor.editOrder(userId, order);
     }
 
     /**
