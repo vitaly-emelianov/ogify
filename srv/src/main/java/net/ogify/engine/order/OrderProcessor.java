@@ -294,7 +294,7 @@ public class OrderProcessor {
         for(Order order : orders) {
             if(friendService.getUserFriendsIds(userId).contains(order.getOwner().getId()))
                 resultMap.put(order.getId(), Order.OrderNamespace.Friends);
-            else if(friendService.getUserExtendedFriendsIds(userId).contains(order.getId()))
+            else if(friendService.getUserExtendedFriendsIds(userId).contains(order.getOwner().getId()))
                 resultMap.put(order.getId(), Order.OrderNamespace.FriendsOfFriends);
             else
                 resultMap.put(order.getId(), Order.OrderNamespace.All);
