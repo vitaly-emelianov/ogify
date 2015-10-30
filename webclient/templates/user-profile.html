@@ -1,30 +1,43 @@
-<div id="profile-page-container">
-    <div class="col-md-3">
-        <div class="profile-avatar">
-            <img src="{{currentUserProfile.photoUri}}" alt="160" class="img-thumbnail">
-
-            <h2>{{currentUserProfile.fullName}}</h2>
-        </div>
-        <div id="executor-rating" class="progress">
-            <div class="progress-bar" role="progressbar"
-                 aria-valuenow="{{currentUserProfile.ratingAsExecutor}}" aria-valuemin="0" aria-valuemax="5"
-                    style="width: {{currentUserProfile.ratingAsExecutor * 20}}%">
-                Рейтинг исполнителя: {{currentUserProfile.ratingAsExecutor}}
+<div id="profile-page-container" ng-controller="ProfilePageController">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="profile-avatar">
+                <img src="{{currentUserProfile.photoUri}}" alt="160" class="img-thumbnail">
+                <h2>{{currentUserProfile.fullName}}</h2>
+            </div>
+            <div id="executor-rating" class="progress">
+                <div class="progress-bar" role="progressbar"
+                     aria-valuenow="{{currentUserProfile.ratingAsExecutor}}" aria-valuemin="0" aria-valuemax="5"
+                        style="width: {{currentUserProfile.ratingAsExecutor * 20}}%">
+                    Рейтинг исполнителя: {{currentUserProfile.ratingAsExecutor}}
+                </div>
+            </div>
+            <div id="customer-rating" class="progress">
+                <div class="progress-bar" role="progressbar"
+                     aria-valuenow="{{currentUserProfile.ratingAsCustomer}}" aria-valuemin="0" aria-valuemax="5"
+                     style="width: {{currentUserProfile.ratingAsCustomer * 20}}%">
+                    Рейтинг покупателя: {{currentUserProfile.ratingAsCustomer}}
+                </div>
             </div>
         </div>
-        <div id="customer-rating" class="progress">
-            <div class="progress-bar" role="progressbar"
-                 aria-valuenow="{{currentUserProfile.ratingAsCustomer}}" aria-valuemin="0" aria-valuemax="5"
-                 style="width: {{currentUserProfile.ratingAsCustomer * 20}}%">
-                Рейтинг покупателя: {{currentUserProfile.ratingAsCustomer}}
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-4">
+            <h2 class="text-center">Выполненные мной</h2>
+            <hr class="divider">
+            <div class="list-group">
+                <a class="list-group-item" 
+                 ng-repeat="order in completedOrders"
+                 data-toggle="modal" 
+                 data-target="#showOrderModal"
+                 ng-click="setClickedOrder(order)">
+                    <span class="label label-default pull-right">№{{order.id}}</span>
+                    <p class="list-group-item-text">{{order.description}}</p>
+                    <p class="small list-group-item-text"><b>Адрес:</b> {{order.address}}</p>
+                </a>
             </div>
         </div>
-    </div>
-
-    <div class="col-md-5">
-
-    </div>
-
-    <div class="col-md-4">
+        <div class="col-md-2">
+        </div>
     </div>
 </div>

@@ -94,8 +94,16 @@
                 </div>
                 <div class="form-group">
                     <label for="address">Адрес:</label>
-                    <input class="form-control" type="text" id="address"
-                            ng-model="order.address.plainAddress"/>
+                    <div class="dropdown">
+                        <input data-toggle="dropdown" class="form-control" type="text" id="address"
+                            ng-model="order.address.addressField.plainAddress"
+                            ng-change="updateAddressCoordinates()"/>
+                        <ul class="dropdown-menu" aria-labelledby="address" ng-if="showSuggestedAddresses">
+                            <li class="suggested-address" ng-click="setOrderAddress(suggestedAddress)" ng-repeat="suggestedAddress in suggestedAddresses">
+                                {{suggestedAddress.formatted_address}}
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="telephoneNumber">Телефон для связи</label>

@@ -11,6 +11,7 @@ import net.ogify.database.entities.OrderItem;
 import net.ogify.database.entities.User;
 import net.ogify.engine.friends.FriendService;
 import net.ogify.engine.secure.exceptions.ForbiddenException;
+import net.ogify.rest.elements.OrdersWithSocialLinks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -110,9 +111,9 @@ public class OrderProcessor {
      * @param userId id of user who make request.
      * @return visible for specified user orders.
      */
-    public List<Order> getNearestOrders(Double neLatitude, Double neLongitude,
+    public OrdersWithSocialLinks getNearestOrders(Double neLatitude, Double neLongitude,
                                         Double swLatitude, Double swLongitude,
-                                        Long userId) {
+                                        Long userId) throws ExecutionException {
         Set<Long> friends;
         Set<Long> friendsOfFriends;
         try {
@@ -123,16 +124,19 @@ public class OrderProcessor {
             friendsOfFriends = Collections.emptySet();
         }
 
-        if(neLongitude < swLongitude)
-            if(180.0 - neLongitude < swLongitude + 180.0)
-                return orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
+        List<Order> orders;
+        if(neLongitude < swLongitude) {
+            if (180.0 - neLongitude < swLongitude + 180.0)
+                orders = orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
                         neLatitude, swLongitude, swLatitude, -180.0);
             else
-                return orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
+                orders = orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
                         neLatitude, 180.0, swLatitude, neLongitude);
+        } else
+            orders = orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
+                    neLatitude, neLongitude, swLatitude, swLongitude);
 
-        return orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
-                neLatitude, neLongitude, swLatitude, swLongitude);
+        return new OrdersWithSocialLinks(orders, getOrdersConnectionsWithUser(orders, userId));
     }
 
     /**
@@ -283,7 +287,7 @@ public class OrderProcessor {
      * @param rate how he's rates.
      * @param comment additional comment for rate.
      */
-    public void rateOrderParty(Long userId, Long orderId, double rate, String comment) {
+    public void rateOrderParty(Long userId, Long orderId, Integer rate, String comment) {
         if(rate > 5 || rate < 0)
             throw new BadRequestException("Rate must be in [0, 5] range");
 
@@ -314,15 +318,13 @@ public class OrderProcessor {
         feedbackController.save(feedback);
     }
 
-    public Map<Long, Order.OrderNamespace> getOrdersConnectionsWithUser(Set<Long> ordersIds, Long userId)
+    protected Map<Long, Order.OrderNamespace> getOrdersConnectionsWithUser(List<Order> orders, Long userId)
             throws ExecutionException {
-        List<Order> orders = orderController.getOrdersForSocialLinkWithOwner(userId, ordersIds,
-                friendService.getUserFriendsIds(userId), friendService.getUserExtendedFriendsIds(userId));
         Map<Long, Order.OrderNamespace> resultMap = new HashMap<>();
         for(Order order : orders) {
             if(friendService.getUserFriendsIds(userId).contains(order.getOwner().getId()))
                 resultMap.put(order.getId(), Order.OrderNamespace.Friends);
-            else if(friendService.getUserExtendedFriendsIds(userId).contains(order.getId()))
+            else if(friendService.getUserExtendedFriendsIds(userId).contains(order.getOwner().getId()))
                 resultMap.put(order.getId(), Order.OrderNamespace.FriendsOfFriends);
             else
                 resultMap.put(order.getId(), Order.OrderNamespace.All);
@@ -371,7 +373,7 @@ public class OrderProcessor {
         return orderController.getUnratedUsersOrders(userId);
     }
 
-    public Long getUserRateForOrder(Long userId, Long orderId) {
+    public Feedback getUserRateForOrder(Long userId, Long orderId) {
         return feedbackController.getUserRateForOrder(userId, orderId);
     }
 }

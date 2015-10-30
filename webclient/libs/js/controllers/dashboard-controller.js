@@ -1,21 +1,9 @@
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter, uiGmapGoogleMapApi,
-                                                     $location, Order, myAddress, ClickedOrder,
+                                                     $location, Order, orderAddress, ClickedOrder,
                                                      UserProfile) {
     $scope.user = UserProfile.get();
-
-    $scope.getOrdersLinks = function() {
-        var showingOrdersIds = [];
-
-        $scope.showingOrders.forEach(function(order) {
-            showingOrdersIds.push(order.id);
-        });
-
-        if(showingOrdersIds.length > 0) {
-            $scope.ordersLinks = Order.getOrdersLinks({ordersIds: showingOrdersIds});
-        }
-    };
     
-    $scope.selfMarker = {
+    $rootScope.selfMarker = {
         coords  : { latitude: 55.927106, longitude: 37.523662 },
         id: "currentPosition",
         visible: false
@@ -30,22 +18,22 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
 
     var mapChanged = function(map) {
         var bounds = map.getBounds();
-        $scope.map.bounds.neLatitude = bounds.getNorthEast().lat();
-        $scope.map.bounds.neLongitude = bounds.getNorthEast().lng();
-        $scope.map.bounds.swLatitude = bounds.getSouthWest().lat();
-        $scope.map.bounds.swLongitude = bounds.getSouthWest().lng();
+        $rootScope.map.bounds.neLatitude = bounds.getNorthEast().lat();
+        $rootScope.map.bounds.neLongitude = bounds.getNorthEast().lng();
+        $rootScope.map.bounds.swLatitude = bounds.getSouthWest().lat();
+        $rootScope.map.bounds.swLongitude = bounds.getSouthWest().lng();
 
         updateOrders();
     };
 
     $rootScope.map = {
-        center: { latitude: 55.927106, longitude: 37.523662 },
+        center: { latitude: 55.753836, longitude: 37.620463 },
         zoom: 10,
         bounds: {
             neLatitude: 55.95,
             neLongitude: 37.82,
-            swLatitude: 55.76,
-            swLongitude: 37.37
+            swLatitude: 55.56,
+            swLongitude: 37.42
         },
         control: {},
         events: {
@@ -78,7 +66,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         return 9;
     };
 
-    if (!!!$rootScope.pageParameters) {
+    if (!$rootScope.pageParameters) {
         $rootScope.pageParameters = {
             pageSize: getMaxOrdersInPage(),
             pagesInBar: getMaxPagesInBar()
@@ -93,7 +81,9 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     $scope.$on('takeOrderEvent', function(event) {
         switchToNearOrders();
     });
-    
+
+    $scope.additionalStyle = {};
+
     var switchToInProgressOrders = function() {
         $scope.user.$promise.then(function(user) {
             UserProfile.getExecutingOrders({userId: user.userId}).$promise.then(function(data){
@@ -103,15 +93,22 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                 $scope.currentPage = {
                     page: 0,
                     pages: _.range(window.Math.min($scope.totalPages, $rootScope.pageParameters.pagesInBar))
-                }
+                };
+
+                $scope.showingOrders.forEach(function(elem) {
+                    if(isOrderOutdated(elem)) {
+                        $scope.additionalStyle[elem.id] = "list-group-item-danger";
+                    }
+                });
             });
         });
     };
     
     var switchToNearOrders = function(){
-        Order.getNearMe($scope.map.bounds).$promise.then(function(data){
-            $scope.showingOrders = data;
-            $scope.getOrdersLinks();
+        Order.getNearMe($rootScope.map.bounds).$promise.then(function(data){
+            $scope.showingOrders = data.orders;
+            $scope.ordersLinks = data.socialLinks;
+
             $scope.totalPages = window.Math.ceil(data.length / $rootScope.pageParameters.pageSize);
             $scope.currentPage = {
                 page: 0,
@@ -161,25 +158,23 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     };
 
     uiGmapGoogleMapApi.then(function(maps) {
-        $scope.maps = maps;
+        $rootScope.maps = maps;
         if(!!navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
-                $scope.map.center = { latitude: position.coords.latitude, longitude: position.coords.longitude };
+                $rootScope.map.center = { latitude: position.coords.latitude, longitude: position.coords.longitude };
 
-                var geocoder = new google.maps.Geocoder();
+                /*var geocoder = new google.maps.Geocoder();
                 var myposition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 geocoder.geocode({'latLng': myposition},function(data, status) {
                     if(status == google.maps.GeocoderStatus.OK) {
-                        myAddress.setAddress(
-                            data[0].formatted_address,
-                            position.coords.latitude,
-                            position.coords.longitude
+                        orderAddress.setAddress(
+                            data[0].formatted_address
                         );
                     }
-                });
+                });*/
 
-                $scope.map.control.refresh($scope.map.center);
-                $scope.map.zoom = 11;
+                $rootScope.map.control.refresh($rootScope.map.center);
+                $rootScope.map.zoom = 11;
 
                 //personal marker init
                 selfMarker = {
@@ -191,7 +186,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                     coords: {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude
-                    },
+                    }/*,
                     events: {
                         dragend: function (marker, eventName, args) {
                             var latitude = marker.getPosition().lat();
@@ -200,19 +195,18 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                             var myposition = new google.maps.LatLng(latitude, longitude);
                             geocoder.geocode({'latLng': myposition},function(data,status) {
                                 if(status == google.maps.GeocoderStatus.OK) {
-                                    myAddress.setAddress(
-                                        data[0].formatted_address,
-                                        latitude,
-                                        longitude
+                                    orderAddress.setAddress(
+                                        data[0].formatted_address
                                     );
                                 }
                             });
                         }
-                    },
+                    }*/,
                     id: "currentPosition",
                     visible: true
                 };
-                $scope.selfMarker = selfMarker;
+                $rootScope.selfMarker = selfMarker;
+                $rootScope.$apply();
             });
         }
     });

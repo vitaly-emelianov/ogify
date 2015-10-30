@@ -14,3 +14,9 @@ function parseDate(date, time) {
 
     return new Date(dateItems[2], dateItems[1] - 1, dateItems[0], timeItems[0], timeItems[1], 0, 0);
 }
+
+function isOrderOutdated(order) {
+    var orderDate = new Date(order.expireIn);
+    var currentDate = new Date();
+    return orderDate < currentDate;
+};
