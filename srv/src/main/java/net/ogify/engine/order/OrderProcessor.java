@@ -63,17 +63,30 @@ public class OrderProcessor {
     /**
      * Method edits order on behalf of the specified user.
      *
-     * @param userId users id on behalf order should be created
-     * @param order order which should be created.
+     * @param userId users id on behalf order should be edited
+     * @param order order which should be edited.
      */
     public void editOrder(Long userId, Order order) {
         User owner = userController.getUserById(userId);
+        Order oldOrder = orderController.getOrderById(order.getId());
         assert owner != null;
-        if(!order.isUserOwner(owner)) //if user is not owner of order
+        assert oldOrder != null;
+        if(!oldOrder.isUserOwner(owner)) //if user is not owner of order
             throw new ForbiddenException("You can't edit not your own order");
-        if(order.isInFinalState()) //if order is completed or canceled
-            throw new ForbiddenException("You can't edit completed or canceled orders");
+        if(oldOrder.getStatus() != OrderStatus.New) //if order is not new
+            throw new ForbiddenException("You can edit only new orders");
+        if(oldOrder.getExecutor() != order.getExecutor()) //if trying to change executor
+            throw new ForbiddenException("You can't change executor of order");
+        if(oldOrder.getStatus() != order.getStatus()) //if trying to change status
+            throw new ForbiddenException("You can't change status of order");
+        if(oldOrder.getDoneAt() != order.getDoneAt()) //if trying to change date of completing
+            throw new ForbiddenException("You can't change date of completing of order");
+        if(oldOrder.getCreatedAt() != order.getCreatedAt()) //if trying to change date of creation
+            throw new ForbiddenException("You can't change date of creation of order");
+        if(oldOrder.getExecutorGetIn() != order.getExecutorGetIn()) //if trying to change date of execution start
+            throw new ForbiddenException("You can't change date of execution start of order");
 
+        //if everything ok
         orderController.saveOrUpdate(order);
     }
 
