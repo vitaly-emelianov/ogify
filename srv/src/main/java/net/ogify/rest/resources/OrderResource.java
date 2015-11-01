@@ -115,9 +115,7 @@ public class OrderResource {
     public void editOrder(Order order) {
         orderProcessor.editOrder(userId, order);
     }
-
-
-
+    
     /**
      * Change order status on specified in request.
      *
