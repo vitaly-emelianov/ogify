@@ -69,26 +69,24 @@ public class OrderProcessor {
      */
     public void editOrder(Long userId, Order order) {
         User owner = userController.getUserById(userId);
-        Order oldOrder = orderController.getOrderById(order.getId());
         assert owner != null;
-        assert oldOrder != null;
-        if(!oldOrder.isUserOwner(owner)) //if user is not owner of order
-            throw new ForbiddenException("You can't edit not your own order");
-        if(oldOrder.getStatus() != OrderStatus.New) //if order is not new
+        Order editedOrder = orderController.getOrderById(order.getId());
+        assert editedOrder != null;
+        if(!editedOrder.isUserOwner(owner)) //if user is not owner of order
+            throw new ForbiddenException("You can edit only your own order");
+        if(editedOrder.getStatus() != OrderStatus.New) //if order is not new
             throw new ForbiddenException("You can edit only new orders");
-        if(oldOrder.getExecutor() != order.getExecutor()) //if trying to change executor
-            throw new ForbiddenException("You can't change executor of order");
-        if(oldOrder.getStatus() != order.getStatus()) //if trying to change status
-            throw new ForbiddenException("You can't change status of order");
-        if(oldOrder.getDoneAt() != order.getDoneAt()) //if trying to change date of completing
-            throw new ForbiddenException("You can't change date of completing of order");
-        if(oldOrder.getCreatedAt() != order.getCreatedAt()) //if trying to change date of creation
-            throw new ForbiddenException("You can't change date of creation of order");
-        if(oldOrder.getExecutorGetIn() != order.getExecutorGetIn()) //if trying to change date of execution start
-            throw new ForbiddenException("You can't change date of execution start of order");
+        editedOrder.setAddress(order.getAddress());
+        editedOrder.setDescription(order.getDescription());
+        editedOrder.setExpireIn(order.getExpireIn());
+        editedOrder.setLatitude(order.getLatitude());
+        editedOrder.setLongitude(order.getLongitude());
+        editedOrder.setNamespace(order.getNamespace());
+        editedOrder.setReward(order.getReward());
+        editedOrder.setTelephoneNumber(order.getTelephoneNumber());
+        editedOrder.setItems(order.getItems());
 
-        //if everything ok
-        orderController.saveOrUpdate(order);
+        orderController.saveOrUpdate(editedOrder);
     }
 
     /**
