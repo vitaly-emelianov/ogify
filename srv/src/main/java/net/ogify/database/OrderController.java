@@ -42,6 +42,7 @@ public class OrderController {
             em.close();
         }
     }
+    
     public List<Order> getNearestOrders(Double latitude, Double longitude) {
         EntityManager em = entityManagerService.createEntityManager();
         try {

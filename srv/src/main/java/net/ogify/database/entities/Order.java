@@ -211,7 +211,9 @@ public class Order {
         return items;
     }
 
-    public void setItems(List<OrderItem> items) { this.items = items; }
+    public void setItems(List<OrderItem> items) {
+        this.items = items;
+    }
 
     public void setExecutor(User executor) {
         this.executor = executor;
@@ -340,5 +342,17 @@ public class Order {
 
     public List<Feedback> getRelatedFeedbacks() {
         return relatedFeedbacks;
+    }
+
+    public void changeEditableFieldsFrom(Order sourceOrder) {
+        this.address = sourceOrder.getAddress();
+        this.description = sourceOrder.getDescription();
+        this.expireIn = sourceOrder.getExpireIn();
+        this.latitude = sourceOrder.getLatitude();
+        this.longitude = sourceOrder.getLongitude();
+        this.namespace = sourceOrder.getNamespace();
+        this.reward = sourceOrder.getReward();
+        this.telephoneNumber = sourceOrder.getTelephoneNumber();
+        this.items = sourceOrder.getItems();
     }
 }

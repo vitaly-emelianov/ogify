@@ -61,20 +61,6 @@ public class OrderProcessor {
         return order;
     }
 
-    private Order changeEditableFields(Order order, Order sourceOrder) {
-        Order editedOrder = order;
-        editedOrder.setAddress(sourceOrder.getAddress());
-        editedOrder.setDescription(sourceOrder.getDescription());
-        editedOrder.setExpireIn(sourceOrder.getExpireIn());
-        editedOrder.setLatitude(sourceOrder.getLatitude());
-        editedOrder.setLongitude(sourceOrder.getLongitude());
-        editedOrder.setNamespace(sourceOrder.getNamespace());
-        editedOrder.setReward(sourceOrder.getReward());
-        editedOrder.setTelephoneNumber(sourceOrder.getTelephoneNumber());
-        editedOrder.setItems(sourceOrder.getItems());
-        return editedOrder;
-    }
-
     /**
      * Method edits order on behalf of the specified user.
      *
@@ -96,7 +82,7 @@ public class OrderProcessor {
                 throw new ForbiddenException("You can edit only items of edited order");
         }
 
-        editedOrder = changeEditableFields(editedOrder, order);
+        editedOrder.changeEditableFieldsFrom(order);
 
         orderController.saveOrUpdate(editedOrder);
     }
