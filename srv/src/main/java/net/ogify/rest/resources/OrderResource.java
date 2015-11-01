@@ -112,10 +112,10 @@ public class OrderResource {
      */
     @PUT
     @Path(("/{id}"))
-    public void editOrder(Order order) {
-        orderProcessor.editOrder(userId, order);
+    public void editOrder(@PathParam("id") Long orderId, Order order) {
+        orderProcessor.editOrder(userId, order, orderId);
     }
-    
+
     /**
      * Change order status on specified in request.
      *

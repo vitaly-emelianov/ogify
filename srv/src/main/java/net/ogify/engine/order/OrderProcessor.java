@@ -67,10 +67,10 @@ public class OrderProcessor {
      * @param userId users id on behalf order should be edited
      * @param order order which should be edited.
      */
-    public void editOrder(Long userId, Order order) {
+    public void editOrder(Long userId, Order order, Long orderId) {
         User owner = userController.getUserById(userId);
         assert owner != null;
-        Order editedOrder = orderController.getOrderById(order.getId());
+        Order editedOrder = orderController.getOrderById(orderId);
         assert editedOrder != null;
 
         if(!editedOrder.isUserOwner(owner)) //if user is not owner of order
@@ -79,7 +79,7 @@ public class OrderProcessor {
             throw new ForbiddenException("You can edit only new orders");
         for(OrderItem item:order.getItems()) {
             OrderItem assertedItem = orderController.getOrderItemById(item.getId());
-            if (assertedItem.getOrderId() != order.getId()) //if item from another order
+            if (assertedItem.getOrderId() != orderId) //if item from another order
                 throw new ForbiddenException("You can edit only items of edited order");
         }
 
