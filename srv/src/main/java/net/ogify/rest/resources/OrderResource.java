@@ -88,6 +88,12 @@ public class OrderResource {
         orderProcessor.denyOrderExecution(userId, orderId);
     }
 
+    @DELETE
+    @Path("/{id}")
+    public void deleteOrder(@PathParam("id") Long orderId) {
+        orderProcessor.changeOrderStatus(userId, orderId, Order.OrderStatus.Canceled);
+    }
+
     /**
      * Create new order.
      *
@@ -109,6 +115,8 @@ public class OrderResource {
     public void editOrder(Order order) {
         orderProcessor.editOrder(userId, order);
     }
+
+
 
     /**
      * Change order status on specified in request.
