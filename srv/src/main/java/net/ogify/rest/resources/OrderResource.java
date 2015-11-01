@@ -100,6 +100,17 @@ public class OrderResource {
     }
 
     /**
+     * Edit order.
+     *
+     * @param order new order body.
+     */
+    @PUT
+    @Path(("/{id}"))
+    public void editOrder(Order order) {
+        orderProcessor.editOrder(userId, order);
+    }
+
+    /**
      * Change order status on specified in request.
      *
      * @param orderId id of order to change.
