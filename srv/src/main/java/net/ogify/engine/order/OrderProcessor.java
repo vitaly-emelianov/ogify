@@ -98,10 +98,10 @@ public class OrderProcessor {
         if(neLongitude < swLongitude) {
             if (180.0 - neLongitude < swLongitude + 180.0)
                 orders = orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
-                        neLatitude, swLongitude, swLatitude, -180.0);
+                        neLatitude, neLongitude, swLatitude, -180.0);
             else
                 orders = orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
-                        neLatitude, 180.0, swLatitude, neLongitude);
+                        neLatitude, 180.0, swLatitude, swLongitude);
         } else
             orders = orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
                     neLatitude, neLongitude, swLatitude, swLongitude);
