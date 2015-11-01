@@ -344,7 +344,7 @@ public class Order {
         return relatedFeedbacks;
     }
 
-    public void changeEditableFieldsFrom(Order sourceOrder) {
+    public void copyEditableFields(Order sourceOrder) {
         this.address = sourceOrder.getAddress();
         this.description = sourceOrder.getDescription();
         this.expireIn = sourceOrder.getExpireIn();

@@ -72,6 +72,7 @@ public class OrderProcessor {
         assert owner != null;
         Order editedOrder = orderController.getOrderById(order.getId());
         assert editedOrder != null;
+
         if(!editedOrder.isUserOwner(owner)) //if user is not owner of order
             throw new ForbiddenException("You can edit only your own order");
         if(editedOrder.getStatus() != OrderStatus.New) //if order is not new
@@ -82,7 +83,7 @@ public class OrderProcessor {
                 throw new ForbiddenException("You can edit only items of edited order");
         }
 
-        editedOrder.changeEditableFieldsFrom(order);
+        editedOrder.copyEditableFields(order);
 
         orderController.saveOrUpdate(editedOrder);
     }
