@@ -62,6 +62,33 @@ public class OrderProcessor {
     }
 
     /**
+     * Method edits order on behalf of the specified user.
+     *
+     * @param userId users id on behalf order should be edited
+     * @param order order which should be edited.
+     */
+    public void editOrder(Long userId, Order order, Long orderId) {
+        User owner = userController.getUserById(userId);
+        assert owner != null;
+        Order editedOrder = orderController.getOrderById(orderId);
+        assert editedOrder != null;
+
+        if(!editedOrder.isUserOwner(owner)) //if user is not owner of order
+            throw new ForbiddenException("You can edit only your own order");
+        if(editedOrder.getStatus() != OrderStatus.New) //if order is not new
+            throw new ForbiddenException("You can edit only new orders");
+        for(OrderItem item:order.getItems()) {
+            OrderItem assertedItem = orderController.getOrderItemById(item.getId());
+            if (assertedItem.getOrderId() != orderId) //if item from another order
+                throw new ForbiddenException("You can edit only items of edited order");
+        }
+
+        editedOrder.copyEditableFields(order);
+
+        orderController.saveOrUpdate(editedOrder);
+    }
+
+    /**
      * Get order by id for specified user.
      *
      * @param userId id of user who requests order
@@ -98,10 +125,10 @@ public class OrderProcessor {
         if(neLongitude < swLongitude) {
             if (180.0 - neLongitude < swLongitude + 180.0)
                 orders = orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
-                        neLatitude, swLongitude, swLatitude, -180.0);
+                        neLatitude, neLongitude, swLatitude, -180.0);
             else
                 orders = orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
-                        neLatitude, 180.0, swLatitude, neLongitude);
+                        neLatitude, 180.0, swLatitude, swLongitude);
         } else
             orders = orderController.getNearestOrdersFiltered(userId, friends, friendsOfFriends,
                     neLatitude, neLongitude, swLatitude, swLongitude);
@@ -294,7 +321,7 @@ public class OrderProcessor {
         for(Order order : orders) {
             if(friendService.getUserFriendsIds(userId).contains(order.getOwner().getId()))
                 resultMap.put(order.getId(), Order.OrderNamespace.Friends);
-            else if(friendService.getUserExtendedFriendsIds(userId).contains(order.getId()))
+            else if(friendService.getUserExtendedFriendsIds(userId).contains(order.getOwner().getId()))
                 resultMap.put(order.getId(), Order.OrderNamespace.FriendsOfFriends);
             else
                 resultMap.put(order.getId(), Order.OrderNamespace.All);

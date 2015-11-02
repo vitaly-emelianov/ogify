@@ -1,6 +1,19 @@
 /**
  * Created by melge on 22.10.2015.
  */
+ogifyApp.service('orderAddress', function () {
+    var address = {
+        plainAddress: ''
+    };
+    return {
+        getAddress: function () {
+            return address;
+        },
+        setAddress: function(textAddress) {
+            address.plainAddress = textAddress;
+        }
+    };
+});
 
 ogifyApp.service('UserProfileService', function ($interval, $rootScope, UserProfile) {
     var currentUser = UserProfile.getCurrentUser();
