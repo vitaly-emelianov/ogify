@@ -32,6 +32,14 @@ public class OrderItem {
     @JsonIgnore
     Order order;
 
+    public Long getId() {
+        return id;
+    }
+
+    public Long getOrderId() {
+        return order.getId();
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
