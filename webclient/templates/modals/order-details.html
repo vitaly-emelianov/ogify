@@ -1,3 +1,4 @@
+
 <div class="modal fade" id="showOrderModal" tabindex="-1" role="dialog" aria-labelledby="infoOrderLabel">
     <div class="modal-dialog" role="document" ng-controller="ShowOrderModalController">
         <div class="modal-content">
@@ -100,11 +101,18 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div ng-hide="getOrder().owner.userId == user.userId && getStatus() != 'New'">
+                        <div ng-show="getOrder().owner.userId != user.userId && getStatus() == 'New'">
                             <label>Автор:</label>
                             <a href="#/profile/{{getOrder().owner.userId}}">
                                 {{getOwnerName()}}
                             </a>
+                            <div ng-switch="clickedOrder.socialRelationship" style="display: inline">
+                                <span ng-switch-when="'Friend'" class="label label-success">Друг</span>
+                                    <span ng-switch-when="'FriendsOfFriends'" class="label label-warning">
+                                        Друг друга
+                                    </span>
+                                <span ng-switch-default class="label label-default">Нет социальной связи</span>
+                            </div>
                             <a href="#/profile/{{getOrder().owner.userId}}">
                                 <img ng-src="{{getOwnerPhotoUrl()}}" class="img-thumbnail">
                             </a>
@@ -114,6 +122,13 @@
                             <label>Исполнитель:</label>
                             <a href="#/profile/{{getOrder().executor.userId}}">
                                 {{getExecutorName()}}
+                                <div ng-switch="clickedOrder.socialRelationship">
+                                    <span ng-switch-when="'Friend'" class="label label-success">Друг</span>
+                                    <span ng-switch-when="'FriendsOfFriends'" class="label label-warning">
+                                        Друг друга
+                                    </span>
+                                    <span ng-switch-default class="label label-default">Друг</span>
+                                </div>
                             </a>
                             <a href="#/profile/{{getOrder().executor.userId}}">
                                 <img ng-src="{{getExecutorPhotoUrl()}}" class="img-thumbnail">
