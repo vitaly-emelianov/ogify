@@ -95,7 +95,7 @@ Where JavaScript file pointed to already installed npm-cli.js
 Current working version located at Build_0 git branch.
 
 ### Contacts
-If you have any question please feel free to contact us: [melges.morgen@gmail.com](mailto:melges.morgen@gmail.com), [sergey.shilin@phystech.edu](sergey.shilin@phystech.edu) or [kentilini@gmail.com](mailto:kentilini@gmail.com)
+If you have any questions please feel free to contact us: [melges.morgen@gmail.com](mailto:melges.morgen@gmail.com), [sergey.shilin@phystech.edu](sergey.shilin@phystech.edu) or [kentilini@gmail.com](mailto:kentilini@gmail.com)
 
 
 [ogify]: http://ogify.net
