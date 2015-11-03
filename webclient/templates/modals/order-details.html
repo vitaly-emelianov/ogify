@@ -107,8 +107,8 @@
                                 {{getOwnerName()}}
                             </a>
                             <div ng-switch="clickedOrder.socialRelationship" style="display: inline">
-                                <span ng-switch-when="'Friend'" class="label label-success">Друг</span>
-                                    <span ng-switch-when="'FriendsOfFriends'" class="label label-warning">
+                                <span ng-switch-when="Friend" class="label label-success">Друг</span>
+                                    <span ng-switch-when="FriendsOfFriends" class="label label-warning">
                                         Друг друга
                                     </span>
                                 <span ng-switch-default class="label label-default">Нет социальной связи</span>
@@ -123,8 +123,8 @@
                             <a href="#/profile/{{getOrder().executor.userId}}">
                                 {{getExecutorName()}}
                                 <div ng-switch="clickedOrder.socialRelationship">
-                                    <span ng-switch-when="'Friend'" class="label label-success">Друг</span>
-                                    <span ng-switch-when="'FriendsOfFriends'" class="label label-warning">
+                                    <span ng-switch-when="Friend" class="label label-success">Друг</span>
+                                    <span ng-switch-when="FriendsOfFriends" class="label label-warning">
                                         Друг друга
                                     </span>
                                     <span ng-switch-default class="label label-default">Друг</span>
