@@ -91,14 +91,13 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     var switchToInProgressOrders = function() {
         $scope.user.$promise.then(function(user) {
             UserProfile.getExecutingOrders({userId: user.userId}).$promise.then(function(data){
-                $scope.executingOrders = data;
                 $scope.showingOrders = data;
-                $scope.totalPages = window.Math.ceil(data.length / $rootScope.pageParameters.pageSize);
+                $scope.totalPages = window.Math.ceil($scope.showingOrders.length / $rootScope.pageParameters.pageSize);
                 $scope.currentPage = {
                     page: 0,
                     pages: _.range(window.Math.min($scope.totalPages, $rootScope.pageParameters.pagesInBar))
                 };
-
+                
                 $scope.showingOrders.forEach(function(elem) {
                     if(isOrderOutdated(elem)) {
                         $scope.additionalStyle[elem.id] = "list-group-item-danger";
@@ -113,7 +112,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
             $scope.showingOrders = data.orders;
             $scope.ordersLinks = data.socialLinks;
 
-            $scope.totalPages = window.Math.ceil(data.length / $rootScope.pageParameters.pageSize);
+            $scope.totalPages = window.Math.ceil($scope.showingOrders.length / $rootScope.pageParameters.pageSize);
             $scope.currentPage = {
                 page: 0,
                 pages: _.range(window.Math.min($scope.totalPages, $rootScope.pageParameters.pagesInBar))
