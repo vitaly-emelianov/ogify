@@ -16,6 +16,8 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         }
     };
 
+
+
     var mapChanged = function(map) {
         var bounds = map.getBounds();
         $rootScope.map.bounds.neLatitude = bounds.getNorthEast().lat();
@@ -59,7 +61,9 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     $scope.doSpider = false;
 
     var getMaxOrdersInPage = function() {
-        return Math.floor(Math.max((angular.element('.list-orders-height').height() - 2*angular.element('.row').height()) / (angular.element('#hidden-order').height() + angular.element('.row').height()), 1));
+        return Math.floor(Math.max((angular.element('.list-orders-height').height()
+            - 2*angular.element('.row').height()) / (angular.element('#hidden-order').height()
+            + angular.element('.row').height()), 1));
     };
     
     var getMaxPagesInBar = function() {
@@ -127,7 +131,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     updateOrders();
 
     $scope.setClickedOrder = function(order){
-        ClickedOrder.set(order);
+        ClickedOrder.setWithSocialRelationship(order, $scope.ordersLinks[order.id]);
     };
 
     $scope.previousPage = function(currentPage){
