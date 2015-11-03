@@ -99,7 +99,7 @@
                             ng-model="order.address.addressField.plainAddress"
                             ng-change="updateAddressCoordinates()"/>
                         <ul class="dropdown-menu" aria-labelledby="address" ng-if="showSuggestedAddresses">
-                            <li class="suggested-address" ng-click="setOrderAddress(suggestedAddress)" ng-repeat="suggestedAddress in suggestedAddresses">
+                            <li  ng-repeat="suggestedAddress in suggestedAddresses" class="suggested-address" ng-click="setOrderAddress(suggestedAddress)">
                                 {{suggestedAddress.formatted_address}}
                             </li>
                         </ul>
