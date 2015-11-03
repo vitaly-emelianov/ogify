@@ -212,7 +212,6 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
                 }
             });
         }
-        $scope.updateAddressCoordinates();
         
         $scope.setOrderAddress = function(suggestedAddress){
             orderAddress.setAddress(suggestedAddress.formatted_address);
@@ -230,8 +229,9 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
                 
             if ($scope.showSuggestedAddresses == true) {
                 $scope.setOrderAddress($scope.suggestedAddresses[0]);
+                $scope.showSuggestedAddresses = false;
             }
-            
+        
             var newOrder = {
                 items: $scope.order.items,
                 expireIn: parseDate($scope.order.expireDate, $scope.order.expireTime).getTime(),

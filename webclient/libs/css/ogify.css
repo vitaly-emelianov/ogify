@@ -71,12 +71,10 @@ p.break-word {
 }
 
 .suggested-address {
-    width: 88vh;
     cursor: pointer;
 }
 
 .suggested-address:hover {
-    width: 88vh;
     cursor: pointer;
     background-color: #367bb6;
     color: white;
