@@ -2,24 +2,6 @@
  * Created by melge on 12.07.2015.
  */
 
-ogifyApp.service('myAddress', function () {
-    var address = {
-        latitude: 0.0,
-        longitude: 0.0,
-        plainAddress: ''
-    };
-    return {
-        getAddress: function () {
-            return address;
-        },
-        setAddress: function(textAddress, latitude, longitude) {
-            address.plainAddress = textAddress;
-            address.latitude = latitude;
-            address.longitude = longitude;
-        }
-    };
-});
-
 ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
     $routeProvider
         .when('/current', {
@@ -143,17 +125,47 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         }
     });
 
-    $scope.telephoneInput.keyup(function(){
-        var isNumberValid = $scope.telephoneInput.intlTelInput("isValidNumber");
-        var error = $scope.telephoneInput.intlTelInput("getValidationError");
-        if(!isNumberValid &&
-            (error == intlTelInputUtils.validationError.TOO_LONG
-            || error == intlTelInputUtils.validationError.IS_POSSIBLE)) {
-            this.classList.add('iti-invalid-key');
-        } else {
-            this.classList.remove('iti-invalid-key');
-        }
-    });
+        $scope.telephoneInput.keyup(function(){
+            var isNumberValid = $scope.telephoneInput.intlTelInput("isValidNumber");
+            var error = $scope.telephoneInput.intlTelInput("getValidationError");
+            if(!isNumberValid &&
+                (error == intlTelInputUtils.validationError.TOO_LONG
+                || error == intlTelInputUtils.validationError.IS_POSSIBLE)) {
+                this.classList.add('iti-invalid-key');
+            } else {
+                this.classList.remove('iti-invalid-key');
+            }
+        });
+        
+        initOrder = function() {
+            $scope.order = {
+                expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
+                expireTime: $filter('date')(new Date(), 'H:MM'),
+                reward: '',
+                address: {coords: $rootScope.selfMarker.coords,
+                          addressField: orderAddress.getAddress()},
+                namespace: 'FriendsOfFriends',
+                description:'',
+                items: [{}]
+            }
+        };
+        
+        initOrder();
+        
+        $scope.$on('updateOrderAddress', function() {
+            $scope.order.address.coords = $rootScope.selfMarker.coords;
+            var myposition = new google.maps.LatLng($rootScope.selfMarker.coords.latitude, $rootScope.selfMarker.coords.longitude);
+            geocoder.geocode({'latLng': myposition},function(data,status) {
+                if(status == google.maps.GeocoderStatus.OK) {
+                    orderAddress.setAddress(
+                        data[0].formatted_address
+                    );
+                    $scope.$apply();
+                }
+            });
+        });
+        
+        $scope.alerts = {warning: [], error: []};
 
     $scope.order = {
         expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
