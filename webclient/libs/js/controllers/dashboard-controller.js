@@ -1,19 +1,7 @@
 ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter, uiGmapGoogleMapApi,
-                                                     $location, Order, myAddress, ClickedOrder,
+                                                     $location, Order, orderAddress, ClickedOrder,
                                                      UserProfile) {
     $scope.user = UserProfile.get();
-
-    $scope.getOrdersLinks = function() {
-        var showingOrdersIds = [];
-
-        $scope.showingOrders.forEach(function(order) {
-            showingOrdersIds.push(order.id);
-        });
-
-        if(showingOrdersIds.length > 0) {
-            $scope.ordersLinks = Order.getOrdersLinks({ordersIds: showingOrdersIds});
-        }
-    };
     
     $scope.selfMarker = {
         coords  : { latitude: 55.927106, longitude: 37.523662 },
@@ -118,8 +106,8 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     
     var switchToNearOrders = function(){
         Order.getNearMe($scope.map.bounds).$promise.then(function(data){
-            $scope.showingOrders = data;
-            $scope.getOrdersLinks();
+            $scope.showingOrders = data.orders;
+            $scope.ordersLinks = data.socialLinks;
             $scope.totalPages = window.Math.ceil(data.length / $rootScope.pageParameters.pageSize);
             $scope.currentPage = {
                 page: 0,
@@ -178,7 +166,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                 var myposition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 geocoder.geocode({'latLng': myposition},function(data, status) {
                     if(status == google.maps.GeocoderStatus.OK) {
-                        myAddress.setAddress(
+                        orderAddress.setAddress(
                             data[0].formatted_address,
                             position.coords.latitude,
                             position.coords.longitude
@@ -208,7 +196,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                             var myposition = new google.maps.LatLng(latitude, longitude);
                             geocoder.geocode({'latLng': myposition},function(data,status) {
                                 if(status == google.maps.GeocoderStatus.OK) {
-                                    myAddress.setAddress(
+                                    orderAddress.setAddress(
                                         data[0].formatted_address,
                                         latitude,
                                         longitude

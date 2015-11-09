@@ -3,7 +3,7 @@
  */
 
 ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, $filter, Order,
-                                                            myAddress) {
+                                                            orderAddress) {
     // Init telephone input
     $scope.telephoneInput = angular.element("#telephoneNumber");
     $scope.telephoneInput.intlTelInput({
@@ -71,7 +71,7 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
         expireTime: $filter('date')(new Date(), 'H:MM'),
         reward: '',
-        address: myAddress.getAddress(),
+        address: orderAddress.getAddress(),
         namespace: 'FriendsOfFriends',
         description:'',
         items: [{}]
@@ -116,8 +116,8 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         var newOrder = {
             items: $scope.order.items,
             expireIn: parseDate($scope.order.expireDate, $scope.order.expireTime).getTime(),
-            latitude: myAddress.getAddress().latitude,
-            longitude: myAddress.getAddress().longitude,
+            latitude: orderAddress.getAddress().latitude,
+            longitude: orderAddress.getAddress().longitude,
             reward: $scope.order.reward,
             telephoneNumber: $scope.telephoneInput[0].value.length > 0 ?
                 $scope.telephoneInput.intlTelInput("getNumber") : null,
@@ -168,7 +168,7 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
                     expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
                     expireTime: $filter('date')(new Date(), 'hh:mm'),
                     reward: '',
-                    address: myAddress.getAddress(),
+                    address: orderAddress.getAddress(),
                     namespace: 'FriendsOfFriends',
                     description:'',
                     items: [{}]

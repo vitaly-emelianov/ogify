@@ -71,7 +71,16 @@ module.exports = function (grunt) {
             }
         },
         watch: {
-            js:  { files: 'libs/js/**.js', tasks: [ 'uglify' ] },
+            js: {
+                files: [
+                    'libs/js/api-module/*.js',
+                    'libs/js/*.js',
+                    'libs/js/services/*.js',
+                    'libs/js/factories/*.js',
+                    'libs/js/controllers/*.js'
+                ],
+                tasks: ['uglify']
+            },
         }
     });
 
