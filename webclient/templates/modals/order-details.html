@@ -129,11 +129,9 @@
                                     <span ng-switch-default class="label label-default">Друг</span>
                                 </div>
                             </a>
-                            <div class="profile-avatar">
-                                <a href="#/profile/{{getOrder().executor.userId}}">
-                                    <img ng-src="{{getExecutorPhotoUrl()}}" class="img-thumbnail profile-avatar-image">
-                                </a>
-                            </div>
+                            <a href="#/profile/{{getOrder().executor.userId}}">
+                                <img ng-src="{{getExecutorPhotoUrl()}}" class="img-thumbnail profile-avatar-image">
+                            </a>
                         </div>
                     </div>
                 </div>
