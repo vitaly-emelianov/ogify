@@ -16,6 +16,8 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         }
     };
 
+
+
     var mapChanged = function(map) {
         var bounds = map.getBounds();
         $rootScope.map.bounds.neLatitude = bounds.getNorthEast().lat();
@@ -59,7 +61,9 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     $scope.doSpider = false;
 
     var getMaxOrdersInPage = function() {
-        return Math.floor(Math.max((angular.element('.list-orders-height').height() - 2*angular.element('.row').height()) / (angular.element('#hidden-order').height() + angular.element('.row').height()), 1));
+        return Math.floor(Math.max((angular.element('.list-orders-height').height()
+            - 2*angular.element('.row').height()) / (angular.element('#hidden-order').height()
+            + angular.element('.row').height()), 1));
     };
     
     var getMaxPagesInBar = function() {
@@ -87,14 +91,13 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     var switchToInProgressOrders = function() {
         $scope.user.$promise.then(function(user) {
             UserProfile.getExecutingOrders({userId: user.userId}).$promise.then(function(data){
-                $scope.executingOrders = data;
                 $scope.showingOrders = data;
-                $scope.totalPages = window.Math.ceil(data.length / $rootScope.pageParameters.pageSize);
+                $scope.totalPages = window.Math.ceil($scope.showingOrders.length / $rootScope.pageParameters.pageSize);
                 $scope.currentPage = {
                     page: 0,
                     pages: _.range(window.Math.min($scope.totalPages, $rootScope.pageParameters.pagesInBar))
                 };
-
+                
                 $scope.showingOrders.forEach(function(elem) {
                     if(isOrderOutdated(elem)) {
                         $scope.additionalStyle[elem.id] = "list-group-item-danger";
@@ -109,7 +112,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
             $scope.showingOrders = data.orders;
             $scope.ordersLinks = data.socialLinks;
 
-            $scope.totalPages = window.Math.ceil(data.length / $rootScope.pageParameters.pageSize);
+            $scope.totalPages = window.Math.ceil($scope.showingOrders.length / $rootScope.pageParameters.pageSize);
             $scope.currentPage = {
                 page: 0,
                 pages: _.range(window.Math.min($scope.totalPages, $rootScope.pageParameters.pagesInBar))
@@ -127,7 +130,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     updateOrders();
 
     $scope.setClickedOrder = function(order){
-        ClickedOrder.set(order);
+        ClickedOrder.setWithSocialRelationship(order, $scope.ordersLinks[order.id]);
     };
 
     $scope.previousPage = function(currentPage){

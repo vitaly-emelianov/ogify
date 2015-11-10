@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-3">
             <div class="profile-avatar">
-                <img src="{{currentUserProfile.photoUri}}" alt="160" class="img-thumbnail">
+                <img ng-src="{{currentUserProfile.photoUri}}" class="img-thumbnail profile-avatar-image">
                 <h2>{{currentUserProfile.fullName}}</h2>
             </div>
             <div id="executor-rating" class="progress">
@@ -23,7 +23,7 @@
         <div class="col-md-2">
         </div>
         <div class="col-md-4">
-            <h2 class="text-center">Завершенные мной</h2>
+            <h2 class="text-center">Выполненные мной</h2>
             <hr class="divider">
             <div class="list-group">
                 <a class="list-group-item" 

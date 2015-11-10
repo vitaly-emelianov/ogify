@@ -212,7 +212,6 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
                 }
             });
         }
-        $scope.updateAddressCoordinates();
         
         $scope.setOrderAddress = function(suggestedAddress){
             orderAddress.setAddress(suggestedAddress.formatted_address);
@@ -230,8 +229,9 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
                 
             if ($scope.showSuggestedAddresses == true) {
                 $scope.setOrderAddress($scope.suggestedAddresses[0]);
+                $scope.showSuggestedAddresses = false;
             }
-            
+        
             var newOrder = {
                 items: $scope.order.items,
                 expireIn: parseDate($scope.order.expireDate, $scope.order.expireTime).getTime(),
@@ -294,8 +294,8 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
 });
 
 ogifyApp.factory('ClickedOrder', function() {
-    var ClickedOrder = {};
-    ClickedOrder.order = {
+    var clickedOrder = {};
+    clickedOrder.order = {
         description: null,
         reward: null,
         items: [],
@@ -305,19 +305,27 @@ ogifyApp.factory('ClickedOrder', function() {
         executor: {photoUri: null, fullName: null}
     };
     
-    ClickedOrder.set = function(order) {
-        ClickedOrder.order = order;
-        ClickedOrder.rate = false;
+    clickedOrder.set = function(order) {
+        clickedOrder.order = order;
+        clickedOrder.rate = false;
     };
-    ClickedOrder.setWithRate = function(order, rate) {
-        ClickedOrder.order = order;
-        ClickedOrder.rate = rate;
+    clickedOrder.setWithRate = function(order, rate, socialRelationship) {
+        clickedOrder.order = order;
+        clickedOrder.rate = rate;
+        clickedOrder.socialRelationship = socialRelationship;
+    };
+
+    clickedOrder.setWithSocialRelationship= function(order, relationship) {
+        clickedOrder.order = order;
+        clickedOrder.socialRelationship = relationship;
     };
     
-    return ClickedOrder;
+    return clickedOrder;
 });
 
-ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $filter, ClickedOrder, Order, $interval) {
+ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $filter, ClickedOrder, Order,
+                                                          UserProfile, $interval) {
+    $scope.user = UserProfile.getCurrentUser();
     $scope.timer = 60;
     var stop;
     $scope.startTimer = function() {
@@ -346,6 +354,8 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
       // Make sure that the interval is destroyed too
       $scope.stopTimer();
     });
+
+    $scope.clickedOrder = ClickedOrder;
 
     $scope.getOrder = function() {
         return ClickedOrder.order;

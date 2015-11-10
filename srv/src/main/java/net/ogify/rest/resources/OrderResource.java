@@ -88,6 +88,12 @@ public class OrderResource {
         orderProcessor.denyOrderExecution(userId, orderId);
     }
 
+    @DELETE
+    @Path("/{id}")
+    public void deleteOrder(@PathParam("id") Long orderId) {
+        orderProcessor.changeOrderStatus(userId, orderId, Order.OrderStatus.Canceled);
+    }
+
     /**
      * Create new order.
      *
@@ -97,6 +103,17 @@ public class OrderResource {
     @POST
     public Order createNewOrder(Order order) {
         return orderProcessor.createOrder(userId, order);
+    }
+
+    /**
+     * Edit order.
+     *
+     * @param order new order body.
+     */
+    @PUT
+    @Path(("/{id}"))
+    public void editOrder(@PathParam("id") Long orderId, Order order) {
+        orderProcessor.editOrder(userId, order, orderId);
     }
 
     /**
