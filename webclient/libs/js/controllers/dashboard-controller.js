@@ -104,7 +104,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         });
     };
     
-    var switchToNearOrders = function(){
+    var switchToNearOrders = function() {
         Order.getNearMe($scope.map.bounds).$promise.then(function(data){
             $scope.showingOrders = data.orders;
             $scope.ordersLinks = data.socialLinks;
