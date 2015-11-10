@@ -2,6 +2,7 @@ package net.ogify.database;
 
 import net.ogify.database.entities.Feedback;
 import net.ogify.database.entities.Order;
+import net.ogify.database.entities.OrderItem;
 import net.ogify.database.entities.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,15 @@ public class OrderController {
         }
     }
 
+    public OrderItem getOrderItemById(Long id) {
+        EntityManager em = entityManagerService.createEntityManager();
+        try {
+            return em.find(OrderItem.class, id);
+        } finally {
+            em.close();
+        }
+    }
+    
     public List<Order> getNearestOrders(Double latitude, Double longitude) {
         EntityManager em = entityManagerService.createEntityManager();
         try {
@@ -215,7 +225,7 @@ public class OrderController {
     public boolean isOrderRatedBy(Order order, User user) {
         EntityManager em = entityManagerService.createEntityManager();
         try {
-            TypedQuery<Integer> query = em.createNamedQuery("Feedback.getFeedbackRate", Integer.class);
+            TypedQuery<Feedback> query = em.createNamedQuery("Feedback.getFeedback", Feedback.class);
             query.setParameter("whichOrderId", order.getId());
             query.setParameter("whoRateId", user.getId());
 

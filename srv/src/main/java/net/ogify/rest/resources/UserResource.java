@@ -79,11 +79,11 @@ public class UserResource {
     }
 
     /**
-     * Method returns orders which user has complited, ordered by "expire in" field.
+     * Method returns orders which user has completed, ordered by "expire in" field.
      *
-     * @summary Returns orders which user has complited.
+     * @summary Returns orders which user has completed.
      * @param userId id of user which orders will be returned.
-     * @return list of orders complited by specified user.
+     * @return list of orders completed by specified user.
      */
     @GET
     @Path("/{id}/executed")

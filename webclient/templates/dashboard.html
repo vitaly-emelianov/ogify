@@ -2,6 +2,25 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <ui-gmap-google-map center='map.center' zoom='map.zoom' control="map.control" events="map.events">
+
+                <script type="text/ng-template" id="control.tpl.html">
+                    <div class="btn-group">
+                        <button type="button"
+                                class="btn btn-default btn-lg"
+                                ng-click="returnHome()">
+                            <span class="glyphicon glyphicon-home"></span>
+                        </button>
+                    </div>
+                </script>
+
+                <ui-gmap-map-control
+                    template="control.tpl.html"
+                    position="top-right"
+                    controller="ReturnHomeController"
+                    index="-1"
+                >
+                </ui-gmap-map-control>
+
                 <ui-gmap-marker
                         ng-if="selfMarker.visible"
                         coords="selfMarker.coords"
@@ -63,7 +82,7 @@
         </div>
     </div>
 </div>
-<div position="fixed" ng-hide="currentPage.pages < 2">
+<div position="fixed" ng-hide="totalPages < 2">
     <nav align="center">
         <ul class="pagination">
             <li>
