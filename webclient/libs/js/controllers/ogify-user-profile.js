@@ -1,7 +1,7 @@
 /**
  * Created by melges on 04.10.15.
  */
-ogifyApp.service('currentUserProfile', function() {
+ogifyApp.service('CurrentUserProfile', function() {
     var profile = {};
 });
 
