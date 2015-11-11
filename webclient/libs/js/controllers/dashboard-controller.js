@@ -162,17 +162,6 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         if(!!navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 $rootScope.map.center = { latitude: position.coords.latitude, longitude: position.coords.longitude };
-
-                /*var geocoder = new google.maps.Geocoder();
-                var myposition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                geocoder.geocode({'latLng': myposition},function(data, status) {
-                    if(status == google.maps.GeocoderStatus.OK) {
-                        orderAddress.setAddress(
-                            data[0].formatted_address
-                        );
-                    }
-                });*/
-
                 $rootScope.map.control.refresh($rootScope.map.center);
                 $rootScope.map.zoom = 11;
 
@@ -186,22 +175,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
                     coords: {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude
-                    }/*,
-                    events: {
-                        dragend: function (marker, eventName, args) {
-                            var latitude = marker.getPosition().lat();
-                            var longitude = marker.getPosition().lng();
-                            var geocoder = new google.maps.Geocoder();
-                            var myposition = new google.maps.LatLng(latitude, longitude);
-                            geocoder.geocode({'latLng': myposition},function(data,status) {
-                                if(status == google.maps.GeocoderStatus.OK) {
-                                    orderAddress.setAddress(
-                                        data[0].formatted_address
-                                    );
-                                }
-                            });
-                        }
-                    }*/,
+                    },
                     id: "currentPosition",
                     visible: true
                 };
