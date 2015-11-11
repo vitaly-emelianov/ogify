@@ -92,6 +92,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         $scope.user.$promise.then(function(user) {
             UserProfile.getExecutingOrders({userId: user.userId}).$promise.then(function(data){
                 $scope.showingOrders = data;
+                
                 $scope.totalPages = window.Math.ceil($scope.showingOrders.length / $rootScope.pageParameters.pageSize);
                 $scope.currentPage = {
                     page: 0,
@@ -132,7 +133,11 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
     $scope.setClickedOrder = function(order){
         ClickedOrder.setWithSocialRelationship(order, $scope.ordersLinks[order.id]);
     };
-
+    
+    $scope.setClickedOrderWithoutSocialRelationship = function(order){
+        ClickedOrder.set(order);
+    };
+    
     $scope.previousPage = function(currentPage){
         if (currentPage.page > 0) {
             currentPage.page -= 1;
