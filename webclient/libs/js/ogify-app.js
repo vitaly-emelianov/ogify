@@ -59,9 +59,7 @@ ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {
         return $http.pendingRequests.length > 0;
     }, function (v) {
         if (v) {
-
             timeoutPromise = $timeout(waitingDialog.show, 1500);
-            //waitingDialog.show();
         } else {
             $timeout.cancel(timeoutPromise);
             waitingDialog.hide();
