@@ -110,7 +110,7 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
         Order.getNearMe($scope.map.bounds).$promise.then(function(data){
             $scope.showingOrders = data.orders;
             $scope.ordersLinks = data.socialLinks;
-            $scope.totalPages = window.Math.ceil(data.length / $rootScope.pageParameters.pageSize);
+            $scope.totalPages = window.Math.ceil($scope.showingOrders.length / $rootScope.pageParameters.pageSize);
             $scope.currentPage = {
                 page: 0,
                 pages: _.range(window.Math.min($scope.totalPages, $rootScope.pageParameters.pagesInBar))
