@@ -1,5 +1,5 @@
 /**
- * Created by melge on 22.10.2015.
+ * Created by melge on 04.11.2015.
  */
 ogifyApp.service('orderAddress', function () {
     var address = {
@@ -30,7 +30,7 @@ ogifyApp.service('UserProfileService', function ($interval, $rootScope, UserProf
             $rootScope.$broadcast('unratedOrdersUpdated');
         });
     });
-     // Schedule repeat after 120s
+    // Schedule repeat after 120s
 
     return {
         getUserProfile: function() {

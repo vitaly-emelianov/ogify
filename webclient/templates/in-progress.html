@@ -55,7 +55,7 @@
                 data-target="#showOrderModal"
                 class="list-group-item"
                 ng-class="[ordersLinks[order.id], additionalStyle[order.id]]"
-                ng-click="setClickedOrder(order)"
+                ng-click="setClickedOrderWithoutSocialRelationship(order)"
                 ng-repeat="order in showingOrders.slice(pageParameters.pageSize*currentPage.page, pageParameters.pageSize*(currentPage.page+1))">
                 <span class="label label-default pull-right">№{{order.id}}</span>
                 <p class="list-group-item-text">{{order.description}}</p>

@@ -9,10 +9,13 @@ module.exports = function (grunt) {
                     mangle: false
                 },
                 files: [{
-                    src: ['libs/js/main.js', 'libs/js/services.js', 'libs/js/waiting-dialog.js', 'libs/js/ogify-api.js',
-                        'libs/js/ogify-app.js', 'libs/js/controllers/dashboard-controller.js',
-                        'libs/js/ogify-user-profile.js', 'libs/js/controllers/my-orders-controller.js',
-                        'libs/js/controllers/return-home-controller.js'],
+                    src: [
+                        'libs/js/api-module/*.js',
+                        'libs/js/*.js',
+                        'libs/js/services/*.js',
+                        'libs/js/factories/*.js',
+                        'libs/js/controllers/*.js'
+                    ],
                     dest: 'jsm/ogify.min.js'
                 }]
             },
@@ -68,7 +71,16 @@ module.exports = function (grunt) {
             }
         },
         watch: {
-            js:  { files: 'libs/js/**.js', tasks: [ 'uglify' ] },
+            js: {
+                files: [
+                    'libs/js/api-module/*.js',
+                    'libs/js/*.js',
+                    'libs/js/services/*.js',
+                    'libs/js/factories/*.js',
+                    'libs/js/controllers/*.js'
+                ],
+                tasks: ['uglify']
+            },
         }
     });
 
