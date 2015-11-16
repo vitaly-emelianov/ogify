@@ -2,7 +2,9 @@
  * Created by melge on 07.11.2015.
  */
 
-ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $filter, ClickedOrder, Order, $interval) {
+ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $filter, UserProfile, ClickedOrder, Order, $interval) {
+    $scope.user = UserProfile.getCurrentUser();
+    
     $scope.timer = 60;
     var stop;
     $scope.startTimer = function() {
