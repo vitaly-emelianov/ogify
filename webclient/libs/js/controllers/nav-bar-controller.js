@@ -2,7 +2,7 @@
  * Created by melge on 07.11.2015.
  */
 
-ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, $location, AuthResource, UserProfile) {
+ogifyApp.controller('NavBarController', function ($scope, $rootScope, $window, $cookies, $location, AuthResource, UserProfile) {
 
     $scope.authWindowModalUri = 'templates/modals/auth-modal.html';
 
@@ -24,6 +24,7 @@ ogifyApp.controller('NavBarController', function ($scope, $window, $cookies, $lo
     };
 
     $scope.updateOrderData = function() {
+        $rootScope.$broadcast('updateOrderAddress');
     };
 
     $scope.user = UserProfile.getCurrentUser();
