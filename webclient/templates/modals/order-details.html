@@ -11,7 +11,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div ng-if="!getRate()" ng-hide="getStatus() != 'Completed'" class="row">
+                    <div ng-if="getRate() == null" ng-show="getStatus() == 'Completed'" class="row">
                         <div class="col-md-8 col-md-offset-2">
                             <button type="button" class="btn btn-default btn-lg" ng-click="rateMyOrder(1)">
                                 <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 1
@@ -64,39 +64,36 @@
                         <p class="text-justify">
                             {{getAddress()}}
                         </p>
-
-                        <label>Актуально до:</label>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p class="text-justify" rows="3" id="expireDate">
-                                    {{getExpireDate()}}
-                                </p>
-                            </div>
-                            <div class="col-md-6">
-                                <p class="text-justify" rows="3" id="expireTime">
-                                    {{getExpireTime()}}
-                                </p>
+                        <div ng-show="getStatus() != 'Completed'">
+                            <label>Актуально до:</label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="text-justify" rows="3" id="expireDate">
+                                        {{getExpireDate()}}
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="text-justify" rows="3" id="expireTime">
+                                        {{getExpireTime()}}
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                                        
-                        <div ng-show="getOrder().owner.userId != user.userId">
-                            <label>Телефон заказчика:</label>
-                            <p class="text-justify" ng-show="getStatus() == 'New'">
-                                <i>Скрыт</i>
-                            </p>
-                            <p class="text-justify" ng-show="timer > 0 && getStatus() == 'Running'">
-                                <i>
-                                    Станет доступен через <font>{{timer}}</font> секунд
-                                </i>
-                            </p>
-                            <p class="text-justify" ng-hide="timer > 0">
-                                <i ng-hide="getOrder().telephoneNumber != null">
-                                    Не указан
-                                </i>
-                                <i ng-hide="getOrder().telephoneNumber == null">
-                                    {{getOrder().telephoneNumber}}
-                                </i>
-                            </p>
+                        <div ng-show="getStatus() != 'Completed'">
+                            <div ng-show="getOrder().owner.userId != user.userId">
+                                <label>Телефон заказчика:</label>
+                                <p class="text-justify" ng-show="getStatus() == 'New'">
+                                    <i>Скрыт</i>
+                                </p>
+                                <p class="text-justify" ng-show="getStatus() == 'Running'">
+                                    <i ng-show="getTelephoneNumber() == null">
+                                        Не указан
+                                    </i>
+                                    <i ng-show="getTelephoneNumber() != null">
+                                        {{getTelephoneNumber()}}
+                                    </i>
+                                </p>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -105,12 +102,14 @@
                             <a href="#/profile/{{getOrder().owner.userId}}">
                                 {{getOwnerName()}}
                             </a>
-                            <div ng-switch="getSocialRelationship()" style="display: inline">
-                                <span ng-switch-when="Friends" class="label label-success">Друг</span>
+                            <div ng-show="getStatus() != 'Completed'">
+                                <div ng-switch="getSocialRelationship()" style="display: inline">
+                                    <span ng-switch-when="Friends" class="label label-success">Друг</span>
                                     <span ng-switch-when="FriendsOfFriends" class="label label-warning">
                                         Друг друга
                                     </span>
-                                <span ng-switch-default class="label label-default">Нет социальной связи</span>
+                                    <span ng-switch-default class="label label-default">Нет социальной связи</span>
+                                </div>
                             </div>
                             <a href="#/profile/{{getOrder().owner.userId}}">
                                 <img ng-src="{{getOwnerPhotoUrl()}}" class="img-thumbnail  profile-avatar-image">
