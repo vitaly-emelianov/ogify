@@ -2,7 +2,9 @@
  * Created by melge on 07.11.2015.
  */
 
-ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $filter, ClickedOrder, Order, $interval) {
+ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $filter, UserProfile, ClickedOrder, Order, $interval) {
+    $scope.user = UserProfile.getCurrentUser();
+    
     $scope.timer = 60;
     var stop;
     $scope.startTimer = function() {
@@ -67,6 +69,9 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
     };
     $scope.getRate = function() {
         return ClickedOrder.rate;
+    };
+    $scope.getSocialRelationship = function() {
+        return ClickedOrder.socialRelationship;
     };
     $scope.userTakesTask = function() {
         Order.getToExecution({orderId: ClickedOrder.order.id}, function(successResponse) {

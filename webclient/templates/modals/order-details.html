@@ -100,12 +100,12 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div ng-show="getOrder().owner.userId != user.userId && (getStatus() == 'New' || getStatus() == 'Running')">
+                        <div ng-if="getOrder().owner.userId != user.userId">
                             <label>Автор:</label>
                             <a href="#/profile/{{getOrder().owner.userId}}">
                                 {{getOwnerName()}}
                             </a>
-                            <div ng-if="getStatus() == 'New'" ng-switch="clickedOrder.socialRelationship" style="display: inline">
+                            <div ng-switch="getSocialRelationship()" style="display: inline">
                                 <span ng-switch-when="Friends" class="label label-success">Друг</span>
                                     <span ng-switch-when="FriendsOfFriends" class="label label-warning">
                                         Друг друга
@@ -117,16 +117,16 @@
                             </a>
                         </div>
 
-                        <div ng-show="getOrder().owner.userId == user.userId && getStatus() != 'New'">
+                        <div ng-if="getOrder().owner.userId == user.userId && getStatus() != 'New'">
                             <label>Исполнитель:</label>
                             <a href="#/profile/{{getOrder().executor.userId}}">
                                 {{getExecutorName()}}
-                                <div ng-switch="clickedOrder.socialRelationship">
+                                <div ng-switch="getSocialRelationship()">
                                     <span ng-switch-when="Friend" class="label label-success">Друг</span>
                                     <span ng-switch-when="FriendsOfFriends" class="label label-warning">
                                         Друг друга
                                     </span>
-                                    <span ng-switch-default class="label label-default">Друг</span>
+                                    <span ng-switch-default class="label label-default">Нет социальной связи</span>
                                 </div>
                             </a>
                             <a href="#/profile/{{getOrder().executor.userId}}">
@@ -139,13 +139,13 @@
             <div class="modal-footer">
                 <button type="button" 
                         ng-click="userTakesTask()"
-                        ng-hide="getStatus() != 'New' || getOrder().owner.userId == user.userId"
+                        ng-show="getStatus() == 'New' && getOrder().owner.userId != user.userId"
                         class="btn btn-primary" >
                     Выполнить заказ
                 </button>
                 <button type="button" 
                         ng-click="cancelOrder()"
-                        ng-show="getStatus() == 'Running' && getOrder().owner.userId != user.userId && timer > 0"
+                        ng-show="getStatus() == 'Running' && getOrder().owner.userId != user.userId"
                         class="btn btn-danger">
                     Отказаться от заказа
                 </button>
@@ -155,7 +155,7 @@
                         data-target="#rateDoneOrder"
                         data-backdrop="static"
                         data-keyboard="false"
-                        ng-hide="getStatus() != 'Running' || getOrder().owner.userId == user.userId"
+                        ng-show="getStatus() == 'Running' && getOrder().owner.userId != user.userId"
                         class="btn btn-success" >
                     Завершить выполнение
                 </button>
