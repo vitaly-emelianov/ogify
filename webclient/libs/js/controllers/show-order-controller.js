@@ -70,6 +70,9 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
     $scope.getRate = function() {
         return ClickedOrder.rate;
     };
+    $scope.getSocialRelationship = function() {
+        return ClickedOrder.socialRelationship;
+    };
     $scope.userTakesTask = function() {
         Order.getToExecution({orderId: ClickedOrder.order.id}, function(successResponse) {
                 angular.element('#showOrderModal').modal('hide');
