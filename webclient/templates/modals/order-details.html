@@ -100,12 +100,12 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div ng-show="getOrder().owner.userId != user.userId">
+                        <div ng-if="getOrder().owner.userId != user.userId">
                             <label>Автор:</label>
                             <a href="#/profile/{{getOrder().owner.userId}}">
                                 {{getOwnerName()}}
                             </a>
-                            <div ng-switch="clickedOrder.socialRelationship" style="display: inline">
+                            <div ng-switch="getSocialRelationship()" style="display: inline">
                                 <span ng-switch-when="Friends" class="label label-success">Друг</span>
                                     <span ng-switch-when="FriendsOfFriends" class="label label-warning">
                                         Друг друга
@@ -117,11 +117,11 @@
                             </a>
                         </div>
 
-                        <div ng-show="getOrder().owner.userId == user.userId && getStatus() != 'New'">
+                        <div ng-if="getOrder().owner.userId == user.userId && getStatus() != 'New'">
                             <label>Исполнитель:</label>
                             <a href="#/profile/{{getOrder().executor.userId}}">
                                 {{getExecutorName()}}
-                                <div ng-switch="clickedOrder.socialRelationship">
+                                <div ng-switch="getSocialRelationship()">
                                     <span ng-switch-when="Friend" class="label label-success">Друг</span>
                                     <span ng-switch-when="FriendsOfFriends" class="label label-warning">
                                         Друг друга
