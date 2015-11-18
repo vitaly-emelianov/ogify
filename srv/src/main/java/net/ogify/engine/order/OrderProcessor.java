@@ -12,6 +12,7 @@ import net.ogify.database.entities.User;
 import net.ogify.engine.friends.FriendService;
 import net.ogify.engine.secure.exceptions.ForbiddenException;
 import net.ogify.rest.elements.OrdersWithSocialLinks;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,8 @@ import java.util.concurrent.ExecutionException;
  */
 @Service
 public class OrderProcessor {
+    private static final Logger logger = Logger.getLogger(FriendService.class);
+
     @Autowired
     OrderController orderController;
 
@@ -79,7 +82,7 @@ public class OrderProcessor {
             throw new ForbiddenException("You can edit only new orders");
         for(OrderItem item:order.getItems()) {
             OrderItem assertedItem = orderController.getOrderItemById(item.getId());
-            if (assertedItem.getOrderId() != orderId) //if item from another order
+            if (!Objects.equals(assertedItem.getOrderId(), orderId)) //if item from another order
                 throw new ForbiddenException("You can edit only items of edited order");
         }
 
@@ -315,16 +318,19 @@ public class OrderProcessor {
         feedbackController.save(feedback);
     }
 
-    protected Map<Long, Order.OrderNamespace> getOrdersConnectionsWithUser(List<Order> orders, Long userId)
-            throws ExecutionException {
+    protected Map<Long, Order.OrderNamespace> getOrdersConnectionsWithUser(List<Order> orders, Long userId) {
         Map<Long, Order.OrderNamespace> resultMap = new HashMap<>();
-        for(Order order : orders) {
-            if(friendService.getUserFriendsIds(userId).contains(order.getOwner().getId()))
-                resultMap.put(order.getId(), Order.OrderNamespace.Friends);
-            else if(friendService.getUserExtendedFriendsIds(userId).contains(order.getOwner().getId()))
-                resultMap.put(order.getId(), Order.OrderNamespace.FriendsOfFriends);
-            else
-                resultMap.put(order.getId(), Order.OrderNamespace.All);
+        try {
+            for (Order order : orders) {
+                if (friendService.getUserFriendsIds(userId).contains(order.getOwner().getId()))
+                    resultMap.put(order.getId(), Order.OrderNamespace.Friends);
+                else if (friendService.getUserExtendedFriendsIds(userId).contains(order.getOwner().getId()))
+                    resultMap.put(order.getId(), Order.OrderNamespace.FriendsOfFriends);
+                else
+                    resultMap.put(order.getId(), Order.OrderNamespace.All);
+            }
+        } catch (ExecutionException e) {
+            logger.error(String.format("Can't get friends for user with id %s", userId), e);
         }
 
         return resultMap;
