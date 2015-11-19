@@ -266,7 +266,7 @@ public class Order {
 
     @JsonProperty("telephoneNumberProvided")
     public boolean isTelephoneNumberProvided() {
-        return telephoneNumber == null;
+        return telephoneNumber != null;
     }
 
     public OrderNamespace getNamespace() {
