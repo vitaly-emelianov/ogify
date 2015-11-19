@@ -264,6 +264,11 @@ public class Order {
         this.telephoneNumber = telephoneNumber;
     }
 
+    @JsonProperty("telephoneNumberProvided")
+    public boolean isTelephoneNumberProvided() {
+        return telephoneNumber == null;
+    }
+
     public OrderNamespace getNamespace() {
         return namespace;
     }
