@@ -64,6 +64,9 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
     $scope.getAddress = function() {
         return ClickedOrder.order.address;
     };
+    $scope.telephoneNumberIsProvided = function() {
+        return ClickedOrder.order.telephoneNumberProvided;
+    };
     $scope.getTelephoneNumber = function() {
         return ClickedOrder.order.telephoneNumber;
     };

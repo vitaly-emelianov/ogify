@@ -91,9 +91,10 @@
                                 <i>Профиль ВКонтакте скрыт</i>
                             </p>
                             <p class="text-justify" 
-                               ng-show="getTelephoneNumber() != null && 
-                                       (getStatus() == 'Running' || getStatus() == 'Completed')">
-                                <i>{{getTelephoneNumber()}}</i>
+                               ng-show="telephoneNumberIsProvided() && 
+                               (getStatus() == 'Running' || getStatus() == 'Completed')">
+                                <i ng-if="getTelephoneNumber() == null">Номер телефона скоро появится</i>
+                                <i ng-if="getTelephoneNumber() != null">{{getTelephoneNumber()}}</i>
                             </p>
                             <p class="text-justify" 
                                ng-show="getStatus() == 'Running' || getStatus() == 'Completed'">
