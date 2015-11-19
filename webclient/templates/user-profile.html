@@ -2,27 +2,27 @@
     <div class="row">
         <div class="col-md-3">
             <div class="profile-avatar">
-                <img ng-src="{{currentUserProfile.photoUri}}" class="img-thumbnail profile-avatar-image">
-                <h2>{{currentUserProfile.fullName}}</h2>
+                <img ng-src="{{watchingProfile.photoUri}}" class="img-thumbnail profile-avatar-image">
+                <h2>{{watchingProfile.fullName}}</h2>
             </div>
             <div id="executor-rating" class="progress">
                 <div class="progress-bar" role="progressbar"
-                     aria-valuenow="{{currentUserProfile.ratingAsExecutor}}" aria-valuemin="0" aria-valuemax="5"
-                        style="width: {{currentUserProfile.ratingAsExecutor * 20}}%">
-                    Рейтинг исполнителя: {{currentUserProfile.ratingAsExecutor}}
+                     aria-valuenow="{{watchingProfile.ratingAsExecutor}}" aria-valuemin="0" aria-valuemax="5"
+                        style="width: {{watchingProfile.ratingAsExecutor * 20}}%">
+                    Рейтинг исполнителя: {{watchingProfile.ratingAsExecutor}}
                 </div>
             </div>
             <div id="customer-rating" class="progress">
                 <div class="progress-bar" role="progressbar"
-                     aria-valuenow="{{currentUserProfile.ratingAsCustomer}}" aria-valuemin="0" aria-valuemax="5"
-                     style="width: {{currentUserProfile.ratingAsCustomer * 20}}%">
-                    Рейтинг покупателя: {{currentUserProfile.ratingAsCustomer}}
+                     aria-valuenow="{{watchingProfile.ratingAsCustomer}}" aria-valuemin="0" aria-valuemax="5"
+                     style="width: {{watchingProfile.ratingAsCustomer * 20}}%">
+                    Рейтинг покупателя: {{watchingProfile.ratingAsCustomer}}
                 </div>
             </div>
         </div>
         <div class="col-md-2">
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" ng-show="currentUser.userId == watchingProfile.userId">
             <h2 class="text-center">Выполненные мной</h2>
             <hr class="divider">
             <div class="list-group">
