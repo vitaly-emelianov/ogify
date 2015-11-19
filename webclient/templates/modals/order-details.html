@@ -6,7 +6,10 @@
                         aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="infoOrderLabel">
                     Детали заказа №{{getOrder().id}}
-                    <span ng-show="isOrderOutdated(getOrder())" class="label label-danger">Просрочен</span>
+                    <span ng-show="isOrderOutdated(getOrder()) && getStatus() != 'Completed'" 
+                          class="label label-danger">
+                        Просрочен
+                    </span>
                 </h4>
             </div>
             <div class="modal-body">
@@ -79,21 +82,25 @@
                                 </div>
                             </div>
                         </div>
-                        <div ng-show="getStatus() != 'Completed'">
-                            <div ng-show="getOrder().owner.userId != user.userId">
-                                <label>Телефон заказчика:</label>
-                                <p class="text-justify" ng-show="getStatus() == 'New'">
-                                    <i>Скрыт</i>
-                                </p>
-                                <p class="text-justify" ng-show="getStatus() == 'Running'">
-                                    <i ng-show="getTelephoneNumber() == null">
-                                        Не указан
-                                    </i>
-                                    <i ng-show="getTelephoneNumber() != null">
-                                        {{getTelephoneNumber()}}
-                                    </i>
-                                </p>
-                            </div>
+                        <div ng-show="getOrder().owner.userId != user.userId">
+                            <label>Контакты заказчика:</label>
+                            <p class="text-justify" ng-show="getStatus() == 'New'">
+                                <i>Телефон скрыт</i>
+                            </p>
+                            <p class="text-justify" ng-show="getStatus() == 'New'">
+                                <i>Профиль ВКонтакте скрыт</i>
+                            </p>
+                            <p class="text-justify" 
+                               ng-show="getTelephoneNumber() != null && 
+                                       (getStatus() == 'Running' || getStatus() == 'Completed')">
+                                <i>{{getTelephoneNumber()}}</i>
+                            </p>
+                            <p class="text-justify" 
+                               ng-show="getStatus() == 'Running' || getStatus() == 'Completed'">
+                                <i>
+                                    <a ng-href="{{getOwnerVkLink()}}">Профиль ВКонтакте</a>
+                                </i>
+                            </p>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -102,14 +109,12 @@
                             <a href="#/profile/{{getOrder().owner.userId}}">
                                 {{getOwnerName()}}
                             </a>
-                            <div ng-show="getStatus() != 'Completed'">
-                                <div ng-switch="getSocialRelationship()" style="display: inline">
-                                    <span ng-switch-when="Friends" class="label label-success">Друг</span>
-                                    <span ng-switch-when="FriendsOfFriends" class="label label-warning">
-                                        Друг друга
-                                    </span>
-                                    <span ng-switch-default class="label label-default">Нет социальной связи</span>
-                                </div>
+                            <div ng-switch="getSocialRelationship()" style="display: inline">
+                                <span ng-switch-when="Friends" class="label label-success">Друг</span>
+                                <span ng-switch-when="FriendsOfFriends" class="label label-warning">
+                                    Друг друга
+                                </span>
+                                <span ng-switch-default class="label label-default">Нет социальной связи</span>
                             </div>
                             <a href="#/profile/{{getOrder().owner.userId}}">
                                 <img ng-src="{{getOwnerPhotoUrl()}}" class="img-thumbnail  profile-avatar-image">

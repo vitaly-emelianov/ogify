@@ -55,6 +55,9 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
     $scope.getOwnerPhotoUrl = function() {
         return ClickedOrder.order.owner.photoUri;
     };
+    $scope.getOwnerVkLink = function() {
+        return "http://vk.com/id" + ClickedOrder.order.owner.vkId;
+    };
     $scope.getExecutorPhotoUrl = function() {
         return ClickedOrder.order.executor.photoUri;
     };
@@ -62,7 +65,7 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
         return ClickedOrder.order.address;
     };
     $scope.getTelephoneNumber = function() {
-            return ClickedOrder.order.telephoneNumber;
+        return ClickedOrder.order.telephoneNumber;
     };
     $scope.getReward = function() {
         return ClickedOrder.order.reward;

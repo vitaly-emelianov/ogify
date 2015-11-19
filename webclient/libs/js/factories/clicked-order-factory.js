@@ -24,7 +24,7 @@ ogifyApp.factory('ClickedOrder', function() {
         items: [],
         address: null,
         expireIn: null,
-        owner: {photoUri: null, fullName: null},
+        owner: {photoUri: null, fullName: null, vkId: null},
         executor: {photoUri: null, fullName: null}
     };
 
