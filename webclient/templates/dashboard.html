@@ -62,7 +62,7 @@
             </div>
         </div>
         <div class="list-group">
-            <a class="list-group-item" id="hidden-order" ng-hide="1">
+            <a class="list-group-item pointer" id="hidden-order" ng-hide="1">
                 <p class="list-group-item-text">description</p>
                 <p class="list-group-item-text"><b>Адрес: </b></p>
                 <p class="list-group-item-text"><b>Актуально до: </b></p>
@@ -70,7 +70,7 @@
             <a id="{{order.id}}"
                 data-toggle="modal"
                 data-target="#showOrderModal"
-                class="list-group-item"
+                class="list-group-item pointer"
                 ng-class="[ordersLinks[order.id], additionalStyle[order.id]]"
                 ng-click="setClickedOrder(order)"
                 ng-repeat="order in showingOrders.slice(pageParameters.pageSize*currentPage.page, pageParameters.pageSize*(currentPage.page+1))">
