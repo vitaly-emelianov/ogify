@@ -6,7 +6,7 @@
                         aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="infoOrderLabel">
                     Детали заказа №{{getOrder().id}}
-                    <span ng-show="isOrderOutdated(getOrder()) && getStatus() != 'Completed'" 
+                    <span ng-show="isOrderOutdated(getOrder()) && getOrder().status != 'Completed'" 
                           class="label label-danger">
                         Просрочен
                     </span>
@@ -14,7 +14,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div ng-if="getRate() == null" ng-show="getStatus() == 'Completed'" class="row">
+                    <div ng-if="getRate() == null" ng-show="getOrder().status == 'Completed'" class="row">
                         <div class="col-md-8 col-md-offset-2">
                             <button type="button" class="btn btn-default btn-lg" ng-click="rateMyOrder(1)">
                                 <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 1
@@ -37,17 +37,17 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label>Описание:</label>
-                        <p class="text-justify break-word" ng-bind-html="getDescription() | linky">
+                        <p class="text-justify break-word" ng-bind-html="getOrder().description | linky">
                         </p>
 
                         <label>Вознаграждение:</label>
-                        <p class="text-justify break-word" ng-bind-html="getReward() | linky">
+                        <p class="text-justify break-word" ng-bind-html="getOrder().reward | linky">
                         </p>
 
-                        <div ng-show="!itemsEmpty()">
+                        <div ng-show="getOrder().items.length != 0">
                             <label>Товары:</label>
                             <p class="text-justify">
-                                <div ng-repeat="item in getItemList()">
+                                <div ng-repeat="item in getOrder().items">
                                     <div class="row">
                                         <div class="col-md-1 col-sm-1">
                                             {{$index + 1}}
@@ -65,9 +65,9 @@
 
                         <label>Адрес:</label>
                         <p class="text-justify">
-                            {{getAddress()}}
+                            {{getOrder().address}}
                         </p>
-                        <div ng-show="getStatus() != 'Completed'">
+                        <div ng-show="getOrder().status != 'Completed'">
                             <label>Актуально до:</label>
                             <div class="row">
                                 <div class="col-md-6">
@@ -84,22 +84,28 @@
                         </div>
                         <div ng-show="getOrder().owner.userId != user.userId">
                             <label>Контакты заказчика:</label>
-                            <p class="text-justify" ng-show="getStatus() == 'New'">
+                            <p class="text-justify" ng-show="getOrder().status == 'New'">
                                 <i>Телефон скрыт</i>
                             </p>
-                            <p class="text-justify" ng-show="getStatus() == 'New'">
+                            <p class="text-justify" ng-show="getOrder().status == 'New'">
                                 <i>Профиль ВКонтакте скрыт</i>
                             </p>
                             <p class="text-justify" 
-                               ng-show="telephoneNumberIsProvided() && 
-                               (getStatus() == 'Running' || getStatus() == 'Completed')">
-                                <i ng-if="getTelephoneNumber() == null">Номер телефона скоро появится</i>
-                                <i ng-if="getTelephoneNumber() != null">{{getTelephoneNumber()}}</i>
+                               ng-show="getOrder().telephoneNumberProvided && 
+                               (getOrder().status == 'Running' || getOrder().status == 'Completed')">
+                                <i ng-if="getOrder().telephoneNumber == null">
+                                    Номер телефона скоро появится
+                                </i>
+                                <i ng-if="getOrder().telephoneNumber != null">
+                                    {{getOrder().telephoneNumber}}
+                                </i>
                             </p>
                             <p class="text-justify" 
-                               ng-show="getStatus() == 'Running' || getStatus() == 'Completed'">
+                               ng-show="getOrder().status == 'Running' || getOrder().status == 'Completed'">
                                 <i>
-                                    <a ng-href="{{getOwnerVkLink()}}">Профиль ВКонтакте</a>
+                                    <a ng-href="http://vk.com/id{{getOrder().owner.vkId}}">
+                                        Профиль ВКонтакте
+                                    </a>
                                 </i>
                             </p>
                         </div>
@@ -108,34 +114,44 @@
                         <div ng-if="getOrder().owner.userId != user.userId">
                             <label>Автор:</label>
                             <a href="#/profile/{{getOrder().owner.userId}}">
-                                {{getOwnerName()}}
+                                {{getOrder().owner.fullName}}
                             </a>
                             <div ng-switch="getSocialRelationship()" style="display: inline">
-                                <span ng-switch-when="Friends" class="label label-success">Друг</span>
+                                <span ng-switch-when="Friends" class="label label-success">
+                                    Друг
+                                </span>
                                 <span ng-switch-when="FriendsOfFriends" class="label label-warning">
                                     Друг друга
                                 </span>
-                                <span ng-switch-default class="label label-default">Нет социальной связи</span>
+                                <span ng-switch-default class="label label-default">
+                                    Нет социальной связи
+                                </span>
                             </div>
                             <a href="#/profile/{{getOrder().owner.userId}}">
-                                <img ng-src="{{getOwnerPhotoUrl()}}" class="img-thumbnail  profile-avatar-image">
+                                <img ng-src="{{getOrder().owner.photoUri}}" 
+                                     class="img-thumbnail  profile-avatar-image">
                             </a>
                         </div>
 
-                        <div ng-if="getOrder().owner.userId == user.userId && getStatus() != 'New'">
+                        <div ng-if="getOrder().owner.userId == user.userId && getOrder().status != 'New'">
                             <label>Исполнитель:</label>
                             <a href="#/profile/{{getOrder().executor.userId}}">
-                                {{getExecutorName()}}
+                                {{getOrder().executor.fullName}}
                                 <div ng-switch="getSocialRelationship()">
-                                    <span ng-switch-when="Friend" class="label label-success">Друг</span>
+                                    <span ng-switch-when="Friend" class="label label-success">
+                                        Друг
+                                    </span>
                                     <span ng-switch-when="FriendsOfFriends" class="label label-warning">
                                         Друг друга
                                     </span>
-                                    <span ng-switch-default class="label label-default">Нет социальной связи</span>
+                                    <span ng-switch-default class="label label-default">
+                                        Нет социальной связи
+                                    </span>
                                 </div>
                             </a>
                             <a href="#/profile/{{getOrder().executor.userId}}">
-                                <img ng-src="{{getExecutorPhotoUrl()}}" class="img-thumbnail profile-avatar-image">
+                                <img ng-src="{{getOrder().executor.photoUri}}" 
+                                     class="img-thumbnail profile-avatar-image">
                             </a>
                         </div>
                     </div>
@@ -144,13 +160,13 @@
             <div class="modal-footer">
                 <button type="button" 
                         ng-click="userTakesTask()"
-                        ng-show="getStatus() == 'New' && getOrder().owner.userId != user.userId"
+                        ng-show="getOrder().status == 'New' && getOrder().owner.userId != user.userId"
                         class="btn btn-primary" >
                     Выполнить заказ
                 </button>
                 <button type="button" 
                         ng-click="cancelOrder()"
-                        ng-show="getStatus() == 'Running' && getOrder().owner.userId != user.userId"
+                        ng-show="getOrder().status == 'Running' && getOrder().owner.userId != user.userId"
                         class="btn btn-danger">
                     Отказаться от заказа
                 </button>
@@ -160,7 +176,7 @@
                         data-target="#rateDoneOrder"
                         data-backdrop="static"
                         data-keyboard="false"
-                        ng-show="getStatus() == 'Running' && getOrder().owner.userId != user.userId"
+                        ng-show="getOrder().status == 'Running' && getOrder().owner.userId != user.userId"
                         class="btn btn-success" >
                     Завершить выполнение
                 </button>
