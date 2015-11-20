@@ -22,11 +22,11 @@
         </div>
         <div class="col-md-2">
         </div>
-        <div class="col-md-4" ng-show="currentUser.userId == watchingProfile.userId">
+        <div class="col-md-4">
             <h2 class="text-center">Выполненные мной</h2>
             <hr class="divider">
-            <div class="list-group">
-                <a class="list-group-item" 
+            <div class="list-group" ng-if="currentUser.userId == watchingProfile.userId">
+                <a class="list-group-item pointer" 
                  ng-repeat="order in completedOrders"
                  data-toggle="modal" 
                  data-target="#showOrderModal"
@@ -36,6 +36,14 @@
                     <p class="small list-group-item-text"><b>Адрес:</b> {{order.address}}</p>
                 </a>
             </div>
+            <ul class="list-group" ng-if="currentUser.userId != watchingProfile.userId">
+                <li class="list-group-item" 
+                 ng-repeat="order in completedOrders">
+                    <span class="label label-default pull-right">№{{order.id}}</span>
+                    <p class="list-group-item-text">{{order.description}}</p>
+                    <p class="small list-group-item-text"><b>Адрес:</b> {{order.address}}</p>
+                </li>
+            </ul>
         </div>
         <div class="col-md-2">
         </div>

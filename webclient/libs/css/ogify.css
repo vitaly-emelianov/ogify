@@ -47,7 +47,7 @@
     text-overflow: ellipsis;
 }
 
-.list-group-item {
+.list-group-item.pointer {
     cursor: pointer;
 }
 
