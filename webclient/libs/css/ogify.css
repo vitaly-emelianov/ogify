@@ -84,3 +84,72 @@ p.break-word {
     background-color: #367bb6;
     color: white;
 }
+
+.rating{
+    color: #a9a9a9;
+    margin: 0;
+    padding: 0;
+}
+
+div.rating-block-big {
+    font-size: 48px;
+    margin-left: auto;
+    margin-right: auto;
+    display: table;
+}
+
+ul.rating {
+    display: inline-block;
+}
+
+.rating li {
+    list-style-type: none;
+    display: inline-block;
+    padding: 1px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 350ms;
+}
+
+.rating-inline {
+    display: inline-block;
+}
+
+.star-rating-0 .rating .filled {
+    color: #990000;
+}
+
+.star-rating-1 .rating .filled,
+.stars-1 .rating,
+.stars-1 .rating > li {
+    color: #990000;
+}
+
+.star-rating-2 .rating .filled,
+.stars-2 .rating,
+.stars-2 .rating > li {
+    color: #993300;
+}
+
+.star-rating-3 .rating .filled,
+.stars-3 .rating,
+.stars-3 .rating > li {
+    color: #996600;
+}
+
+.star-rating-4 .rating .filled,
+.stars-4 .rating,
+.stars-4 .rating > li {
+    color: #999900;
+}
+
+.star-rating-5 .rating .filled,
+.stars-5 .rating,
+.stars-5 .rating > li {
+    color: #99CC00;
+}
+
+.rating > li:hover ~ li {
+    color: #a9a9a9 !important;
+}
