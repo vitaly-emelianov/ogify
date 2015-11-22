@@ -9,21 +9,8 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-default btn-lg" ng-click="rateCurrentOrder(1)">
-                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 1
-                        </button>
-                        <button type="button" class="btn btn-default btn-lg" ng-click="rateCurrentOrder(2)">
-                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 2
-                        </button>
-                        <button type="button" class="btn btn-default btn-lg" ng-click="rateCurrentOrder(3)">
-                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 3
-                        </button>
-                        <button type="button" class="btn btn-default btn-lg" ng-click="rateCurrentOrder(4)">
-                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 4
-                        </button>
-                        <button type="button" class="btn btn-default btn-lg" ng-click="rateCurrentOrder(5)">
-                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 5
-                        </button>
+                        <div class="rating-block-big" star-rating on-rating-selected="rateCurrentOrder(rating)"
+                             readonly="false" max="5" rating-value="selectedValue"/>
                     </div>
                 </div>
             </div>

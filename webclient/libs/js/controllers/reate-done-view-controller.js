@@ -3,11 +3,17 @@
  */
 
 ogifyApp.controller('rateDoneOrderController', function ($scope, $rootScope, $filter, ClickedOrder, Order) {
-    $scope.rateCurrentOrder = function(rating) {
-        Order.rateOrder({orderId: ClickedOrder.order.id}, {rate: rating} , function(successResponse) {
+    $scope.selectedValue = 0;
+    $scope.rateCurrentOrder = function(selectedRatingValue) {
+        Order.rateOrder(
+            {
+                orderId: ClickedOrder.order.id
+            }, {
+                rate: selectedRatingValue
+            }, function(successResponse) {
                 angular.element('#rateDoneOrder').modal('hide');
-            },
-            function(errorResponse) {
+            }, function(errorResponse) {
+
             });
     };
 });

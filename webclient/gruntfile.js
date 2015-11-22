@@ -12,6 +12,7 @@ module.exports = function (grunt) {
                     src: [
                         'libs/js/api-module/*.js',
                         'libs/js/*.js',
+                        'libs/js/directives/*.js',
                         'libs/js/services/*.js',
                         'libs/js/factories/*.js',
                         'libs/js/controllers/*.js'
@@ -75,11 +76,14 @@ module.exports = function (grunt) {
                 files: [
                     'libs/js/api-module/*.js',
                     'libs/js/*.js',
+                    'libs/js/directives/*.js',
                     'libs/js/services/*.js',
                     'libs/js/factories/*.js',
-                    'libs/js/controllers/*.js'
+                    'libs/js/controllers/*.js',
+                    'libs/css/animations.css',
+                    'libs/css/ogify-main.css'
                 ],
-                tasks: ['uglify']
+                tasks: ['uglify', 'cssmin']
             },
         }
     });
