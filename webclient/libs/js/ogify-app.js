@@ -32,7 +32,7 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
     });
 });
 
-ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {    
+ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {
     $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
     $rootScope.modalWindowsUri = 'templates/modals/modals.html';
     $rootScope.createOrderModalUri = 'templates/modals/new-order.html';
