@@ -111,6 +111,30 @@ ul.rating {
     cursor: pointer;
     transition: color 350ms;
 }
+li.star-rating-0{
+    color: #990000 !important;
+}
+
+li.star-rating-1 > li {
+    color: #990000 !important;
+}
+
+li.star-rating-2 > li {
+    color: #993300 !important;
+}
+
+li.star-rating-3 > li {
+    color: #996600 !important;
+}
+
+li.star-rating-4 > li {
+    color: #999900 !important;
+}
+
+li.star-rating-5 > li {
+    color: #99CC00 !important;
+}
+
 
 .rating-inline {
     display: inline-block;

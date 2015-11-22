@@ -111,7 +111,12 @@ ogifyServices.factory('Order', ['$resource',
             rateOrder: {
                 url: BASE_PATH + ORDER_PATH + '/:orderId' + '/rate', method: 'PUT',
                 params: {orderId: '@orderId'}
+            },
+            getOrderRate: {
+                url: BASE_PATH + ORDER_PATH + '/:orderId' + '/rate', method: 'GET',
+                params: {orderId: '@orderId'}
             }
+
         });
     }
 ]);

@@ -10,30 +10,14 @@
                           class="label label-danger">
                         Просрочен
                     </span>
+                    <div ng-if="getOrder().status == 'Completed'">
+                        <div star-rating readonly="orderRated" max="5"
+                             on-rating-selected="rateMyOrder(rating)"
+                             rating-value="orderRatingValue"></div>
+                    </div>
                 </h4>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div ng-if="getRate() == null" ng-show="getOrder().status == 'Completed'" class="row">
-                        <div class="col-md-8 col-md-offset-2">
-                            <button type="button" class="btn btn-default btn-lg" ng-click="rateMyOrder(1)">
-                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 1
-                            </button>
-                            <button type="button" class="btn btn-default btn-lg" ng-click="rateMyOrder(2)">
-                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 2
-                            </button>
-                            <button type="button" class="btn btn-default btn-lg" ng-click="rateMyOrder(3)">
-                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 3
-                            </button>
-                            <button type="button" class="btn btn-default btn-lg" ng-click="rateMyOrder(4)">
-                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 4
-                            </button>
-                            <button type="button" class="btn btn-default btn-lg" ng-click="rateMyOrder(5)">
-                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 5
-                            </button>
-                        </div>
-                    </div>
-                </div> 
                 <div class="row">
                     <div class="col-md-6">
                         <label>Описание:</label>
@@ -103,7 +87,7 @@
                             <p class="text-justify" 
                                ng-show="getOrder().status == 'Running' || getOrder().status == 'Completed'">
                                 <i>
-                                    <a ng-href="http://vk.com/id{{getOrder().owner.vkId}}">
+                                    <a ng-href="http://vk.com/id{{getOrder().owner.vkId}}" target="_blank">
                                         Профиль ВКонтакте
                                     </a>
                                 </i>

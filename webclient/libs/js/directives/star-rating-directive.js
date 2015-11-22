@@ -26,19 +26,28 @@ ogifyApp.directive('starRating', function() {
 
             scope.getStarClass = function(ind) {
                 var ret = 'star';
-                if (scope.readonly != undefined || scope.readonly !== false)
-                    ret += ' star-' + (ind+1);
+                if (scope.readonly == true) {
+                    ret += ' star-rating-' + (scope.ratingValue);
+                    if(ind < scope.ratingValue) {
+                        ret += ' filled';
+                    }
+
+                    elem.addClass(ret);
+                }
+
                 return ret;
             };
 
             scope.setRaitsClass = function(ind) {
-                if (scope.readonly != undefined || scope.readonly !== false)
+                if (scope.readonly != true) {
                     elem.addClass('stars-' + (ind + 1));
+                }
             };
 
             scope.removeRaitsClass = function(ind) {
-                if (scope.readonly != undefined || scope.readonly !== false)
+                if (scope.readonly != true) {
                     elem.removeClass('stars-' + (ind + 1));
+                }
             };
 
             scope.toggle = function(index) {
@@ -51,8 +60,8 @@ ogifyApp.directive('starRating', function() {
             };
 
             scope.$watch('ratingValue',
-                function(oldVal, newVal) {
-                    if (newVal || newVal == 0) {
+                function(newVal, oldVal) {
+                    if(newVal != null) {
                         updateStars();
                     }
                 }
