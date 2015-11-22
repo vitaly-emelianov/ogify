@@ -32,7 +32,15 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
     });
 });
 
-ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {
+ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {    
+    $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
+    $rootScope.modalWindowsUri = 'templates/modals/modals.html';
+    $rootScope.createOrderModalUri = 'templates/modals/new-order.html';
+    $rootScope.showOrderModalUri = 'templates/modals/order-details.html';
+    $rootScope.rateDoneOrderModalUri = 'templates/modals/rate-done-order.html';
+    $rootScope.landingUri = '/landing';
+    
+    //init self position
     if(!!navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             selfMarker = {
@@ -52,13 +60,6 @@ ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {
         $rootScope.$apply();
     }
     
-    $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
-    $rootScope.modalWindowsUri = 'templates/modals/modals.html';
-    $rootScope.createOrderModalUri = 'templates/modals/new-order.html';
-    $rootScope.showOrderModalUri = 'templates/modals/order-details.html';
-    $rootScope.rateDoneOrderModalUri = 'templates/modals/rate-done-order.html';
-    $rootScope.landingUri = '/landing';
-
     /* Will be fixed in new version of Bootstrap (Angular.js Bootrstap bug) */
     $rootScope.$on('$locationChangeStart', function(event) {
         angular.element('#authModal').modal('hide');
