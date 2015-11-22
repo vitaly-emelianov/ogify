@@ -5,7 +5,7 @@
                 <h4 class="text-center">Новые</h4>
                 <hr class="divider">
                 <div class="list-group">
-                    <a class="list-group-item" 
+                    <a class="list-group-item pointer" 
                      ng-repeat="order in myOrders | filter:onlyNew"
                      data-toggle="modal" 
                      data-target="#showOrderModal"
@@ -20,7 +20,7 @@
                 <h4 class="text-center">В исполнении</h4>
                 <hr class="divider">
                 <div class="list-group">
-                    <a class="list-group-item" 
+                    <a class="list-group-item pointer" 
                      ng-repeat="order in myOrders | filter:onlyRunning"
                      data-toggle="modal" 
                      data-target="#showOrderModal"
@@ -35,7 +35,7 @@
                 <h4 class="text-center">Завершенные</h4>
                 <hr class="divider">
                 <div class="list-group">
-                    <a class="list-group-item" 
+                    <a class="list-group-item pointer" 
                      ng-repeat="order in myOrders | filter:onlyDone"
                      data-toggle="modal" 
                      data-target="#showOrderModal"

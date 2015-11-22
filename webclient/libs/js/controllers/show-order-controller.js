@@ -37,42 +37,13 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
     $scope.getOrder = function() {
         return ClickedOrder.order;
     };
-    $scope.getDescription = function() {
-        return ClickedOrder.order.description;
-    };
-    $scope.getItemList = function() {
-        return ClickedOrder.order.items;
-    };
-    $scope.itemsEmpty = function() {
-        return (ClickedOrder.order.items.length == 0);
-    };
-    $scope.getOwnerName = function() {
-        return ClickedOrder.order.owner.fullName;
-    };
-    $scope.getExecutorName = function() {
-        return ClickedOrder.order.executor.fullName;
-    };
-    $scope.getOwnerPhotoUrl = function() {
-        return ClickedOrder.order.owner.photoUri;
-    };
-    $scope.getExecutorPhotoUrl = function() {
-        return ClickedOrder.order.executor.photoUri;
-    };
-    $scope.getAddress = function() {
-        return ClickedOrder.order.address;
-    };
-    $scope.getReward = function() {
-        return ClickedOrder.order.reward;
-    };
-    $scope.getStatus = function() {
-        return ClickedOrder.order.status;
-    };
     $scope.getRate = function() {
         return ClickedOrder.rate;
     };
     $scope.getSocialRelationship = function() {
         return ClickedOrder.socialRelationship;
     };
+
     $scope.userTakesTask = function() {
         Order.getToExecution({orderId: ClickedOrder.order.id}, function(successResponse) {
                 angular.element('#showOrderModal').modal('hide');

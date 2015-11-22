@@ -40,7 +40,6 @@ public class User {
     Long facebookId;
 
     @Column(name = "vk_id", nullable = true, unique = true)
-    @JsonIgnore
     Long vkId;
 
     @Column(name = "fullName", nullable = false, unique = false)
