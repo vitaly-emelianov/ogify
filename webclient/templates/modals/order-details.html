@@ -109,6 +109,16 @@
                                 </i>
                             </p>
                         </div>
+                        <div ng-show="getOrder().owner.userId == user.userId && (getOrder().status == 'Running' || getOrder().status == 'Completed')">
+                            <label>Контакты исполнителя:</label>
+                            <p class="text-justify">
+                                <i>
+                                    <a ng-href="http://vk.com/id{{getOrder().executor.vkId}}">
+                                        Профиль ВКонтакте
+                                    </a>
+                                </i>
+                            </p>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <div ng-if="getOrder().owner.userId != user.userId">
