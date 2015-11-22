@@ -11,6 +11,7 @@ import net.ogify.rest.elements.RateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -137,7 +138,7 @@ public class OrderResource {
      */
     @PUT
     @Path("/{id}/rate")
-    public void rateOrder(@PathParam("id") Long orderId, @NotNull RateRequest rateRequest) {
+    public void rateOrder(@PathParam("id") Long orderId, @NotNull @Valid RateRequest rateRequest) {
         orderProcessor.rateOrderParty(userId, orderId, rateRequest.getRate(), rateRequest.getComment());
     }
 
