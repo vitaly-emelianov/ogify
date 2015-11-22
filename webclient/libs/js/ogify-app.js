@@ -33,6 +33,25 @@ ogifyApp.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
 });
 
 ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {
+    if(!!navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            selfMarker = {
+                coords: {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                }
+            };
+            $rootScope.selfMarker = selfMarker;
+            $rootScope.$apply();
+        });
+    } else {
+        selfMarker = {
+            coords: { latitude: 55.927106, longitude: 37.523662 }
+        };
+        $rootScope.selfMarker = selfMarker;
+        $rootScope.$apply();
+    }
+    
     $rootScope.navBarTemplateUri = 'templates/navbar/navbar.html';
     $rootScope.modalWindowsUri = 'templates/modals/modals.html';
     $rootScope.createOrderModalUri = 'templates/modals/new-order.html';
