@@ -24,6 +24,15 @@ ogifyApp.directive('starRating', function() {
                 }
             };
 
+            scope.getUlClass = function () {
+                var classString = 'rating';
+                if(scope.readonly != true) {
+                    classString += ' unrated';
+                }
+
+                return classString;
+            };
+
             scope.getStarClass = function(ind) {
                 var ret = 'star';
                 if (scope.readonly == true) {

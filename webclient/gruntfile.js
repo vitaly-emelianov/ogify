@@ -79,9 +79,11 @@ module.exports = function (grunt) {
                     'libs/js/directives/*.js',
                     'libs/js/services/*.js',
                     'libs/js/factories/*.js',
-                    'libs/js/controllers/*.js'
+                    'libs/js/controllers/*.js',
+                    'libs/css/animations.css',
+                    'libs/css/ogify-main.css'
                 ],
-                tasks: ['uglify']
+                tasks: ['uglify', 'cssmin']
             },
         }
     });
