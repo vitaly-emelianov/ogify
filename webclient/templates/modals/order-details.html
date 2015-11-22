@@ -117,9 +117,9 @@
                                 <span ng-switch-when="FriendsOfFriends" class="label label-warning">
                                     Друг друга
                                 </span>
-                                <span ng-switch-default class="label label-default">
-                                    Нет социальной связи
-                                </span>
+                                <!--<span ng-switch-default class="label label-default">-->
+                                    <!--Нет социальной связи-->
+                                <!--</span>-->
                             </div>
                             <a href="#/profile/{{getOrder().owner.userId}}">
                                 <img ng-src="{{getOrder().owner.photoUri}}" 
@@ -131,17 +131,17 @@
                             <label>Исполнитель:</label>
                             <a href="#/profile/{{getOrder().executor.userId}}">
                                 {{getOrder().executor.fullName}}
-                                <div ng-switch="getSocialRelationship()">
-                                    <span ng-switch-when="Friend" class="label label-success">
-                                        Друг
-                                    </span>
-                                    <span ng-switch-when="FriendsOfFriends" class="label label-warning">
-                                        Друг друга
-                                    </span>
-                                    <span ng-switch-default class="label label-default">
-                                        Нет социальной связи
-                                    </span>
-                                </div>
+                                <!--<div ng-switch="getSocialRelationship()">-->
+                                    <!--<span ng-switch-when="Friend" class="label label-success">-->
+                                        <!--Друг-->
+                                    <!--</span>-->
+                                    <!--<span ng-switch-when="FriendsOfFriends" class="label label-warning">-->
+                                        <!--Друг друга-->
+                                    <!--</span>-->
+                                    <!--<span ng-switch-default class="label label-default">-->
+                                        <!--Нет социальной связи-->
+                                    <!--</span>-->
+                                <!--</div>-->
                             </a>
                             <a href="#/profile/{{getOrder().executor.userId}}">
                                 <img ng-src="{{getOrder().executor.photoUri}}" 

@@ -4,7 +4,7 @@
 ogifyApp.directive('starRating', function() {
     return {
         restrict: 'A',
-        templateUrl: '../../../templates/directives/star-rating.html',
+        templateUrl: '../../templates/directives/star-rating.html',
         scope : {
             ratingValue : '=',
             max : '=?',
