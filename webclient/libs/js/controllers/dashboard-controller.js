@@ -60,8 +60,8 @@ ogifyApp.controller('DashboardController', function ($rootScope, $scope, $filter
 
     var getMaxOrdersInPage = function() {
         return Math.floor(Math.max((angular.element('.list-orders-height').height()
-            - 2*angular.element('.row').height()) / (angular.element('#hidden-order').height()
-            + angular.element('.row').height()), 1));
+            - 2*20) / (angular.element('#hidden-order').height()
+            + 20), 1));
     };
     
     var getMaxPagesInBar = function() {

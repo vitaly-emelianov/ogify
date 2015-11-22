@@ -39,7 +39,27 @@ ogifyApp.run(function ($rootScope, $http, $cookies, $window, $timeout) {
     $rootScope.showOrderModalUri = 'templates/modals/order-details.html';
     $rootScope.rateDoneOrderModalUri = 'templates/modals/rate-done-order.html';
     $rootScope.landingUri = '/landing';
-
+    
+    //init self position
+    if(!!navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            selfMarker = {
+                coords: {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                }
+            };
+            $rootScope.selfMarker = selfMarker;
+            $rootScope.$apply();
+        });
+    } else {
+        selfMarker = {
+            coords: { latitude: 55.927106, longitude: 37.523662 }
+        };
+        $rootScope.selfMarker = selfMarker;
+        $rootScope.$apply();
+    }
+    
     /* Will be fixed in new version of Bootstrap (Angular.js Bootrstap bug) */
     $rootScope.$on('$locationChangeStart', function(event) {
         angular.element('#authModal').modal('hide');
