@@ -1,0 +1,6 @@
+<ul class="rating">
+    <li ng-repeat="star in stars" ng-class="star" ng-mouseover="setRaitsClass($index)"
+        ng-mouseout="removeRaitsClass($index)" ng-click="toggle($index)">
+        <i class="fa fa-star"></i>
+    </li>
+</ul>

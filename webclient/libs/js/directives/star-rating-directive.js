@@ -3,12 +3,8 @@
  */
 ogifyApp.directive('starRating', function() {
     return {
-        restrict : 'A',
-        template : '<ul class="rating">'
-        + '    <li ng-repeat="star in stars" ng-class="star" ng-mouseover="setRaitsClass($index)" ng-mouseout="removeRaitsClass($index)" ng-click="toggle($index)">'
-        + '        <i class="fa fa-star"></i>'
-        + '    </li>'
-        + '</ul>',
+        restrict: 'A',
+        templateUrl: '/templates/directives/star-rating.html',
         scope : {
             ratingValue : '=',
             max : '=?',
@@ -43,7 +39,7 @@ ogifyApp.directive('starRating', function() {
             scope.removeRaitsClass = function(ind) {
                 if (scope.readonly != undefined || scope.readonly !== false)
                     elem.removeClass('stars-' + (ind + 1));
-            }
+            };
 
             scope.toggle = function(index) {
                 if (scope.readonly == undefined || scope.readonly === false) {

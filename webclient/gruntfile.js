@@ -76,6 +76,7 @@ module.exports = function (grunt) {
                 files: [
                     'libs/js/api-module/*.js',
                     'libs/js/*.js',
+                    'libs/js/directives/*.js',
                     'libs/js/services/*.js',
                     'libs/js/factories/*.js',
                     'libs/js/controllers/*.js'
