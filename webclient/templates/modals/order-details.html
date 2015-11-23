@@ -10,7 +10,7 @@
                           class="label label-danger">
                         Просрочен
                     </span>
-                    <div style="display: inline-block" ng-if="getOrder().status == 'Completed'">
+                    <div style="display: inline-block" ng-if="getOrder().status == 'Completed' && getOrder().executor.userId != user.userId">
                         <div star-rating readonly="orderRated" max="5"
                              on-rating-selected="rateMyOrder(rating)"
                              rating-value="orderRatingValue"></div>
