@@ -168,8 +168,6 @@
                         ng-click="orderToDone()"
                         data-toggle="modal"
                         data-target="#rateDoneOrder"
-                        data-backdrop="static"
-                        data-keyboard="false"
                         ng-show="getOrder().status == 'Running' && getOrder().owner.userId != user.userId"
                         class="btn btn-success" >
                     Завершить выполнение
