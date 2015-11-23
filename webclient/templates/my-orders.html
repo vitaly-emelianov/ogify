@@ -36,7 +36,7 @@
                 <hr class="divider">
                 <div class="list-group">
                     <a class="list-group-item pointer" 
-                     ng-repeat="order in myOrders | filter:onlyDone"
+                     ng-repeat="order in myOrders | filter:onlyDone | orderBy:'-id'"
                      data-toggle="modal" 
                      data-target="#showOrderModal"
                      ng-click="setClickedOrderRate(order)">

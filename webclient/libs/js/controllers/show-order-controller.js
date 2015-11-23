@@ -10,8 +10,11 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
     $scope.orderRated = ClickedOrder.isOrderRated();
     $scope.$on("ClickedOrderRateResolved", function(event, feedback) {
         if(feedback != null && feedback.rate != null) {
-            $scope.orderRatingValue = feedback.rate;
             $scope.orderRated = true;
+            $scope.orderRatingValue = feedback.rate;
+        } else {
+            $scope.orderRated = false;
+            $scope.orderRatingValue = 0;
         }
     });
     
@@ -86,8 +89,8 @@ ogifyApp.controller('ShowOrderModalController', function ($scope, $rootScope, $f
 
     $scope.rateMyOrder = function(rating) {
         Order.rateOrder({orderId: ClickedOrder.order.id}, {rate: rating} , function(successResponse) {
-                $scope.orderRatingValue = rating;
                 $scope.orderRated = true;
+                $scope.orderRatingValue = rating;
                 $rootScope.$broadcast('rateMyOrderEvent', ClickedOrder.order.id);
             },
             function(errorResponse) {
