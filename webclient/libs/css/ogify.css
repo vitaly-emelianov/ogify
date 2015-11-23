@@ -112,7 +112,7 @@ ul.rating {
     transition: color 350ms;
 }
 .star-rating-0 {
-    color: #990000 !important;
+    color: #a9a9a9 !important;
 }
 
 .star-rating-1 {
@@ -141,7 +141,7 @@ ul.rating {
 }
 
 .star-rating-0 .rating .filled {
-    color: #990000;
+    color: #a9a9a9;
 }
 
 .star-rating-1 .rating .filled,
@@ -175,5 +175,9 @@ ul.rating {
 }
 
 .unrated > li:hover ~ li {
+    color: #a9a9a9 !important;
+}
+
+.rated > li:not(.filled) {
     color: #a9a9a9 !important;
 }
