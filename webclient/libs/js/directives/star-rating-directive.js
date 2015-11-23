@@ -68,7 +68,6 @@ ogifyApp.directive('starRating', function() {
 
             scope.toggle = function(index) {
                 if (scope.readonly == undefined || scope.readonly === false) {
-                    elem.removeClass();
                     scope.onRatingSelected({
                         rating : index + 1
                     });
