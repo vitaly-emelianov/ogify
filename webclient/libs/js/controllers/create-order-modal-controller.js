@@ -39,9 +39,11 @@ ogifyApp.controller('CreateOrderModalController', function ($rootScope, $scope, 
         });
         
         initOrder = function() {
+            var tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
             $scope.order = {
-                expireDate: $filter('date')(new Date(), 'dd.MM.yyyy'),
-                expireTime: $filter('date')(new Date(), 'H:MM'),
+                expireDate: $filter('date')(tomorrow, 'dd.MM.yyyy'),
+                expireTime: $filter('date')(tomorrow, 'H:MM'),
                 reward: '',
                 address: {coords: $rootScope.selfMarker.coords,
                           addressField: orderAddress.getAddress()},
